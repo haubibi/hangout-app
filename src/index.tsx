@@ -3,13 +3,34 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from './context/user.context';
+import { TaskProvider } from './context/task.context';
+import { GoogleMapProvider } from './context/google-map.context';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:5000/hang-out-213d4/us-central1/graphql',
+  cache: new InMemoryCache()
+
+})
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <UserProvider>
+        <TaskProvider>        
+          <GoogleMapProvider>        
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </GoogleMapProvider>
+        </TaskProvider>
+      </UserProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );
 
@@ -17,3 +38,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

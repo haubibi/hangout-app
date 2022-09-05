@@ -1,0 +1,73 @@
+[debug] [2022-09-05T00:49:50.171Z] ----------------------------------------------------------------------
+[debug] [2022-09-05T00:49:50.173Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Biao\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2022-09-05T00:49:50.173Z] CLI Version:   11.8.0
+[debug] [2022-09-05T00:49:50.173Z] Platform:      win32
+[debug] [2022-09-05T00:49:50.173Z] Node Version:  v16.16.0
+[debug] [2022-09-05T00:49:50.174Z] Time:          Mon Sep 05 2022 08:49:50 GMT+0800 (中国标准时间)
+[debug] [2022-09-05T00:49:50.174Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-09-05T00:49:50.246Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-09-05T00:49:50.246Z] > authorizing via signed-in user (biao.huangsoultaker@gmail.com)
+[debug] [2022-09-05T00:49:50.247Z] [iam] checking project hang-out-213d4 for permissions ["firebase.projects.get"]
+[debug] [2022-09-05T00:49:50.247Z] > refreshing access token with scopes: []
+[debug] [2022-09-05T00:49:50.249Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-09-05T00:49:50.249Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-09-05T00:49:50.319Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2022-09-05T00:49:50.319Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-09-05T00:49:50.336Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hang-out-213d4:testIamPermissions [none]
+[debug] [2022-09-05T00:49:50.336Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hang-out-213d4:testIamPermissions x-goog-quota-user=projects/hang-out-213d4
+[debug] [2022-09-05T00:49:50.337Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hang-out-213d4:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-09-05T00:49:50.511Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hang-out-213d4:testIamPermissions 200
+[debug] [2022-09-05T00:49:50.511Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hang-out-213d4:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-09-05T00:49:50.512Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4 [none]
+[debug] [2022-09-05T00:49:50.721Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4 200
+[debug] [2022-09-05T00:49:50.721Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4 {"projectId":"hang-out-213d4","projectNumber":"290230702663","displayName":"Hang out","name":"projects/hang-out-213d4","resources":{"hostingSite":"hang-out-213d4","realtimeDatabaseInstance":"hang-out-213d4-default-rtdb","storageBucket":"hang-out-213d4.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_c65e46ed-f847-4f01-9525-3df557917919"}
+[info] 
+[info] === Serving from 'C:\Users\Biao\Desktop\hangout-app'...
+[info] 
+[info] +  functions: Using node@16 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Using node@16 from host."}}
+[debug] [2022-09-05T00:49:50.743Z] defaultcredentials: writing to file C:\Users\Biao\AppData\Roaming\firebase\biao_huangsoultaker_gmail.com_application_default_credentials.json
+[debug] [2022-09-05T00:49:50.744Z] Setting GAC to C:\Users\Biao\AppData\Roaming\firebase\biao_huangsoultaker_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Biao\\AppData\\Roaming\\firebase\\biao_huangsoultaker_gmail.com_application_default_credentials.json"}}
+[debug] [2022-09-05T00:49:50.745Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig [none]
+[debug] [2022-09-05T00:49:50.971Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig 200
+[debug] [2022-09-05T00:49:50.972Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig {"projectId":"hang-out-213d4","databaseURL":"https://hang-out-213d4-default-rtdb.firebaseio.com","storageBucket":"hang-out-213d4.appspot.com","locationId":"us-central"}
+[info] i  functions: Watching "C:\Users\Biao\Desktop\hangout-app\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\Biao\\Desktop\\hangout-app\\functions\" for Cloud Functions..."}}
+[debug] [2022-09-05T00:49:51.003Z] Validating nodejs source
+[debug] [2022-09-05T00:49:53.218Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "apollo-server-express": "^3.10.2",
+    "express": "^4.18.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0",
+    "graphql": "^16.6.0",
+    "graphql-scalars": "^1.18.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-09-05T00:49:53.218Z] Building nodejs source
+[debug] [2022-09-05T00:49:53.218Z] Analyzing nodejs backend spec
+[debug] [2022-09-05T00:49:53.219Z] Could not find functions.yaml. Must use http discovery
+[debug] [2022-09-05T00:49:53.413Z] Serving at port 9005
+
+[debug] [2022-09-05T00:49:53.885Z] Got response from /__/functions.yaml {"endpoints":{"graphql":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"graphql"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2022-09-05T00:49:53.890Z] shutdown requested via /__/quitquitquit
+
+[info] +  functions: Loaded functions definitions from source: graphql. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: graphql."}}
+[info] +  functions[us-central1-graphql]: http function initialized (http://localhost:5000/hang-out-213d4/us-central1/graphql). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://localhost:5000/hang-out-213d4/us-central1/graphql)."}}

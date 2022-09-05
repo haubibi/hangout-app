@@ -1,0 +1,33 @@
+{
+    "users": {
+        "user1": {
+            "displayName": "biao huang",
+            "email": "biao.huangsoultaker@gmail.com",
+            "id": "sdfsdfsdfsdfsdf"
+        },
+        "user2": {
+            "displayName": "biao huang",
+            "email": "biao.huangsoultaker@gmail.com",
+            "id": "sdfsdfsdfsdfsdf"
+        },
+        "user3": {
+            "displayName": "biao huang",
+            "email": "biao.huangsoultaker@gmail.com",
+            "id": "sdfsdfsdfsdfsdf"
+        }
+    },
+    "Tasks": {
+        "task1":{
+            "title":"have dinner",
+            "organizer":"biao huang",
+            "members":"[]",
+            "description":"name"
+        },
+        "task2":{
+            "title":"go out",
+            "organizer":"biao huang",
+            "members":"[]",
+            "description":"name"
+        }
+    }
+}
