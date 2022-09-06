@@ -2,16 +2,9 @@ import { gql } from '@apollo/client';
 
 export const ADDUSER = gql`
     mutation(
-        $uid:String,
-        $displayName:String,
-        $email:String
+        $userInput: UserInput
     ) {
-        addUser(
-          uid:$uid, 
-          displayName: $displayName, 
-          email: $email
-          ) 
-        {
+        addUser(userInput: $userInput){
           uid
           displayName
           email

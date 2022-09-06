@@ -13,6 +13,8 @@ interface IMapFormInput {
   setAddressFormInput:Dispatch<React.SetStateAction<LatLngLiteral | null>>;
   mapInstance: google.maps.Map | null;
   setMapInstance:Dispatch<React.SetStateAction<google.maps.Map| null>>;
+  addressString: string;
+  setAddressString: Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultL:LatLngLiteral = {
@@ -25,10 +27,12 @@ const initialFormInputMapValue: IMapFormInput ={
   mapIsLoaded: false,
   addressFormInput: null,
   mapInstance: null,
+  addressString: '',
   setMapIsLoaded:()=>{},
   setDefaultLocation:()=>{},
   setAddressFormInput: ()=>{},
-  setMapInstance: ()=>{}
+  setMapInstance: ()=>{},
+  setAddressString: ()=>{}
 }
 
 export const GoogleMapContext = createContext(initialFormInputMapValue);
@@ -41,6 +45,7 @@ export const GoogleMapProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [mapIsLoaded, setMapIsLoaded] =useState<boolean>(false);
     const [defaultLocation, setDefaultLocation] =useState<LatLngLiteral>(defaultL);
     const [addressFormInput, setAddressFormInput] = useState<null | LatLngLiteral>(null);
+    const [addressString, setAddressString] = useState<string>('');
     const [mapInstance, setMapInstance] =useState<null | google.maps.Map>(null);
 
     useEffect(()=>{
@@ -54,16 +59,18 @@ export const GoogleMapProvider:FC<IProviderChildrenProps> = ({children}) =>{
           });
       }
       getCurrentCoordsAsync();
-  },[]);
+    },[]);
     const value = {
       defaultLocation,
       mapIsLoaded,
       mapInstance,
       addressFormInput,
+      addressString,
       setAddressFormInput,
       setDefaultLocation,
       setMapInstance,
-      setMapIsLoaded
+      setMapIsLoaded,
+      setAddressString
     };
     return <GoogleMapContext.Provider value = {value}>{children}</GoogleMapContext.Provider>
 }

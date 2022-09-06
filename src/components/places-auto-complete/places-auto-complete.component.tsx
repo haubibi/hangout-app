@@ -13,8 +13,7 @@ import usePlacesAutocomplete, {
 
   import { ComboboxInputStyled, ComboboxStyled, ComboboxContainer } from './places-auto-complete.styles'
   import { GoogleMapContext } from "../../context/google-map.context";
-  import React, { useContext,HTMLAttributes, FC } from "react";
-
+  import React, { useContext,HTMLAttributes, FC, useEffect } from "react";
 
 
   export interface IComboboxContainer {
@@ -32,7 +31,7 @@ import usePlacesAutocomplete, {
   interface IPlacesProps extends HTMLAttributes<HTMLDivElement>{
     comboboxContainerStyle: IComboboxContainer;
     ComboboxStyle: IComboboxStyled;
-    ComboboxInputStyle: IComboboxInputStyled;
+    ComboboxInputStyle: IComboboxInputStyled
   }
   
 
@@ -48,8 +47,12 @@ import usePlacesAutocomplete, {
       suggestions: { status, data },
       clearSuggestions,
     } = usePlacesAutocomplete();
+    const {setAddressFormInput, mapInstance, addressFormInput, addressString } = useContext(GoogleMapContext);
 
-    const {setAddressFormInput, mapInstance} = useContext(GoogleMapContext);
+    useEffect(()=>{
+      setValue(addressString,false);
+    },[]);
+
 
 
     const handleSelect = async (val: string) => {
@@ -62,7 +65,6 @@ import usePlacesAutocomplete, {
 
       setAddressFormInput(latlng);
       mapInstance!.panTo(latlng);
-      
     };
   
     return (

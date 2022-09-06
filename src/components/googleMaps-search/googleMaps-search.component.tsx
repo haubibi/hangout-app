@@ -1,9 +1,12 @@
 
-import React ,{ useContext}from "react";
+import React ,{ useContext, HTMLAttributes, FC}from "react";
 import Places from "../places-auto-complete/places-auto-complete.component";
 import GoogleMaps from '../googleMaps-map/googleMap-map.component'
 import { GoogleMapContext } from "../../context/google-map.context";
 import { markerCreator } from '../../utils/googleMap/googleMap.utils'
+import { Spin } from "antd";
+import { LatLngLiteral } from "../../utils/interfaces/google.interface";
+import { defaultLatLng } from "../../utils/googleMap/googleMap.utils";
 
 const comboboxSettings = {
     comboboxContainerStyle:{
@@ -23,7 +26,7 @@ const mapContainerStyle = {
 };
 
 const options = {
-    mapId: "8e0a97af9386fef",
+    // mapId: "8e0a97af9386fef",
     disableDefaultUI: true,
     clickableIcons: false,
 };
@@ -57,22 +60,25 @@ const googleMapSettings = {
 // position={latlng}
 // onLoad = {markerOnload}
 
-const GoogleSearchInForm = () =>{
+
+// interface IGoogleSearchInFormProps extends HTMLAttributes<HTMLDivElement>{
+//     defaultLatLng: LatLngLiteral;
+// }
+const GoogleSearchInForm:FC = () =>{
     const {mapIsLoaded, addressFormInput, defaultLocation} = useContext(GoogleMapContext);
     
-    if (!mapIsLoaded) return <div>Loading...</div>;
+    if (!mapIsLoaded) return <Spin />;
     const center = addressFormInput? addressFormInput: defaultLocation;
     const markerLocation = addressFormInput? [markerCreator({position: center})]: [];
-  return (
+    return (
     <div>
         <Places {...comboboxSettings} />
         <GoogleMaps 
-            defaultCenter={ center }
             googleMapProps = {{center: center,...googleMapSettings.googleMapProps}}
             markers = {[...markerLocation, ...googleMapSettings.markers]}
         />
     </div>
-  );
+    );
 }
 
 export default GoogleSearchInForm;

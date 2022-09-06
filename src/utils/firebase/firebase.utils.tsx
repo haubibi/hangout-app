@@ -11,18 +11,17 @@ import {
     NextOrObserver,
     User
 } from 'firebase/auth';
-import { useQuery } from '@apollo/client';
-// import { ADDUSER } from '../graphql/userGraphql.utils';
-import {
-  getDatabase,
+import { 
+  getStorage,
   ref,
-  onValue,
-  set,
-  get,
-  child,
-  DatabaseReference
-} from 'firebase/database'
+  uploadString,
+  uploadBytes,
+  getDownloadURL
+ } from "firebase/storage";
 
+ import {hashId} from '../usefulFunctions/hashid'
+ import { UploadRequestOption } from 'rc-upload/lib/interface';
+ import { IImageObj } from '../images/images.utils';
 const firebaseConfig = {
   apiKey: "AIzaSyCeT3ANdqXNbquxmYay1gm9O-8NgqlpakA",
   authDomain: "hang-out-213d4.firebaseapp.com",
@@ -35,14 +34,68 @@ const firebaseConfig = {
 };
 
 
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app,'gs://hang-out-213d4.appspot.com/');
 
-const firebaseApp = initializeApp(firebaseConfig);
+
+
+
+//images ref
+const imagesRef = ref(storage, 'images');
+
+export type BuckType = 'users' | 'tasks';
+export type userImageType = 'avatar';
+export type taskImageType = 'frontCover' | 'showup';
+
+
+export function customUploadImage(buckType: 'users', id: string, type: 'avatar'):((options: UploadRequestOption) => void);
+export function customUploadImage(buckType: 'tasks', id: string, type: 'frontCover'):((options: UploadRequestOption) => void);
+export function customUploadImage(buckType: 'tasks', id: string, type: 'showup'):((options: UploadRequestOption) => void);
+export function customUploadImage(buckType:BuckType, id: string, type: userImageType | taskImageType): ((options: UploadRequestOption) => void) {
+    const buckTypeRef = ref(imagesRef, buckType);
+    const itemRef = ref(buckTypeRef, id);
+    const categoryRef = ref(itemRef, type);
+    return ({ onError, onSuccess, file, filename ,data}: any) => {
+    const metadata = {
+        contentType: 'image/jpeg'
+    }
+//a unique name for the 
+    const imageRef = ref(categoryRef,file.uid)
+    try {
+      switch(typeof file) {
+        case 'string':
+          uploadString(imageRef, file, 'base64url').then((snapshot) => {
+            onSuccess(snapshot)
+          }).catch(error =>{
+            console.log(error)
+            onError(error)
+          });
+          break;
+          default:
+            uploadBytes(imageRef, file).then((snapshot) => {
+              console.log(snapshot.ref)
+              onSuccess(snapshot)
+            }).catch(error =>{
+            console.log(error)
+            onError(error)
+          });
+      }
+      
+    } catch(e) {
+      onError(e);
+    }
+  }
+}
+
+
+
+export const getImageUrl = async (refPath: string) => {
+  return getDownloadURL(ref(storage, refPath))
+}
+
+
 //get the auth
 export const auth = getAuth();
-//get the firebase storage
-export const db = getDatabase();
-
-const dbRef = ref(db);
 //instance of google provider
 const googleProvider = new GoogleAuthProvider();
 //set the type of provider

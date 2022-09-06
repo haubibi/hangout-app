@@ -23,22 +23,9 @@ export interface IProviderChildrenProps {
 export const TaskProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [currentTask, setCurrentTask] = useState<ITaskInputString | null>(null);
     const [addTask] = useMutation(ADDTASK);
-    const [addUser] = useMutation(ADDUSER);
     useEffect(()=>{
-      console.log(currentTask)
       if(currentTask !== null){
-            // const add = async()=>{
-            //     await addUser({
-            //        variables:{
-            //             displayName: 'asfs',
-            //             uid: 'sdfsdf',
-            //             email: 'sdfsdfsd'
-            //        } 
-            //     });
-            // }
-            // add();
           const add = async()=>{
-            console.log(currentTask)
               await addTask({
                  variables:{
                     taskObj: currentTask

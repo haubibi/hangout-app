@@ -13,8 +13,12 @@ admin.initializeApp({
 
 const db = admin.database();
 
-    
+
 const typeDefs = gql`
+    input reviewInput {
+        review: String
+        user: UserInput
+    }
     input TaskInput {
         id: ID!
         title:String!
@@ -23,13 +27,18 @@ const typeDefs = gql`
         endDate: String!
         endTime: String!
         organizer: UserInput!
+        participants: [UserInput]!
         description:String!
+        reviews: [reviewInput]!
         location: LocationInput!
         participantsNumber: Int!
-
+        open: Boolean
+        hide: Boolean
+        address: String
     }
+
     input UserInput {
-        uid:String!
+        uid:ID!
         displayName: String
         email: String!
     }
@@ -57,6 +66,9 @@ const typeDefs = gql`
         reviews: [Review]!
         location: Location!
         participantsNumber: Int!
+        open: Boolean
+        hide: Boolean
+        address: String
     }
     type Review {
         review: String
@@ -66,7 +78,7 @@ const typeDefs = gql`
         email: String
     }
     type User {
-        uid:String!
+        uid:ID!
         displayName: String
         email: String!
     }
@@ -80,7 +92,7 @@ const typeDefs = gql`
 
     type Mutation {
         addTask(taskObj:TaskInput): Task
-        addUser(uid:String, displayName: String, email: String): User
+        addUser(userInput:UserInput): User
     }
 
 
@@ -175,47 +187,41 @@ const resolvers = {
             _,
             {taskObj}
         ) => {
-            console.log(_,taskObj)
-            const taskRef = db.ref("tasks");
-            const task = {
-                ...taskObj,
-                participants: [],
-                reviews:[],
-                hide: false,
-                status: 'open'
-            }
-            taskRef.push(task);
+            // console.log(_,taskObj)
+            const tasksRef = db.ref("tasks");
+            const taskRef = tasksRef.child(taskObj.id);
+            const task = {...taskObj}
+            taskRef.set(task);
             return task;
         },
         addUser: async(
             _,
-            {uid, displayName, email},
+            {userInput},
         ) => {
-            const userRef = db.ref("users");
-            const user = {
-                displayName,
-                email,
-                uid
-            };
-            
-            const isRepeat = await db.ref("users")
-            .once("value")
-            .then(snap =>snap.val())
-            .then(value => {
-                const mails = Object.keys(value).map((key)=>value[key].email);
-                const uids = Object.keys(value).map((key)=>value[key].uid);
-                const mailsIndex = mails.findIndex(mail => mail === email);
-                const uidsIndex = uids.findIndex(id => id === uid);
-                if(mailsIndex === -1 && uidsIndex === -1){
-                    return false;
-                }
-                return true;
-            });
-            // console.log(isRepeat)
-            if(!isRepeat){
-                await userRef.push(user);
-            }
-            return user;
+            console.log(userInput)
+            const {uid} = userInput;
+            const usersRef = db.ref("users");
+            const userRef = usersRef.child(uid);
+            userRef.set(userInput);
+            return userInput;
+            // return user;
+            // const isRepeat = await db.ref("users")
+            // .once("value")
+            // .then(snap =>snap.val())
+            // .then(value => {
+            //     const mails = Object.keys(value).map((key)=>value[key].email);
+            //     const uids = Object.keys(value).map((key)=>value[key].uid);
+            //     const mailsIndex = mails.findIndex(mail => mail === email);
+            //     const uidsIndex = uids.findIndex(id => id === uid);
+            //     if(mailsIndex === -1 && uidsIndex === -1){
+            //         return false;
+            //     }
+            //     return true;
+            // });
+            // // console.log(isRepeat)
+            // if(!isRepeat){
+            //     await userRef.push(user);
+            // }
         }
     }
 }

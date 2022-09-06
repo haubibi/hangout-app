@@ -8,18 +8,18 @@ import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from './context/user.context';
 import { TaskProvider } from './context/task.context';
 import { GoogleMapProvider } from './context/google-map.context';
-
+import Geocode from 'react-geocode';
 const client = new ApolloClient({
   uri: 'http://localhost:5000/hang-out-213d4/us-central1/graphql',
   cache: new InMemoryCache()
+});
 
-})
-
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_GEOCODE_KEY!);
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ApolloProvider client={client}>
       <UserProvider>
         <TaskProvider>        
@@ -31,7 +31,7 @@ root.render(
         </TaskProvider>
       </UserProvider>
     </ApolloProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

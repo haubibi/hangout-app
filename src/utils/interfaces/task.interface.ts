@@ -1,8 +1,8 @@
 import { IUser,IReview } from './user.interface';
 import { Moment } from 'moment';
 import { LatLngLiteral } from './google.interface'
+import { IImageObj } from '../images/images.utils'
 
-export type TaskStatus = 'open' | 'closed';
 
 export interface ITaskBase {
     id: string;
@@ -10,7 +10,9 @@ export interface ITaskBase {
     organizer: IUser;
     participantsNumber: number;
     location: LatLngLiteral;
+    description: string;
 }
+
 export interface ITaskInputMoment extends ITaskBase{
     startDate:Moment;
     startTime:Moment;
@@ -34,5 +36,8 @@ export interface ITask extends ITaskBase {
     participants: IUser[];
     reviews: IReview[];
     hide: boolean;
-    status: TaskStatus;
+    open: boolean;
+    address: string;
+    showImages:IImageObj[],
+    frontCoverImage:IImageObj;
 }

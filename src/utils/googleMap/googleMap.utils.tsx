@@ -1,6 +1,25 @@
 import {IGoogleMarkerProps} from '../interfaces/google.interface';
+import { LatLngLiteral } from '../interfaces/google.interface'
 import Geocode from 'react-geocode';
-type LatLngLiteral = google.maps.LatLngLiteral;
+
+
+export const defaultLatLng = {
+    lat:51.4405956,
+    lng: 5.4730085
+}
+
+    //  useEffect(()=> {
+    //     const getLocation = async() => {
+    //         await getLocationByLatlng(markerLocation).then((lct:string)=>{
+    //             setInputLocation(lct!);
+    //         }).catch(error=> {
+    //             console.log(error)
+    //         });
+    //     };
+    //     getLocation();
+    // });
+export const defaultAddress = 'Victoriapark, Eindhoven, Netherlands';
+
 export const getCurrentCoords= async ():Promise<LatLngLiteral | null> => {
     return new Promise((resolve,reject)=>{
         navigator.geolocation.getCurrentPosition((posiiton: GeolocationPosition)=>{
@@ -34,14 +53,19 @@ export const markerCreator = (props: IGoogleMarkerProps) =>{
     }
 };
 
-
-export const getLocationByLatlng = async(latlng: LatLngLiteral) => {
-   return await Geocode.fromLatLng(latlng.lat.toString(), latlng.lng.toString()).then(
-        (response) => {
-            return response.results[0].formatted_address;
-        },
-        (error) => {
-            return error;
-        }
-    );
+// Geocode.setApiKey("AIzaSyB0TA9D7pUqSlKckqwbh4BXNNi2MS---Hc");
+export const getLocationByLatlng = async(latlng: LatLngLiteral):Promise<string | undefined> => {
+    console.log(latlng)
+    return new Promise((resolve,reject)=>{
+        Geocode.fromLatLng(latlng.lat.toString(), latlng.lng.toString()).then(
+            (response) => {
+                resolve(response.results[0].formatted_address);
+            },
+            (error) => {
+                console.log(latlng)
+                reject(error);
+            }
+        );
+    });
+    
 }

@@ -36,18 +36,15 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [addUser] = useMutation(ADDUSER);
 
 
-    // console.log(currentUser)
+    console.log(currentUser)
     useEffect(()=>{
         if(currentUser !== null){
-            const {displayName, uid, email} = currentUser as IUser;
             const add = async()=>{
+                console.log(122211)
                 await addUser({
-                   variables:{
-                        displayName,
-                        uid,
-                        email
-                   } 
+                   variables:{userInput: currentUser} 
                 });
+                console.log(111)
             }
             add();
         }

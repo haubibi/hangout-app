@@ -22,9 +22,11 @@ const googleMapLib:("places" | "drawing" | "geometry" | "localContext" | "visual
 const  App: FC = () => {
   const {setCurrentUser, additionalInfo, currentUser} = useContext(UserContext);
   const {setMapIsLoaded} = useContext(GoogleMapContext);
+  console.log(process.env)
   const { isLoaded } = useLoadScript({
     // googleMapsApiKey: process.env.GOOGLE_MAPS_PUBLISH_API_KEY!,
-    googleMapsApiKey: "AIzaSyDhfF0689nkFeU3OosRDudFUtBh6RLIDag",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
+    // googleMapsApiKey: "AIzaSyDhfF0689nkFeU3OosRDudFUtBh6RLIDag",
     libraries: googleMapLib,
   });
 
@@ -33,12 +35,12 @@ const  App: FC = () => {
   })
   useEffect(()=>{
     onUserAuthStateChanged(async(user) =>{
-      console.log(additionalInfo)
+      // console.log(additionalInfo)
         if(!user) return;
         if(currentUser && user.uid === currentUser.uid) return;
         const {uid,email} = user;
         const userInfo = {
-          ...additionalInfo,
+          displayName: '',
           uid,
           email
         };

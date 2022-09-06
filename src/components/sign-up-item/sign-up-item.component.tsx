@@ -16,8 +16,9 @@ const SignUpItem = () => {
 
     const onFinish = async(values: any)=>{
         console.log('Success:', values);
-        // console.log(data)
+        console.log(data)
         const { email,password, displayName } = values;
+        console.log(data)
         const ifEmailRepeated = await data.getAllEmails.map((emailObj: IAllEmails)=> emailObj.email).findIndex((mail: string)=>mail === email);
         if(ifEmailRepeated !== -1){
             alert('the email has been signed!');

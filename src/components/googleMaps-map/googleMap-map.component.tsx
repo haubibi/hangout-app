@@ -17,29 +17,19 @@ import { GoogleMapContext } from "../../context/google-map.context";
 import { useContext } from "react";
 import { IGoogleMarkerProps } from "../../utils/interfaces/google.interface";
 
-const containerStyle = {
-    width: '80%',
-    height: '80%',
-};
 
 interface GoogleMapsInterface extends HTMLAttributes<HTMLDivElement>{
-    defaultCenter: LatLngLiteral,
     googleMapProps: GoogleMapProps,
     markers: IGoogleMarkerProps[];
 }
 
 
  const GoogleMaps:FC<GoogleMapsInterface> = ({
-    defaultCenter,
     googleMapProps,
     markers
  }) => {
     // const mapRef = useRef<any>();
-    const { addressFormInput, setMapInstance, defaultLocation } = useContext(GoogleMapContext);
-    const center = useMemo<LatLngLiteral>(
-        () => defaultCenter,
-        []
-    );
+    const { setMapInstance } = useContext(GoogleMapContext);
     const options = useMemo<MapOptions>(
         () => (googleMapProps.options!),
         []
@@ -48,19 +38,22 @@ interface GoogleMapsInterface extends HTMLAttributes<HTMLDivElement>{
         setMapInstance(map);
     }, []);
 
-  const markerOnload = (marker:google.maps.Marker) => {
-    console.log(marker, center)
-  }
-  const markOnClick = () =>{
+    const markerOnload = (marker:google.maps.Marker) => {
+        // console.log(marker, center)
+    }
+    const markOnClick = () =>{
     
-  }
+
+    }
+
+//   console.log(googleMapProps)
     return (
         <GoogleMapContainer>
             {/* <ReactComponent /> */}
             <GoogleMap
-                options={options}
-                onLoad={onLoad}
                 {...googleMapProps}
+                onLoad={onLoad}
+                options = {options}
             >
             
             {
