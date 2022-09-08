@@ -19,6 +19,12 @@ const typeDefs = gql`
         review: String
         user: UserInput
     }
+    input ImageInput {
+        uid: ID!
+        name: String
+        refPath: String!
+        url: String!
+    }
     input TaskInput {
         id: ID!
         title:String!
@@ -35,6 +41,8 @@ const typeDefs = gql`
         open: Boolean
         hide: Boolean
         address: String
+        showImages:[ImageInput]
+        frontCoverImage: ImageInput
     }
 
     input UserInput {
@@ -52,7 +60,12 @@ const typeDefs = gql`
         lat: Float!
         lng: Float!
     }
-
+    type Image {
+        uid: ID!
+        name: String
+        refPath: String!
+        url: String!
+    }
     type Task{
         id: ID!
         title:String!
@@ -69,6 +82,8 @@ const typeDefs = gql`
         open: Boolean
         hide: Boolean
         address: String
+        showImages:[Image]
+        frontCoverImage: Image
     }
     type Review {
         review: String
@@ -114,12 +129,22 @@ const resolvers = {
                     .then(snap =>snap.val())
                     .then(value => Object.keys(value).map((key)=>value[key]));
         }, 
-        getTaskById: async(_,{id})=>{
+        getTaskById: async(
+            _,
+            {id}
+        )=>{
             return db.ref("tasks")
                     .once("value")
                     .then(snap =>snap.val())
                     .then(value => {
-                        return value.filter((task)=>task.id === id)[0];
+                        const taskArr = Object.keys(value).map((key)=>value[key]);
+                        const taskIndex = taskArr.findIndex((task) => task.id === id);
+                        console.log(_,id, taskArr,taskIndex)
+                        if(taskIndex === -1){
+                            return null;
+                        } else {
+                            return taskArr[taskIndex];
+                        }
                     });
         },
         getUserById: async(_,{uid})=>{

@@ -1,7 +1,7 @@
 
 import React, { FC, useEffect, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useLoadScript } from '@react-google-maps/api';
+// import { useLoadScript } from '@react-google-maps/api';
 import Navigation from './routers/navigation/navigation.component';
 import Home from './routers/home/home.component';
 import TaskForm from './routers/task-form/task-form.component'
@@ -17,22 +17,13 @@ import "antd/dist/antd.css";
 import { IUser } from './utils/interfaces/user.interface';
 
 
-const googleMapLib:("places" | "drawing" | "geometry" | "localContext" | "visualization")[]= ["places"];
+// const googleMapLib:("places" | "drawing" | "geometry" | "localContext" | "visualization")[]= ["places"];
 
 const  App: FC = () => {
   const {setCurrentUser, additionalInfo, currentUser} = useContext(UserContext);
   const {setMapIsLoaded} = useContext(GoogleMapContext);
-  console.log(process.env)
-  const { isLoaded } = useLoadScript({
-    // googleMapsApiKey: process.env.GOOGLE_MAPS_PUBLISH_API_KEY!,
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
-    // googleMapsApiKey: "AIzaSyDhfF0689nkFeU3OosRDudFUtBh6RLIDag",
-    libraries: googleMapLib,
-  });
+ 
 
-  useEffect(()=>{
-    setMapIsLoaded(isLoaded);
-  })
   useEffect(()=>{
     onUserAuthStateChanged(async(user) =>{
       // console.log(additionalInfo)

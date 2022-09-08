@@ -40,13 +40,13 @@ const TaskForm = ({setDefaultLoactionToCurrent = true}) =>{
             setDefaultTask(baseTask)
         }
       },[]);
-
+      
     return ( 
         <TaskFormContainer>
             <h2>this is a task form</h2>
             {   
                 loading ?  <Spin /> :
-                <TaskFormItem defaultTask = {defaultTask}></TaskFormItem>
+                <TaskFormItem taskId="taskTest111"></TaskFormItem>
             }
         </TaskFormContainer>
     )

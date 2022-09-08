@@ -1,12 +1,12 @@
 import { createContext, FC, Dispatch, useState, useEffect } from "react";
 import { gql, useQuery,useMutation } from '@apollo/client';
 import { ADDTASK , ADDUSER} from "../utils/graphql/mutation.utils";
-import { ITaskInputString } from "../utils/interfaces/task.interface";
+import { ITask } from '../utils/interfaces/task.interface';
 import React from "react";
 
 export interface ITaskContext {
-  currentTask: null | ITaskInputString;
-  setCurrentTask: Dispatch<React.SetStateAction<ITaskInputString| null>>;
+  currentTask: null | ITask;
+  setCurrentTask: Dispatch<React.SetStateAction<ITask| null>>;
 }
 const initTaskContext:ITaskContext = {
   currentTask: null,
@@ -21,7 +21,7 @@ export interface IProviderChildrenProps {
   }
 
 export const TaskProvider:FC<IProviderChildrenProps> = ({children}) =>{
-    const [currentTask, setCurrentTask] = useState<ITaskInputString | null>(null);
+    const [currentTask, setCurrentTask] = useState<ITask | null>(null);
     const [addTask] = useMutation(ADDTASK);
     useEffect(()=>{
       if(currentTask !== null){
@@ -33,9 +33,7 @@ export const TaskProvider:FC<IProviderChildrenProps> = ({children}) =>{
               });
           }
           add();
-          // console.log(add)
       }
-      // console.log(user, currentUser)
 
   },[currentTask])
     const value = {

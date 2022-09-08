@@ -8,6 +8,12 @@ const initAdditionalInfo = {
     displayName: ''
 }
 
+const defaultUser: IUser = {
+    email: 'biao.huangsoultaker@gmail.com',
+    uid: 'sdfsdfsdfsd',
+    displayName: 'biao huang'
+}
+
 export interface IUserContext {
     currentUser: null | IUser;
     setCurrentUser: Dispatch<React.SetStateAction<IUser| null>>;
@@ -31,20 +37,18 @@ export interface IProviderChildrenProps {
 }
 
 export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
-    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+    const [currentUser, setCurrentUser] = useState<IUser | null>(defaultUser);
     const [additionalInfo, setAdditionalInfo] = useState<IAdditionalInfo>(initAdditionalInfo);
     const [addUser] = useMutation(ADDUSER);
 
 
-    console.log(currentUser)
+    // console.log(currentUser)
     useEffect(()=>{
         if(currentUser !== null){
             const add = async()=>{
-                console.log(122211)
                 await addUser({
                    variables:{userInput: currentUser} 
                 });
-                console.log(111)
             }
             add();
         }

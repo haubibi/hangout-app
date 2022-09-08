@@ -2,85 +2,71 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
-import React, { useState } from 'react';
+import React, { useState, HTMLAttributes,FC, useEffect } from 'react';
 import { FormImagesUploadContainer} from './form-images-upload.styles'
 import { customUploadImage } from '../../utils/firebase/firebase.utils';
 import { IImageObj } from '../../utils/images/images.utils'
+import { deleteImage } from '../../utils/firebase/firebase.utils';
+import { ImagesTypeName } from '../../utils/images/images.utils';
+import { useMemo } from 'react';
+import { useContext } from 'react';
+import { UserContext } from '../../context/user.context';
+import { Form } from 'antd';
 
-const getBase64 = (file: RcFile): Promise<undefined> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      return reject();   
-      // resolve(reader.result as string);
-    }
-    reader.onerror = error => reject(error);
+interface IFormImagesUploadProps extends HTMLAttributes<HTMLDivElement>{
+  maxImageLength: number;
+}
 
-  });
 
-export const FormImagesUpload: React.FC = () => {
+export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
+    // parentRefPath,
+    maxImageLength = 5,
+    // defaultFileList = []
+}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([
     {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-2',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-3',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-4',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-xxx',
-      percent: 50,
-      name: 'image.png',
-      status: 'uploading',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'error',
-    },
+      name: "inbetween.png",
+      // refPath: "images/tasks/taskTest111/displayInTask/rc-upload-1662591043673-6",
+      uid: "rc-upload-1662591043673-6",
+      url: "https://firebasestorage.googleapis.com/v0/b/hang-out-213d4.appspot.com/o/images%2Ftasks%2FtaskTest111%2FdisplayInTask%2Frc-upload-1662592247661-6?alt=media&token=5334240d-e248-49bb-89d2-3570d24ebeea"
+
+    }
   ]);
 
-  const handleCancel = () => setPreviewOpen(false);
+
+  // useEffect(()=>)
+
+  const getDisPlayImages = (e: any) => {
+    console.log(e)
+    if (Array.isArray(e)) {
+      return e;
+    }
+   return e && e.fileList;
+  };
+
+  const beforeUpload = (file: RcFile, Filelist: RcFile[]) => {
+    console.log(Filelist)
+    return false;
+  }
+
+  const handleCancel = () => {
+    setPreviewOpen(false)
+  };
 
   const handlePreview = async (file: UploadFile) => {
     console.log(file)
-    // if (!file.url && !file.preview) {
-    //   file.preview = await getBase64(file.originFileObj as RcFile);
-    // }
-
-    // setPreviewImage(file.url || (file.preview as string));
-    // setPreviewOpen(true);
-    // setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
-
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList ,file}) => {
-    // const { uid , name ,response:{metadata:{fullPath}}} = file;
-    // const imageObj:IImageObj = {uid, name, refPath: fullPath} 
-    console.log(file)
-    setFileList(newFileList);
+  // customUploadImage('users', 'sdf', 'avatar')
+  const handleChange: UploadProps['onChange'] = ({ fileList, file}) => {
+    setFileList(fileList);
   }
+
+  const handleRemove:UploadProps['onRemove'] = (file) => {
+  }
+
 
   const uploadButton = (
     <div>
@@ -88,27 +74,29 @@ export const FormImagesUpload: React.FC = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-  const customUpload = async({ onError, onSuccess, file }: any) => {
-    const metadata = {
-        contentType: 'image/jpeg'
-    }
-   
-  };
   return (
-    <FormImagesUploadContainer>
-      <Upload
-        listType="picture-card"
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
-        // customRequest = { customUpload}
-        customRequest = {customUploadImage('users', 'sdf', 'avatar')}
-      >
-        {fileList.length >= 8 ? null : uploadButton}
-      </Upload>
-      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-      </Modal>
-    </FormImagesUploadContainer>
-  );
-};
+    // <FormImagesUploadContainer>
+    <Form.Item 
+          label="Display images" 
+          name = "fileList"
+          labelCol={{ span: 5 }}
+          wrapperCol={{ span: 15 }}
+    >
+        <FormImagesUploadContainer
+          listType="picture-card"
+          fileList={fileList}
+          beforeUpload = {beforeUpload}
+          onPreview={handlePreview}
+          onChange={handleChange}
+          onRemove = {handleRemove}
+          // customRequest = {customUploadImage('users', 'sdf', 'avatar')}
+        >
+          {fileList.length >= maxImageLength ? null : uploadButton}
+        </FormImagesUploadContainer>
+    </Form.Item> 
+    // </FormImagesUploadContainer>
+    );
+  };
+  // <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+  //   <img alt="example" style={{ width: '100%' }} src={previewImage} />
+  // </Modal>

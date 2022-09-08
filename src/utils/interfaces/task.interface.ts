@@ -1,7 +1,7 @@
 import { IUser,IReview } from './user.interface';
 import { Moment } from 'moment';
 import { LatLngLiteral } from './google.interface'
-import { IImageObj } from '../images/images.utils'
+import { IImageObjWithUrl } from '../images/images.utils'
 
 
 export interface ITaskBase {
@@ -21,23 +21,19 @@ export interface ITaskInputMoment extends ITaskBase{
     
 }
 export interface ITaskInputString extends ITaskBase{
-    startDate:string;
-    startTime:string;
-    endDate:string;
-    endTime:string;
+    startDate:string | undefined;
+    startTime:string | undefined;
+    endDate:string| undefined;
+    endTime:string| undefined;
 }
 
 
-export interface ITask extends ITaskBase {
-    startDate:string;
-    startTime:string;
-    endDate:string;
-    endTime:string;
+export interface ITask extends ITaskInputString {
     participants: IUser[];
     reviews: IReview[];
     hide: boolean;
     open: boolean;
     address: string;
-    showImages:IImageObj[],
-    frontCoverImage:IImageObj;
+    showImages:IImageObjWithUrl[],
+    frontCoverImage:IImageObjWithUrl;
 }

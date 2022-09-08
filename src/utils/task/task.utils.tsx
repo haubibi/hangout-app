@@ -8,7 +8,7 @@ export const getUuiD = (uid: string) => {
     return uid+ '_' + Math.random().toString();
 }
 
-
+console.log(new Date())
 
 export const baseTaskCreator =  (): ITask => {
     const location: LatLngLiteral = defaultLatLng;
@@ -22,10 +22,10 @@ export const baseTaskCreator =  (): ITask => {
             // avatarStr: '',
             email: ''
         },
-        startDate: '',
-        startTime: '',
-        endDate: '',
-        endTime: '',
+        startDate: undefined,
+        startTime: undefined,
+        endDate: undefined,
+        endTime: undefined,
         participants: [],
         reviews: [],
         hide: false,
@@ -45,6 +45,7 @@ export const taskCreator = (baseTask: ITask, props: ITaskInputMoment):ITask => {
     const id = getUuiD(props.id);
     return {
         ...baseTask,
+        ...props,
         id,
         startDate: getDateString(props.startDate),
         startTime: getDateTimeString(props.startTime),

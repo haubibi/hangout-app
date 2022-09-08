@@ -12,8 +12,8 @@ import usePlacesAutocomplete, {
   import "@reach/combobox/styles.css";
 
   import { ComboboxInputStyled, ComboboxStyled, ComboboxContainer } from './places-auto-complete.styles'
-  import { GoogleMapContext } from "../../context/google-map.context";
-  import React, { useContext,HTMLAttributes, FC, useEffect } from "react";
+  import React, { HTMLAttributes, FC, useState, useEffect } from "react";
+  import { LatLngLiteral } from '../../utils/interfaces/google.interface';
 
 
   export interface IComboboxContainer {
@@ -25,20 +25,31 @@ import usePlacesAutocomplete, {
   export interface IComboboxStyled extends IComboboxContainer{
     paddingTop?: string;
   }
+
   export interface IComboboxInputStyled extends IComboboxContainer{
+
   }
 
-  interface IPlacesProps extends HTMLAttributes<HTMLDivElement>{
+  export interface IPlaceInputValue {
+      location: LatLngLiteral;
+      address: string;
+  }
+  
+  interface IPlacesProps {
     comboboxContainerStyle: IComboboxContainer;
     ComboboxStyle: IComboboxStyled;
-    ComboboxInputStyle: IComboboxInputStyled
+    ComboboxInputStyle: IComboboxInputStyled;
+    onChange: (e: IPlaceInputValue) => void;
+    defaultV: IPlaceInputValue;
   }
   
 
   const Places:FC<IPlacesProps> = ({
     comboboxContainerStyle,
     ComboboxStyle,
-    ComboboxInputStyle
+    ComboboxInputStyle,
+    defaultV,
+    onChange
   }) => {
     const {
       ready,
@@ -47,24 +58,29 @@ import usePlacesAutocomplete, {
       suggestions: { status, data },
       clearSuggestions,
     } = usePlacesAutocomplete();
-    const {setAddressFormInput, mapInstance, addressFormInput, addressString } = useContext(GoogleMapContext);
+    // const [latLng, setLatLng] = useState<LatLngLiteral>(defaultV.location);
+    // const {setAddressFormInput, mapInstance, addressFormInput, addressString } = useContext(GoogleMapContext);
 
     useEffect(()=>{
-      setValue(addressString,false);
+        setValue(defaultV.address, false);
+        clearSuggestions();
     },[]);
 
 
-
     const handleSelect = async (val: string) => {
-      // console.log(val)
       setValue(val, false);
       clearSuggestions();
       const results = await getGeocode({ address: val });
-      // const { lat, lng } = await getLatLng(results[0]);
-      const latlng = await getLatLng(results[0]);
+      const locationLatLng = await getLatLng(results[0]);
+      if(!locationLatLng) return;
+      // setLatLng(locationLatLng);
 
-      setAddressFormInput(latlng);
-      mapInstance!.panTo(latlng);
+
+      onChange({
+          location: locationLatLng,
+          address: value
+      });
+      // mapInstance!.panTo(latlng);
     };
   
     return (

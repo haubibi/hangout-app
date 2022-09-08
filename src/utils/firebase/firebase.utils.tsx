@@ -16,12 +16,16 @@ import {
   ref,
   uploadString,
   uploadBytes,
-  getDownloadURL
+  getDownloadURL,
+  deleteObject,
+  UploadResult
  } from "firebase/storage";
-
  import {hashId} from '../usefulFunctions/hashid'
  import { UploadRequestOption } from 'rc-upload/lib/interface';
  import { IImageObj } from '../images/images.utils';
+import { UploadFile } from 'antd';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyCeT3ANdqXNbquxmYay1gm9O-8NgqlpakA",
   authDomain: "hang-out-213d4.firebaseapp.com",
@@ -48,6 +52,23 @@ export type userImageType = 'avatar';
 export type taskImageType = 'frontCover' | 'showup';
 
 
+export const updateImage = async(parentRefPath: string, file: any):Promise<UploadResult> => {
+  const { uid } = file;
+  const parentRef = ref(storage,parentRefPath)
+  const imageRef = ref(parentRef,uid)
+  return await uploadBytes(imageRef, file);
+}
+export const deleteImage = async (parentRefPath: string, file: any):Promise<void> => {
+  const { uid } = file;
+  const parentRef = ref(storage, parentRefPath);
+  const imageRef = ref(parentRef, uid);
+  return await deleteObject(imageRef);
+}
+
+
+
+
+
 export function customUploadImage(buckType: 'users', id: string, type: 'avatar'):((options: UploadRequestOption) => void);
 export function customUploadImage(buckType: 'tasks', id: string, type: 'frontCover'):((options: UploadRequestOption) => void);
 export function customUploadImage(buckType: 'tasks', id: string, type: 'showup'):((options: UploadRequestOption) => void);
@@ -55,11 +76,7 @@ export function customUploadImage(buckType:BuckType, id: string, type: userImage
     const buckTypeRef = ref(imagesRef, buckType);
     const itemRef = ref(buckTypeRef, id);
     const categoryRef = ref(itemRef, type);
-    return ({ onError, onSuccess, file, filename ,data}: any) => {
-    const metadata = {
-        contentType: 'image/jpeg'
-    }
-//a unique name for the 
+    return ({ onError, onSuccess, file}: any) => {
     const imageRef = ref(categoryRef,file.uid)
     try {
       switch(typeof file) {
@@ -89,8 +106,10 @@ export function customUploadImage(buckType:BuckType, id: string, type: userImage
 
 
 
+
+
 export const getImageUrl = async (refPath: string) => {
-  return getDownloadURL(ref(storage, refPath))
+  return await getDownloadURL(ref(storage, refPath))
 }
 
 

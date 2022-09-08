@@ -1,13 +1,14 @@
 import {IGoogleMarkerProps} from '../interfaces/google.interface';
-import { LatLngLiteral } from '../interfaces/google.interface'
+import { LatLngLiteral } from '../interfaces/google.interface';
 import Geocode from 'react-geocode';
 
 
 export const defaultLatLng = {
-    lat:51.4405956,
+    lat: 51.4405956,
     lng: 5.4730085
 }
-
+export type googleMapLibType = ("places" | "drawing" | "geometry" | "localContext" | "visualization")[];
+export const googleMapLibWithPlaces:googleMapLibType = ['places'];
     //  useEffect(()=> {
     //     const getLocation = async() => {
     //         await getLocationByLatlng(markerLocation).then((lct:string)=>{
@@ -45,10 +46,10 @@ export const markerCreator = (props: IGoogleMarkerProps) =>{
         strokeColor: "gold",
         strokeWeight: 2,
     };
-    const animation = props.animation || google.maps.Animation.DROP;
+    // const animation = props.animation || google.maps.Animation.DROP;
     return {
         icon,
-        animation,
+        // animation,
         ...props
     }
 };
