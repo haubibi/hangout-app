@@ -1,3 +1,4 @@
+import { verify } from 'crypto';
 import { initializeApp } from 'firebase/app';
 import { 
     getAuth, 
@@ -9,22 +10,20 @@ import {
     signOut,
     onAuthStateChanged,
     NextOrObserver,
-    User
+    User,
+    sendEmailVerification
 } from 'firebase/auth';
 import { 
   getStorage,
   ref,
-  uploadString,
   uploadBytes,
   getDownloadURL,
   deleteObject,
   UploadResult
  } from "firebase/storage";
- import {hashId} from '../usefulFunctions/hashid'
- import { UploadRequestOption } from 'rc-upload/lib/interface';
- import { IImageObj } from '../images/images.utils';
-import { UploadFile } from 'antd';
+import { IAdditionalInfo, IUserInput, IUser } from '../interfaces/user.interface';
 
+import { createBaseUser } from '../user/user.utils';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCeT3ANdqXNbquxmYay1gm9O-8NgqlpakA",
@@ -51,12 +50,15 @@ export type BuckType = 'users' | 'tasks';
 export type userImageType = 'avatar';
 export type taskImageType = 'frontCover' | 'showup';
 
-
+const metadata = {
+  contentType: 'image/jpeg'
+};
 export const updateImage = async(parentRefPath: string, file: any):Promise<UploadResult> => {
-  const { uid } = file;
-  const parentRef = ref(storage,parentRefPath)
-  const imageRef = ref(parentRef,uid)
-  return await uploadBytes(imageRef, file);
+    const { uid } = file;
+    const parentRef = ref(storage,parentRefPath)
+    const imageRef = ref(parentRef,uid)
+    return await uploadBytes(imageRef, file.originFileObj, metadata);
+  // return await uploadString(imageRef, file.thumbUrl);
 }
 export const deleteImage = async (parentRefPath: string, file: any):Promise<void> => {
   const { uid } = file;
@@ -64,46 +66,6 @@ export const deleteImage = async (parentRefPath: string, file: any):Promise<void
   const imageRef = ref(parentRef, uid);
   return await deleteObject(imageRef);
 }
-
-
-
-
-
-export function customUploadImage(buckType: 'users', id: string, type: 'avatar'):((options: UploadRequestOption) => void);
-export function customUploadImage(buckType: 'tasks', id: string, type: 'frontCover'):((options: UploadRequestOption) => void);
-export function customUploadImage(buckType: 'tasks', id: string, type: 'showup'):((options: UploadRequestOption) => void);
-export function customUploadImage(buckType:BuckType, id: string, type: userImageType | taskImageType): ((options: UploadRequestOption) => void) {
-    const buckTypeRef = ref(imagesRef, buckType);
-    const itemRef = ref(buckTypeRef, id);
-    const categoryRef = ref(itemRef, type);
-    return ({ onError, onSuccess, file}: any) => {
-    const imageRef = ref(categoryRef,file.uid)
-    try {
-      switch(typeof file) {
-        case 'string':
-          uploadString(imageRef, file, 'base64url').then((snapshot) => {
-            onSuccess(snapshot)
-          }).catch(error =>{
-            console.log(error)
-            onError(error)
-          });
-          break;
-          default:
-            uploadBytes(imageRef, file).then((snapshot) => {
-              console.log(snapshot.ref)
-              onSuccess(snapshot)
-            }).catch(error =>{
-            console.log(error)
-            onError(error)
-          });
-      }
-      
-    } catch(e) {
-      onError(e);
-    }
-  }
-}
-
 
 
 
@@ -125,14 +87,36 @@ googleProvider.setCustomParameters({
 export const signInWithGooglePopup = async() => signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = async() => signInWithRedirect(auth, googleProvider);
 
-export const createAuthUserWithEmailAndPassword = async (email: string, password: string) =>{
-    if(!email || !password) return;
-        return await createUserWithEmailAndPassword(auth, email, password);
+
+
+export const createAuthUserWithEmailAndPassword = async (email: string, password: string, additionalInfo: IAdditionalInfo):Promise<IUser> =>{
+  return new Promise(async (resolve,reject)=> {
+      if(!email || !password){
+          reject(new Error('email or password is invaild!'))
+          return;
+      }
+      //create user
+      createUserWithEmailAndPassword(auth, email, password).then(({user}) => {
+        //verify
+        sendEmailVerification(user).then(()=>{
+              const { email, uid } = user;
+              const newUser  = createBaseUser({email, uid, ...additionalInfo} as IUserInput);
+              resolve(newUser);
+        }).catch((error) => {
+            reject(error.code);
+            // ..
+          });;
+        })
+        .catch((error) => {
+          reject(error.code);
+        // ..
+      });
+  })
 }
 
 export const signInWithWithEmailAndPasswordMethod = async (email:string,password:string) =>{
     if(!email || !password) return;
-    return await signInWithEmailAndPassword(auth, email,password)
+    return await signInWithEmailAndPassword(auth, email,password);
 }
 
 export const signOutUser = async () => await signOut(auth);

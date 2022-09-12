@@ -9,16 +9,7 @@ export const defaultLatLng = {
 }
 export type googleMapLibType = ("places" | "drawing" | "geometry" | "localContext" | "visualization")[];
 export const googleMapLibWithPlaces:googleMapLibType = ['places'];
-    //  useEffect(()=> {
-    //     const getLocation = async() => {
-    //         await getLocationByLatlng(markerLocation).then((lct:string)=>{
-    //             setInputLocation(lct!);
-    //         }).catch(error=> {
-    //             console.log(error)
-    //         });
-    //     };
-    //     getLocation();
-    // });
+
 export const defaultAddress = 'Victoriapark, Eindhoven, Netherlands';
 
 export const getCurrentCoords= async ():Promise<LatLngLiteral | null> => {

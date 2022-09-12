@@ -16,12 +16,12 @@ import { LatLngLiteral, MapOptions } from "../../utils/interfaces/google.interfa
 import { GoogleMapContext } from "../../context/google-map.context";
 import { useContext } from "react";
 import { IGoogleMarkerProps } from "../../utils/interfaces/google.interface";
-import { IPlaceInputValue } from '../places-auto-complete/places-auto-complete.component';
+import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
 
 interface IGoogleMapsProps{
     googleMapProps: GoogleMapProps;
     markers: IGoogleMarkerProps[];
-    center: IPlaceInputValue;
+    center: ILatLngAndAddress;
 }
 
 
@@ -58,7 +58,7 @@ interface IGoogleMapsProps{
                 {...googleMapProps}
                 onLoad={onLoad}
                 options = {options}
-                center = {center.location}
+                center = {center.latLng}
             >
             
             {

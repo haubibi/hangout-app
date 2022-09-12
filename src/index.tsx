@@ -11,7 +11,9 @@ import { GoogleMapProvider } from './context/google-map.context';
 import Geocode from 'react-geocode';
 const client = new ApolloClient({
   uri: 'http://localhost:5000/hang-out-213d4/us-central1/graphql',
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+      addTypename: false
+  })
 });
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_GEOCODE_KEY!);

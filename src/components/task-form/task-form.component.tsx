@@ -1,0 +1,56 @@
+import React, {useEffect, useState, FC ,HTMLAttributes} from "react";
+import { TaskFormContainer } from './task-form.styles';
+import { TaskFormItem } from '../task-form-item/task-form-item.component';
+import { Spin, message } from 'antd';
+import { ITask } from "../../utils/interfaces/task.interface";
+
+import { LatLngLiteral } from "../../utils/interfaces/google.interface";
+import { getCurrentCoords } from "../../utils/googleMap/googleMap.utils";
+import { IUser } from '../../utils/interfaces/user.interface';
+import { baseTaskCreator } from '../../utils/task/task.utils';
+import { useQuery } from '@apollo/client';
+import { GETTASKBYID } from '../../utils/graphql/query.utils';
+
+interface ITaskFormprops {
+    user: IUser;
+    taskId: string;
+}
+
+
+export const TaskForm:FC<ITaskFormprops> = ({
+    user,
+    taskId
+}) =>{
+    const [ task, setTask ] = useState<ITask>();
+    const { data, loading, error} = useQuery(GETTASKBYID,{
+        variables: {
+            id: taskId
+        }
+    });
+    console.log(111)
+
+    useEffect(()=>{
+        const getTask = async() => {
+            await baseTaskCreator(taskId, user!).then((task)=>{
+                setTask(task);
+            });
+        };
+        if(error || (data && !data.getTaskById)){
+            getTask();
+        }
+        if(data && data.getTaskById) {
+            const {__typename, ...task} = data.getTaskById;
+            setTask(task);
+        }
+    },[error, data, taskId, user]);
+    console.log(error, loading, data)
+    if(loading || !task) return <Spin />;
+    return ( 
+        <TaskFormContainer>
+            <h2>this is a task form</h2>
+                <TaskFormItem task= { task }></TaskFormItem>
+        </TaskFormContainer>
+    )
+}
+
+

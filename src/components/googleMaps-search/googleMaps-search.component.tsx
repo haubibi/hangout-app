@@ -3,14 +3,11 @@ import React ,{ useState, FC}from "react";
 import { useLoadScript } from '@react-google-maps/api';
 import Places from "../places-auto-complete/places-auto-complete.component";
 import GoogleMaps from '../googleMaps-map/googleMap-map.component'
-import { markerCreator, googleMapLibType } from '../../utils/googleMap/googleMap.utils'
+import { markerCreator } from '../../utils/googleMap/googleMap.utils'
 import { Spin } from "antd";
-import { IPlaceInputValue } from "../places-auto-complete/places-auto-complete.component";
 import { googleMapLibWithPlaces } from '../../utils/googleMap/googleMap.utils'
-import { useCallback } from 'react';
-import {
-    GoogleMap
-} from "@react-google-maps/api";
+import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
+
 const comboboxSettings = {
     comboboxContainerStyle:{
 
@@ -24,8 +21,8 @@ const comboboxSettings = {
 };
 
 const mapContainerStyle = {
-    width: '80%',
-    height: '80%',
+    width: '90%',
+    height: '100%',
 };
 
 const options = {
@@ -50,25 +47,25 @@ const googleMapSettings = {
 // interface IGoogleSearchInFormProps extends HTMLAttributes<HTMLDivElement>{
 //     defaultV: LatLngLiteral;
 //     onchange: (v: IPlaceInputValue) =>void
-// } 
+// }
+// latLngAndAddress
 interface IGoogleSearchInFormProps {
-    location: IPlaceInputValue;
-    onChange: (v: IPlaceInputValue) =>void
+    value?: ILatLngAndAddress;
+    onChange?: (v: ILatLngAndAddress) =>void
 }
 
-const GoogleSearchInForm:FC<IGoogleSearchInFormProps> = ({onChange, location}) =>{
-    const [ placeInput, setPlaceInput ] = useState<IPlaceInputValue>(location);
+const GoogleSearchInForm:FC<IGoogleSearchInFormProps> = ({onChange, value}) =>{
+    const [ placeInput, setPlaceInput ] = useState<ILatLngAndAddress | undefined>(value);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
         libraries: googleMapLibWithPlaces,
     });
-    // console.log(placeInput)
-    const markerLocation = [markerCreator({position: placeInput.location})];
+    const markerLocation = [markerCreator({position: placeInput!.latLng})];
     // const {mapIsLoaded, addressFormInput, defaultLocation} = useContext(GoogleMapContext);
 
-    const handlePlaceInputChange = (e: IPlaceInputValue) => {
+    const handlePlaceInputChange = (e: ILatLngAndAddress) => {
         setPlaceInput(e);
-        onChange(e);
+        onChange!(e);
     }
 
     if(!isLoaded) return <Spin />
@@ -77,13 +74,13 @@ const GoogleSearchInForm:FC<IGoogleSearchInFormProps> = ({onChange, location}) =
         <div>
             <Places 
                 {...comboboxSettings}
-                defaultV = { placeInput}
+                defaultV = { placeInput!}
                 onChange = {handlePlaceInputChange}
             />
             <GoogleMaps 
-                googleMapProps = {{center: placeInput.location ,...googleMapSettings.googleMapProps}}
+                googleMapProps = {{center: placeInput!.latLng ,...googleMapSettings.googleMapProps}}
                 markers = {[...markerLocation, ...googleMapSettings.markers]}
-                center = { placeInput }
+                center = { placeInput! }
             />
         </div>
     )

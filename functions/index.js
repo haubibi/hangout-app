@@ -13,8 +13,13 @@ admin.initializeApp({
 
 const db = admin.database();
 
-
+// uid: string;
+// displayName: string;
+// email: string;
+// sex: 'male' | 'female';
+// avatarImg: IImageObjWithUrlAndRefPath | null;
 const typeDefs = gql`
+
     input reviewInput {
         review: String
         user: UserInput
@@ -24,6 +29,22 @@ const typeDefs = gql`
         name: String
         refPath: String!
         url: String!
+    }
+    input LatLngLiteralInput {
+        lat: Float!
+        lng: Float!
+    }
+    input LatLngAndAddressInput {
+        latLng: LatLngLiteralInput
+        address: String
+    }
+    input UserInput {
+        uid:ID!
+        displayName: String
+        email: String!
+        sex: String!
+        avatarImg: ImageInput
+        friendsList:[UserInput]
     }
     input TaskInput {
         id: ID!
@@ -36,30 +57,25 @@ const typeDefs = gql`
         participants: [UserInput]!
         description:String!
         reviews: [reviewInput]!
-        location: LocationInput!
+        latLngAndAddress: LatLngAndAddressInput!
         participantsNumber: Int!
         open: Boolean
         hide: Boolean
-        address: String
         showImages:[ImageInput]
         frontCoverImage: ImageInput
     }
 
-    input UserInput {
-        uid:ID!
-        displayName: String
-        email: String!
-    }
+    
 
-    input LocationInput {
+    type LatLngLiteral {
         lat: Float!
         lng: Float!
     }
-
-    type Location {
-        lat: Float!
-        lng: Float!
+    type LatLngAndAddress {
+        latLng: LatLngLiteral
+        address: String
     }
+
     type Image {
         uid: ID!
         name: String
@@ -77,13 +93,12 @@ const typeDefs = gql`
         participants: [User]
         description:String!
         reviews: [Review]!
-        location: Location!
         participantsNumber: Int!
         open: Boolean
         hide: Boolean
-        address: String
         showImages:[Image]
         frontCoverImage: Image
+        latLngAndAddress: LatLngAndAddress
     }
     type Review {
         review: String
@@ -96,7 +111,12 @@ const typeDefs = gql`
         uid:ID!
         displayName: String
         email: String!
+        sex: String!
+        avatarImg: Image
+        friendsList:[User]
     }
+
+
     type Query {
         users: [User]
         tasks: [Task]
@@ -148,6 +168,8 @@ const resolvers = {
                     });
         },
         getUserById: async(_,{uid})=>{
+            console.log(uid)
+            if(uid === '') return;
             return db.ref("users")
                     .once("value")
                     .then(snap =>snap.val())

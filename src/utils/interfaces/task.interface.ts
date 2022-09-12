@@ -1,7 +1,7 @@
 import { IUser,IReview } from './user.interface';
 import { Moment } from 'moment';
-import { LatLngLiteral } from './google.interface'
-import { IImageObjWithUrl } from '../images/images.utils'
+import { ILatLngAndAddress } from './google.interface'
+import { IImageObjWithUrlAndRefPath } from '../images/images.utils'
 
 
 export interface ITaskBase {
@@ -9,7 +9,7 @@ export interface ITaskBase {
     title: string;
     organizer: IUser;
     participantsNumber: number;
-    location: LatLngLiteral;
+    // location: LatLngLiteral;
     description: string;
 }
 
@@ -33,7 +33,8 @@ export interface ITask extends ITaskInputString {
     reviews: IReview[];
     hide: boolean;
     open: boolean;
-    address: string;
-    showImages:IImageObjWithUrl[],
-    frontCoverImage:IImageObjWithUrl;
+    // address: string;
+    latLngAndAddress: ILatLngAndAddress;
+    showImages: IImageObjWithUrlAndRefPath[],
+    frontCoverImage: IImageObjWithUrlAndRefPath | null;
 }

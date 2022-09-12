@@ -7,8 +7,78 @@ export const GETALLMAILS = gql`
     }
 `
 
+export const GETUSER = gql`
+    query($uid:String){
+      getUserById (uid:$uid){
+          displayName
+          sex
+          uid
+          email
+          avatarImg{
+            uid
+            name
+            refPath
+            url
+          }
+        }
+    }
+`
+export const GETAllTASKS = gql`
+    query{
+      tasks {
+        id
+        title
+        startDate
+        startTime
+        endDate
+        endTime
+        organizer {
+            uid
+            displayName
+            email
+          }
+        showImages {
+          uid
+          name
+          refPath
+          url
+        }
+        frontCoverImage{
+          uid
+          name
+          refPath
+          url
+        }
+        latLngAndAddress {
+          latLng {
+            lng
+            lat
+          }
+          address
+        }
+        reviews{
+          user {
+            uid
+            displayName
+            email
+          }
+          review
+        }
+        participants {
+          uid
+          displayName
+          email
+        }
+        description
+        participantsNumber
+        open
+        hide
+      }
+    }
+`
+
 export const GETTASKBYID = gql`
-query($id:String){
+    query($id:String){
     getTaskById(id:$id){
       id
       title
@@ -33,9 +103,12 @@ query($id:String){
         refPath
         url
       }
-      location {
-        lng
-        lat
+      latLngAndAddress {
+        latLng {
+          lng
+          lat
+        }
+        address
       }
       reviews{
         user {
@@ -54,7 +127,6 @@ query($id:String){
       participantsNumber
       open
       hide
-      address
     }
-  }
+}
 `

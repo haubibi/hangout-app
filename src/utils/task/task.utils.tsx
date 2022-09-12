@@ -1,27 +1,25 @@
-import { ITask, ITaskInputMoment, ITaskInputString} from "../interfaces/task.interface"
-import { getDateString, getDateTimeString, getMomentByDateAndTimeString } from '../date/date.utils'
-import { LatLngLiteral } from '../interfaces/google.interface'
-import { defaultLatLng, defaultAddress } from "../googleMap/googleMap.utils";
-import { defaultFrontCoverImage } from '../images/images.utils';
+import { ITask, ITaskInputMoment} from "../interfaces/task.interface"
+import { getDateString, getDateTimeString } from '../date/date.utils'
+import { getCurrentCoords } from "../googleMap/googleMap.utils";
+import { defaultLatLng } from "../googleMap/googleMap.utils";
+import { IUser } from '../interfaces/user.interface';
 
-export const getUuiD = (uid: string) => {
+
+
+
+export const getUid = (uid: string) => {
     return uid+ '_' + Math.random().toString();
 }
 
-console.log(new Date())
 
-export const baseTaskCreator =  (): ITask => {
-    const location: LatLngLiteral = defaultLatLng;
-    const address: string = defaultAddress;
-    return {
-        id: '',
+export const baseTaskCreator =  async(
+    id: string, 
+    organizer: IUser
+): Promise<ITask> => {
+    const task: ITask =  {
+        id,
         title: '',
-        organizer: {
-            uid: '',
-            displayName: '',
-            // avatarStr: '',
-            email: ''
-        },
+        organizer,
         startDate: undefined,
         startTime: undefined,
         endDate: undefined,
@@ -31,22 +29,28 @@ export const baseTaskCreator =  (): ITask => {
         hide: false,
         open:true,
         participantsNumber: 0,
-        location,
-        address,
+        latLngAndAddress: {
+            latLng: defaultLatLng,
+            address: ''
+        },
         description:'',
         showImages:[],
-        frontCoverImage: defaultFrontCoverImage
-    }
+        frontCoverImage: null
+    };
+    return new Promise(async (resolve, reject)=>{
+        await getCurrentCoords().then((location)=>{
+            if(location){
+                task.latLngAndAddress.latLng = location;
+            }
+            resolve(task);
+        })
+    });
 }
 
-// export const getdefaultTask = () => await baseTaskCreator();
-
 export const taskCreator = (baseTask: ITask, props: ITaskInputMoment):ITask => {
-    const id = getUuiD(props.id);
     return {
         ...baseTask,
         ...props,
-        id,
         startDate: getDateString(props.startDate),
         startTime: getDateTimeString(props.startTime),
         endDate: getDateString(props.endDate),

@@ -1,7 +1,10 @@
-import React, { useContext,FC, useEffect, useState, useMemo } from 'react';
+import React, { useContext,FC, useEffect, useState, useMemo,Fragment } from 'react';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { IFormImagesUploadProps } from '../form-images-upload/form-images-upload.component';
 import moment from 'moment';
 import {
-  Form,
+    FormInstance,
+    Form,
   Input,
   Button,
   DatePicker,
@@ -9,79 +12,206 @@ import {
   TimePicker,
   Col, 
   Row,
-  UploadFile
+  Switch,
+  UploadFile,
+  Spin,
+  message,
 } from 'antd';
+
 import { ITask } from '../../utils/interfaces/task.interface';
 import { FormImagesUpload } from '../form-images-upload/form-images-upload.component'
 import { TaskFormItemContainer } from './task-form-item.styles';
 import GoogleSearchInForm from '../googleMaps-search/googleMaps-search.component';
+import { FormSwitch } from '../form-switch/form-switch.component';
 import { taskCreator } from '../../utils/task/task.utils';
-import { UserContext } from '../../context/user.context';
-import { updateImages, ImagesTypeName, TaskImagesTypeName, IImageObj, getNewImageObj } from '../../utils/images/images.utils';
-import { baseTaskCreator } from '../../utils/task/task.utils';
-import { useQuery } from '@apollo/client';
-import { GETTASKBYID } from '../../utils/graphql/query.utils';
+import { 
+    updateImages, 
+    ImagesTypeName, 
+    TaskImagesTypeName, 
+    getImagesWithUrlAndRefPath, 
+    transformImageToWithoutRefPath 
+} from '../../utils/images/images.utils';
+// import { baseTaskCreator } from '../../utils/task/task.utils';
+// import { useQuery } from '@apollo/client';
+// import { GETTASKBYID } from '../../utils/graphql/query.utils';
 import { useForm } from 'antd/es/form/Form';
-import { IPlaceInputValue } from '../places-auto-complete/places-auto-complete.component';
 import { dateFormat } from '../../utils/date/date.utils';
+import { getImagesWithRefPath } from '../../utils/images/images.utils';
 import './task.less';
+import { JsxElement } from 'typescript';
 const { TextArea } = Input;
-
+const {Item} = Form;
 
 interface TaskFormItemProps {
-    taskId: string;
+    task:ITask
 }
 
-const defauletTask = baseTaskCreator();
+const titleFormProps = {
+    label: "Event title",
+    name: "title",
+    labelCol: {span: 4},
+    wrapperCol: {span: 20},
+    rules:[{ required: true, message: '' }]
+}
+
+const startDateFormProps = {
+    label: "Start date",
+    name: "startDate",
+    labelCol: {span: 8},
+    wrapperCol: {span: 12},
+    rules: [{ required: true, message: '' }]
+}
+const startTimeFormProps = {
+    label: "Start time",
+    name: "startTime",
+    labelCol: {span: 8},
+    wrapperCol: {span: 12},
+    rules: [{ required: true, message: '' }]
+}
+
+
+const endDateFormProps = {
+    label: "End date",
+    name: "endDate",
+    labelCol: {span: 8},
+    wrapperCol: {span: 12},
+    rules: [{ required: true, message: '' }]
+}
+const endTimeFormProps = {
+    label: "End time",
+    name: "endTime",
+    labelCol: {span: 8},
+    wrapperCol: {span: 12},
+    rules: [{ required: true, message: '' }]
+}
+const descriptionFormProps = {
+    label: "Description",
+    name: "description",
+    labelCol: {span: 4},
+    wrapperCol: {span: 20},
+    rules: [{ required: true, message: '' }]
+}
+const frontCoverFormProp = {
+    label: "FrontCover",
+    name: "frontCoverImage",
+    maxImageLength: 1,
+}
+const showImagesFormProps = {
+    label: "Display Images",
+    name: "showImages",
+    maxImageLength: 3,
+}
+
+const googleSearchFormProps = {
+    name: "latLngAndAddress",
+    style:{width: '100%'},                 
+    wrapperCol:{span: 24},
+    rules: [{ required: true, message: '' }]                   
+                            
+}
+
+
+
+const openFormitemProps = {
+    name:'open',
+    label:'Event open',
+    labelCol: {span: 10},
+    wrapperCol: {span: 10}                      
+}
+const showFormitemProps = {
+    name:'hide',
+    label:'Hide event',
+    labelCol: {span: 10},
+    wrapperCol: {span: 10}                      
+}
+const switchProps = {
+    checkedChildren: <CheckOutlined />,
+    unCheckedChildren: <CloseOutlined />,
+    defaultChecked: true
+}
+const formSwitchOpenProps = {
+    switchProps,
+    formItemprops: openFormitemProps  
+}
+const formSwitchShowProps = {
+    switchProps,
+    formItemprops: showFormitemProps  
+}
+
+
+const subbmitButtonFormitemProps = {
+
+}
+
+
+
 
 export const TaskFormItem:FC<TaskFormItemProps> = ({
-    taskId
+    task
 }) =>{
     const [ form ] = useForm();
     const [ detail, setDetail] = useState<Record<string, any>>();
-    const [ task, setTask ] = useState<ITask>(defauletTask);
-    const {data, loading, error} = useQuery(GETTASKBYID,{
-        variables: {
-            id: taskId
-        }
-    });
+    const taskId = task.id;
 
-    const {currentUser} = useContext(UserContext);
-    console.log(taskId)
+    const FormItemsArr = useMemo(()=>{
+        return [
+            [{formItemProps: titleFormProps, wrappedElement: <Input allowClear = {true}/>}],
+            [
+                {formItemProps: startDateFormProps, wrappedElement: <DatePicker />},
+                {formItemProps: startTimeFormProps, wrappedElement: <TimePicker />}
+            ],
+            [
+                {formItemProps: endDateFormProps, wrappedElement: <DatePicker />},
+                {formItemProps: endTimeFormProps, wrappedElement: <TimePicker />}
+            ],  
+            [{formItemProps: descriptionFormProps, wrappedElement: <TextArea rows={4} allowClear = {true} />}],
+            [{formItemProps: {}, wrappedElement:<FormImagesUpload {...frontCoverFormProp} showImages = {task.showImages}/>}], //
+            [{formItemProps: {}, wrappedElement:<FormImagesUpload {...showImagesFormProps} showImages = {task.showImages}/>}], //
+            [{formItemProps: googleSearchFormProps, wrappedElement: <GoogleSearchInForm />}],
+            [
+                {formItemProps: {}, wrappedElement:<FormSwitch {...formSwitchOpenProps}/>},
+                {formItemProps: {}, wrappedElement:<FormSwitch {...formSwitchShowProps}/>},
+            ], 
+            [{formItemProps: subbmitButtonFormitemProps, wrappedElement: <Button type="primary" htmlType="submit">Submit</Button>,encapsulated: false}],
+        
+        ]
+    },[task]);
+   
+
     useEffect(()=>{
-        console.log(data, loading, error);
-       if(!loading){
-           if(data){
-                const {__typename, ...task} = data.getTaskById;
-                setTask(task);
-            }
-       } 
-    },[data, loading, error]);
+        const { 
+            id, 
+            // title, 
+            // description,
+            // hide,
+            // open,
+            // participantsNumber, 
+            startDate, 
+            startTime, 
+            endDate, 
+            endTime,
+            organizer,
+            participants,
+            // frontCoverImage,
+            // latLngAndAddress,
+            showImages, 
+            reviews,
+            ...otherProps
+        } = task;
 
-
-    useEffect(()=>{
-        const {title, startDate, startTime, endDate, endTime, description, participantsNumber } = task;
+        // console.log(showImages)
+        const showImagesWithUrl = transformImageToWithoutRefPath(showImages);
+        // console.log(showImages, showImagesWithUrl)
         setDetail({
-            title, 
             startDate : startDate? moment(startDate, dateFormat): undefined,
             startTime : startTime?moment(startTime): undefined, 
             endDate : endDate?moment(endDate, dateFormat): undefined, 
-            endTime : endTime?moment(endTime): undefined, 
-            description, 
-            participantsNumber
+            endTime : endTime?moment(endTime): undefined,
+            showImages: showImagesWithUrl,
+            ...otherProps
         });
     },[task])
-
-    useEffect(()=>{
-        form.resetFields();
-        console.log(detail)
-    },[form, detail])
-
-
-
-    const handleGoogleSearch = (e: IPlaceInputValue) => {
-
-    }
+    // console.log(task,detail)
 
     const onFinishFailed = ({ values, errorFields, outOfDate }: any) => {
         console.log(values, errorFields, outOfDate,task.showImages)
@@ -89,10 +219,8 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
    
     const onFinish = (values: any) => {
         console.log(task.showImages,values)
-        // const { startDate } = values;
-        if(!currentUser) {alert('Please login first!'); return;}
-        const { uid } = currentUser;
-        // if(!addressFormInput) {alert('Please select a place!'); return;}
+        // if(!currentUser) {alert('Please login first!'); return;}
+        // const { uid } = currentUser;
         if(!task.showImages) task.showImages = [];
         // update task
         updateImages(
@@ -100,24 +228,12 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             taskId,
             TaskImagesTypeName.DISPLAYINTASK,
             task.showImages,
-            values.fileList.fileList
+            values.showImages
         ).then(()=>{
-            const imagesObj:IImageObj[] = values.fileList.fileList.map((file: UploadFile) => {
-                const {uid, name} = file;
-                const refPath = `images/${ImagesTypeName.TASKS}/${taskId}/${TaskImagesTypeName.DISPLAYINTASK}/${uid}`;
-                return {
-                    uid,
-                    name,
-                    refPath
-                }
-            });
-
-            getNewImageObj(imagesObj).then((showImages)=>{
-                console.log(showImages, values)
+            const imagesWithRef = getImagesWithRefPath(ImagesTypeName.TASKS, taskId, TaskImagesTypeName.DISPLAYINTASK, values.showImages);
+            getImagesWithUrlAndRefPath(imagesWithRef).then((showImages)=>{
+                // console.log(showImages, values)
                 const taskObj = taskCreator(task,{
-                    id: uid,
-                    organizer: currentUser,
-                    location: values.location.location,
                     showImages,
                     ...values
                 });
@@ -130,26 +246,42 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
 
     };
 
-    // console.log(detail, task)
+
+    if(!task || !detail) return <Spin />
     return(
         <TaskFormItemContainer>
             <Form
                 form={form}
                 name='taskform'
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 15 }}
                 layout="horizontal"
                 onFinish={onFinish}
                 onFinishFailed = {onFinishFailed}
                 initialValues = {detail}
-                // initialValues = {FormInitialValues}
+                colon = {false}
             >   
-                <Row>
+
+                {
+                    FormItemsArr.map((rowArr,index)=>{
+                        const elementsNum = rowArr.length;
+                        return(
+                            <Row key={index} align = "middle" justify = "start" gutter={16}>
+                                {
+                                    rowArr.map((formitem, index) => {
+                                        const { formItemProps, wrappedElement} = formitem;
+                                        console.log(formitem,rowArr.length);
+                                        return wrappedElement.type === 'function'?
+                                        <Col key={index} span={Math.round(24/elementsNum)}>{wrappedElement}</Col>:    
+                                        <Col key={index} span={Math.round(24/elementsNum)}><Form.Item {...formItemProps}>{wrappedElement}</Form.Item></Col>;    
+                                    })
+                                }
+                             </Row>
+                        )
+                    })
+                }
+                {/* <Row>
                     <Col span={24}>
                         <Form.Item 
-                            label="Event title"
-                            name = "title"
-                            rules={[{ required: true, message: '' }]}
+                            {...titleFormProps}
                         >
                             <Input allowClear = {true}/>
                         </Form.Item>
@@ -159,11 +291,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 <Row>
                     <Col span={12}>
                         <Form.Item
-                            label="Start date"
-                            name = "startDate"
-                            labelCol = {{span: 10}}
-                            wrapperCol = {{span: 10}}
-                            rules={[{ required: true, message: '' }]}
+                            {...startDateFormProps}
                         >
                             <DatePicker />
                         </Form.Item>
@@ -171,11 +299,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                     <Col span={12}>
                         <Form.Item 
-                            label="Start time"
-                            name = "startTime"
-                            labelCol = {{span: 6}}
-                            wrapperCol = {{span: 10}}
-                            rules={[{ required: true, message: '' }]}
+                            {...startTimeFormProps}
                         >
                             <TimePicker />
                         </Form.Item>
@@ -184,11 +308,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 <Row>
                     <Col span={12}>
                         <Form.Item
-                            label="End date"
-                            name = "endDate"
-                            labelCol = {{span: 10}}
-                            wrapperCol = {{span: 10}}
-                            rules={[{ required: true, message: '' }]}
+                           {...endDateFormProps}
                         >
                             <DatePicker />
                         </Form.Item>
@@ -196,11 +316,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                     <Col span={12}>
                         <Form.Item 
-                            label="End time"
-                            name = "endTime"
-                            labelCol = {{span: 6}}
-                            wrapperCol = {{span: 10}}
-                            rules={[{ required: true, message: '' }]}
+                           {...endTimeFormProps}
                         >
                             <TimePicker />
                         </Form.Item>
@@ -209,9 +325,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 <Row>
                     <Col span={24}>
                         <Form.Item 
-                            label="Description" 
-                            name = "description"
-                            rules={[{ required: true, message: '' }]}
+                            {...descriptionFormProps}
                         >
                             <TextArea rows={4} allowClear = {true}/>
                         </Form.Item>
@@ -235,28 +349,44 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 <Row>
                     <Col span={24} >                
                         <FormImagesUpload
-                            maxImageLength= {3}
+                            {...showImagesFormProps}
+                            showImages = {task.showImages}
                         />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={24}>
                         <Form.Item 
-                            name = "location"
+                            name = "latLngAndAddress"
                             style={{width: '100%'}}
                             wrapperCol = {{span: 24}}
                             rules={[{ required: true, message: '' }]}
                         >
                             <GoogleSearchInForm 
-                                onChange = { handleGoogleSearch }
-                                location = {{
-                                    location: task.location,
-                                    address: task.address
-                                }}
+                                
                             />
                         </Form.Item>
                     </Col>
                 </Row>
+                
+
+                <Row>
+                    <Col span = {12}>
+                        <FormSwitch
+                            switchProps = {switchProps}
+                            formItemprops = {openFormitemProps}
+                        />
+                    </Col>
+                    <Col span = {12}>
+                        <FormSwitch
+                            switchProps = {switchProps}
+                            formItemprops = {showFormitemProps}
+                        />
+                    </Col>
+                </Row>
+                
+                
+                
                 <Row>
                     <Col span={2} offset = {11}>
                         <Form.Item >
@@ -266,6 +396,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         </Form.Item>
                     </Col>
                 </Row>
+                 */}
 
             </Form>
 

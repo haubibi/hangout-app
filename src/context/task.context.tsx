@@ -35,7 +35,7 @@ export const TaskProvider:FC<IProviderChildrenProps> = ({children}) =>{
           add();
       }
 
-  },[currentTask])
+  },[currentTask, addTask])
     const value = {
       currentTask,
       setCurrentTask

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
 export const SignupItemContainer = styled.div`
-    min-width: 500px;
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
 `

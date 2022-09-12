@@ -17,7 +17,7 @@ export const ComboboxStyled = styled(Combobox)`
     width: ${(props: IComboboxStyled) => props.width || '100%'};
     height: ${(props: IComboboxStyled) => props.height || '50px'};
     left: ${(props: IComboboxStyled) => props.left || '100px'};
-    padding-top: ${(props: IComboboxStyled) => props.paddingTop || '50px'};
+    padding-top: ${(props: IComboboxStyled) => props.paddingTop || '0px'};
     display: flex;
     flex-direction: column;
     align-items: center;

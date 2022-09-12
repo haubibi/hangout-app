@@ -1,36 +1,66 @@
-import React from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
+import React, {
+    useContext,
+    useState,
+    useEffect
+} from 'react';
+import { 
+    Button, 
+    Form, 
+    Input,
+    message
+} from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { SignupItemContainer } from './sign-up-item.styles';
-
-import { useQuery } from '@apollo/client';
-import { GETALLMAILS } from '../../utils/graphql/query.utils'
-import { IAllEmails } from '../../utils/interfaces/user.interface';
-import { useContext } from 'react';
 import { createAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
 import { UserContext } from '../../context/user.context';
-import { mathString } from '../../utils/usefulFunctions/limit.utils';
+import { 
+    initialValues,
+    signupRules,
+    SignUpNamesEnum
+ } from '../../validators/signup.validate';
+
+ const formitems = [
+    { label: 'Displayname', name: SignUpNamesEnum.displayname, rules: signupRules[SignUpNamesEnum.displayname],item: <Input placeholder='display name'/>},
+    { label: 'E-mail', name: SignUpNamesEnum.email, rules: signupRules[SignUpNamesEnum.email], item: <Input placeholder='e-mail address'/>},
+    { label: 'Password', name: SignUpNamesEnum.password, rules: signupRules[SignUpNamesEnum.password], item: <Input.Password placeholder='password'/>},
+    { label: 'Confirm Password', name: SignUpNamesEnum.confirm, rules: signupRules[SignUpNamesEnum.confirm],item: <Input.Password  placeholder='confirm password'/>},
+]
+
 
 const SignUpItem = () => {
-    const {data} = useQuery(GETALLMAILS);
-    const {setAdditionalInfo} = useContext(UserContext);
+    const { setCurrentUser } = useContext(UserContext);
+    const [ detail, setDetail] = useState<Record<string, any>>();
+    const navigate = useNavigate();
+
+    //set initial values when component mounted
+    useEffect(()=> {
+        setDetail(initialValues);
+    },[])
+
+
+
 
     const onFinish = async(values: any)=>{
         console.log('Success:', values);
-        console.log(data)
-        const { email,password, displayName } = values;
-        console.log(data)
-        const ifEmailRepeated = await data.getAllEmails.map((emailObj: IAllEmails)=> emailObj.email).findIndex((mail: string)=>mail === email);
-        if(ifEmailRepeated !== -1){
-            alert('the email has been signed!');
-        } else {
-            if(mathString(displayName)){
-                setAdditionalInfo({
-                    displayName
-                });
-            }
-            createAuthUserWithEmailAndPassword(email, password);
+        // console.log(data)
+        const { email,password, displayName, sex} = values;
 
+
+        const additionalInfo = {
+            displayName,
+            sex,
+            avatarImg: null,
+            friendsList: []
         }
+        createAuthUserWithEmailAndPassword(email, password, additionalInfo).then((user)=>{
+            setCurrentUser(user);
+            console.log(user)
+            navigate(`/`);
+        }).catch((error)=>{
+            message.error(error);
+        });
+
+        // }
     };
     
     const onFinishFailed = (errorInfo: any) => {
@@ -39,74 +69,19 @@ const SignUpItem = () => {
     return(
         <SignupItemContainer>
             <Form
-                name="basic"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
-                initialValues={{ remember: true }}
+                initialValues = {detail}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                <Form.Item
-                    label="Displayname"
-                    name="displayname"
-                    rules={[{ required: true, message: 'Please input your displayname!' }]}
-                >
-                    <Input />
-                </Form.Item>
-                
-                <Form.Item
-                    label="E-mail"
-                    name="email"
-                    rules={[
-                        {
-                            type: 'email',
-                            message: 'The input is not valid E-mail'
-                        },
-                        { 
-                            required: true, 
-                            message: 'Please input your E-mail!' 
-                        }
-                    ]}
-                >
-                <Input/>
-                </Form.Item>
-                
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                    <Input.Password />
-                </Form.Item>
-                
-                <Form.Item
-                    name="confirm"
-                    label="Confirm Password"
-                    dependencies={['password']}
-                    hasFeedback
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please confirm your password!',
-                    },
-                    ({ getFieldValue }) => ({
-                        validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                            return Promise.resolve();
-                        }
-                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                        },
-                    }),
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
-                {/* <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 13, span: 4 }}>
-                    <Checkbox>Remember me</Checkbox>
-                </Form.Item> */}
 
-                <Form.Item wrapperCol={{ offset: 13, span: 4 }}>
+                {
+                    formitems.map(({item,rules,...otherProps}, index) => <Form.Item key = {index} {...otherProps} rules = {rules}>{item as JSX.Element}</Form.Item>)
+                            
+                }
+                <Form.Item label = "" wrapperCol={{sm: {span: 4, offset: 14}}}>
                     <Button type="primary" htmlType="submit">
                         Sign up
                     </Button>

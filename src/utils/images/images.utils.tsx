@@ -1,15 +1,20 @@
 import { UploadFile } from 'antd';
 import { UploadResult } from 'firebase/storage'
 import { updateImage, deleteImage, getImageUrl } from '../firebase/firebase.utils';
-export interface IImageObj {
+export interface IImageObjWithRefPath {
     uid: string;
     name: string;
     refPath: string;
 }
-export interface IImageObjWithUrl {
+export interface IImageObjWithUrlAndRefPath {
     uid: string;
     name: string;
     refPath: string;
+    url: string;
+}
+export interface IImageObjWithUrl {
+    uid: string;
+    name: string;
     url: string;
 }
 
@@ -42,21 +47,23 @@ export const defaultFrontCoverImage = {
 
 
 
-// export const getImagesWithUrl = async(imageObjList: IImageObj[]):Promise<IImageObjWithUrl[]>=>{
-//     const promises:Promise<IImageObjWithUrl>[] = imageObjList.map(imageObj => {
-//         return new Promise(async (resolve,rejects)=>{
-//             const { uid, name, refPath} = imageObj;
-//             const newObj:IImageObjWithUrl = {uid, name, url: ''};
-//             try {
-//                 await getImageUrl(refPath).then(url => newObj.url = url);
-//                 resolve(newObj as IImageObjWithUrl);
-//             } catch(error) {
-//                 rejects(error);
-//             }
-//         });
-//     });
-//     return Promise.all(promises);
-// }
+export const transformImageToWithoutRefPath = (imagesWithUrlAndRefPath: IImageObjWithUrlAndRefPath[] | []):(IImageObjWithUrl[] | []) => {
+    if(Array.isArray(imagesWithUrlAndRefPath)){
+        if(imagesWithUrlAndRefPath.length !== 0){
+            return imagesWithUrlAndRefPath.map((imageWithUrlAndRefPath)=> {
+                const { refPath, ...imagesWithUrl} = imageWithUrlAndRefPath;
+                return imagesWithUrl;
+            });
+        }
+        return [];
+    }
+    return [];
+}
+
+
+
+
+
 
 
 
@@ -65,7 +72,6 @@ export const defaultFrontCoverImage = {
 const CheckIfUidExist = (uid: string, fileList: UploadFile[]) => {
     return fileList.findIndex(v => v.uid === uid) !== -1;
 }
-
 const getModifedUploadFileObjByUid = (preFileList:UploadFile[], currentFileList:UploadFile[]):IModifiedUploadFile =>{
     console.log(preFileList, currentFileList)
     const addFilesList:UploadFile[] = [], deleteFilesList:UploadFile[] = [];
@@ -106,26 +112,39 @@ export async function updateImages(imageType: ImagesTypeName, uid: string, subTy
 }
 
 
-// export interface IImageObjWithUrl {
-//     uid: string;
-//     name: string;
-//     refPath: string;
-//     url: string;
-// }
 
 
-// IImageObj
-export const getNewImageObj = (imageObjs: IImageObj[]) =>{
+export function getImagesWithRefPath(imageType: ImagesTypeName.USERS, taskOrUserId: string, subType: UsermagesTypeName.AVATAR, files:UploadFile[]): IImageObjWithRefPath[];
+export function getImagesWithRefPath(imageType: ImagesTypeName.TASKS, taskOrUserId: string, subType: TaskImagesTypeName.FRONTCOVER,files:UploadFile[]): IImageObjWithRefPath[];
+export function getImagesWithRefPath(imageType: ImagesTypeName.TASKS, taskOrUserId: string, subType: TaskImagesTypeName.DISPLAYINTASK,files:UploadFile[]): IImageObjWithRefPath[];
+export function getImagesWithRefPath(imageType: ImagesTypeName, taskOrUserId: string, subType: UsermagesTypeName | TaskImagesTypeName,files:UploadFile[]): IImageObjWithRefPath[] {
+    return files.map((file: UploadFile) => {
+        const { uid, name } = file;
+        const refPath = `images/${imageType}/${taskOrUserId}/${subType}/${uid}`;
+        return {
+            uid,
+            name,
+            refPath
+        }
+    });
+
+}
+
+
+
+
+
+export const getImagesWithUrlAndRefPath = (imageObjs: IImageObjWithRefPath[]) =>{
     const promises = imageObjs.map((imageObj)=>{
         return new Promise((resolve)=>{
             getImageUrl(imageObj.refPath).then((url)=>{
                 resolve({
                     ...imageObj,
                     url
-                } as IImageObjWithUrl)
+                });
             })
         });
     });
-
     return Promise.all(promises);
 }
+

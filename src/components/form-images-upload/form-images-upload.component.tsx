@@ -4,8 +4,7 @@ import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import React, { useState, HTMLAttributes,FC, useEffect } from 'react';
 import { FormImagesUploadContainer} from './form-images-upload.styles'
-import { customUploadImage } from '../../utils/firebase/firebase.utils';
-import { IImageObj } from '../../utils/images/images.utils'
+import { IImageObjWithRefPath, IImageObjWithUrl } from '../../utils/images/images.utils';
 import { deleteImage } from '../../utils/firebase/firebase.utils';
 import { ImagesTypeName } from '../../utils/images/images.utils';
 import { useMemo } from 'react';
@@ -13,33 +12,30 @@ import { useContext } from 'react';
 import { UserContext } from '../../context/user.context';
 import { Form } from 'antd';
 
-interface IFormImagesUploadProps extends HTMLAttributes<HTMLDivElement>{
+export interface IFormImagesUploadProps{
   maxImageLength: number;
+  name: string;
+  label: string;
+  showImages: IImageObjWithUrl[];
 }
 
 
 export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
     // parentRefPath,
     maxImageLength = 5,
+    name = 'showImages',
+    label = 'Display images',
+    showImages,
     // defaultFileList = []
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    {
-      name: "inbetween.png",
-      // refPath: "images/tasks/taskTest111/displayInTask/rc-upload-1662591043673-6",
-      uid: "rc-upload-1662591043673-6",
-      url: "https://firebasestorage.googleapis.com/v0/b/hang-out-213d4.appspot.com/o/images%2Ftasks%2FtaskTest111%2FdisplayInTask%2Frc-upload-1662592247661-6?alt=media&token=5334240d-e248-49bb-89d2-3570d24ebeea"
-
-    }
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>(showImages);
 
 
   // useEffect(()=>)
-
-  const getDisPlayImages = (e: any) => {
+  const normalFile = (e: any) => {
     console.log(e)
     if (Array.isArray(e)) {
       return e;
@@ -61,12 +57,12 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
   };
   // customUploadImage('users', 'sdf', 'avatar')
   const handleChange: UploadProps['onChange'] = ({ fileList, file}) => {
+    console.log(fileList)
     setFileList(fileList);
   }
 
   const handleRemove:UploadProps['onRemove'] = (file) => {
   }
-
 
   const uploadButton = (
     <div>
@@ -77,10 +73,11 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
   return (
     // <FormImagesUploadContainer>
     <Form.Item 
-          label="Display images" 
-          name = "fileList"
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 15 }}
+          label= { label}
+          name = { name }
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 20 }}
+          getValueFromEvent = {normalFile}
     >
         <FormImagesUploadContainer
           listType="picture-card"

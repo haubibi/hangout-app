@@ -1,61 +1,101 @@
-import {FC} from 'react';
-import SearchInput from '../../components/searchInput/searchInput.conponent';
-import { Col, Row, Divider} from 'antd';
-import React from 'react';
+import { 
+    FC, 
+    useState,
+    useEffect
+} from 'react';
+import { HomeContainer } from './home.styles';
+import { HomeSearch } from '../../components/home-search/home-search.component';
+import { EventCardList } from '../../components/event-card-list/event-card-list.component';
+import { GETAllTASKS } from '../../utils/graphql/query.utils';
+import { PaginationBar } from '../../components/pagination/pagination.component'
+import { ITask } from '../../utils/interfaces/task.interface';
+import { 
+    Col,
+    Row,
+    Spin
+} from 'antd';
 
-import { gql, useQuery } from '@apollo/client';
 
-
-// const USERS = gql`
-//     query{
-//         users {
-//         displayName
-//         }
-//     }
-// `;
-// const TASK = gql`
-//     query($id:String){
-//         getTaskById(id:$id) {
-//             title
-//         }
-//     }
-// `;
-// query($id:String){
-//     getTaskById(id:$id) {
-//       title
-//       organizer {
-//         displayName
-//       }
-//       description
-//     }
-//   }
-// const TASK = gql`
-
+import { useQuery } from '@apollo/client';
+import { 
+    tasksColSideLayout,
+    tasksColMiddleLayout,
+    searchColSideLayout,
+    midColConfigue
+} from '../../utils/layout-antdesign/layout';
 
 
 const Home: FC = () =>{
-    // const {data, loading, error} = useQuery(TASK,{
-    //     variables: {
-    //         id: "0"
-    //     }
-    // });
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [ tasks, setTasks ] = useState<ITask[]>();
+    const [ currentTasks, setCurrentTasks ] = useState<ITask[]>();
+    const { data, loading, error} = useQuery(GETAllTASKS);
 
-    // console.log('loading:',loading);
-    // console.log('error:',error);
-    // console.log('data:',data);
+
+    const paginationOnChange = (page: number, pageSize: number) => {
+        console.log(page, pageSize)
+        setCurrentPage(page);
+        setPageSize(pageSize);
+    }
+
+
+    useEffect(()=>{
+        if(tasks){
+            setCurrentTasks(tasks.slice(
+                pageSize * (currentPage -1),
+                pageSize * currentPage,
+            ));
+        }
+    },[tasks, currentPage, pageSize])
+    
+    useEffect(()=>{
+        if(data && data.tasks) {
+            const t: ITask[] = [...data.tasks];
+            for(let i = t.length; i< 100; i++) {
+                t.push(data.tasks[0]);
+            }
+            // setTasks(data.tasks);
+            
+            setTasks(t);
+        }
+    },[error, data]);
+    if(loading || !currentTasks || !tasks) return <Spin />;
+
+
+
+    console.log(currentTasks.length)
     return (
-        <div>
-            <Divider></Divider>
-            <Row><Col span={24}></Col></Row>
+        <HomeContainer>
             <Row>
-                <Col span={12} offset = {6}>
-                    <SearchInput />
+                <Col {...searchColSideLayout} ></Col>
+                <Col {...tasksColMiddleLayout}>
+                    <HomeSearch />
                 </Col>
+                <Col {...searchColSideLayout}></Col>
             </Row>
+
             <Row>
-                <Col span={24}></Col>
+                <Col {...tasksColSideLayout}></Col>
+                <Col {...midColConfigue}>
+                    <EventCardList 
+                        tasks={currentTasks}
+                    />
+                </Col>
+                <Col {...tasksColSideLayout}></Col>
             </Row>
-        </div>
+            <Row style={{margin:'50px 0px 50px 0px'}} gutter= {30}>
+                <Col span = {6}></Col>
+                <Col span = {12}>
+                    <PaginationBar 
+                        onChange={paginationOnChange}
+                        total = {tasks.length}
+                        pageSize = {pageSize}
+                    />
+                </Col>
+                <Col span = {6}></Col>
+            </Row>
+        </HomeContainer>
     )
 }
 

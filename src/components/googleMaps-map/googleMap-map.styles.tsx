@@ -12,6 +12,6 @@ export const GoogleMapContainer = styled.div`
 `
 
 export const GoogleMapItem = styled(GoogleMap)`
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
 `

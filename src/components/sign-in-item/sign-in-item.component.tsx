@@ -1,17 +1,46 @@
-import { SignInItemContainer, Htext} from './sign-in-item.styles';
-import { Button, Form, Input, Checkbox } from 'antd';
+import { useState, useEffect,useContext } from 'react';
+import { SignInItemContainer} from './sign-in-item.styles';
+import { Button, Form, Input, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { signInWithWithEmailAndPasswordMethod } from '../../utils/firebase/firebase.utils'
-import React from "react";
+import { useNavigate } from 'react-router-dom';
+import { UserCredential } from 'firebase/auth';
+import { UserContext } from '../../context/user.context';
+import { 
+    LoginNamesEnum,
+    loginRules,
+    initialValues
+ } from '../../validators/login.validate';
+
+const formitems = [
+    {  name: LoginNamesEnum.email, rules: loginRules[LoginNamesEnum.email], item: <Input prefix={<UserOutlined />} placeholder="Username" />},
+    {  name: LoginNamesEnum.password, rules: loginRules[LoginNamesEnum.password], item: <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="password" />},
+]
+
+
 const SignInItem = () => {
-    const onFinish = (values: any) => {
+    const { setUserUid } = useContext(UserContext)
+    const [ detail, setDetail] = useState<Record<string, any>>();
+    const navigate = useNavigate();
+
+    //set initial values when component mounted
+    useEffect(()=> {
+        setDetail(initialValues);
+    },[])
+
+
+    const onFinish = async(values: any) => {
         console.log('Success:', values);
         const { email, password} = values;
-        try {
-            signInWithWithEmailAndPasswordMethod(email, password);
-        } catch( error ){
-            console.log(error);
-        }
+        signInWithWithEmailAndPasswordMethod(email, password).then((credential: UserCredential | undefined)=>{
+            // if(credential) {
+            //     const uid = credential.user.uid;
+            //     console.log(uid)
+            //     setUserUid(uid);
+            // }
+            navigate(`/`);
+        }).catch(error => message.error(error));
+        
       };
     
     const onFinishFailed = (errorInfo: any) => {
@@ -20,42 +49,20 @@ const SignInItem = () => {
     return (
         <SignInItemContainer>
             <Form
-                name="normal_login"
-                className="login-form"
-                initialValues={{ remember: true }}
+                name="logIn"
+                initialValues={detail}
                 onFinish={onFinish}
+                onFinishFailed = { onFinishFailed }
                 >
-                <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: 'Please input your Username!' }]}
-                >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-                </Form.Item>
-                <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
-                >
-                    <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
-                    type="password"
-                    placeholder="Password"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                    <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-
-                    <a className="login-form-forgot" href="">
-                    Forgot password
-                    </a>
-                </Form.Item>
+                {
+                    formitems.map(({item,rules,...otherProps}, index) => <Form.Item key = {index} {...otherProps} rules = {rules}>{item as JSX.Element}</Form.Item>)
+                            
+                }
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
+                    <Button type="primary" htmlType="submit">
                     Log in
                     </Button>
-                    Or <a href="">register now!</a>
                 </Form.Item>
                 </Form>
         </SignInItemContainer>
