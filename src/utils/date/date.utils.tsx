@@ -10,7 +10,8 @@ export const getDateString = (m: Moment): string => m.format('YYYY-MM-DD');
 
 export const getDateTimeString = (m: Moment): string  => m.format()
 
-export const getMomentByDateAndTimeString = (d:string, t:string) => moment(t.replace(dateRex, d));
+export const getCurrentMoment = (): Moment => moment();
+export const getMomentByDateAndTimeString = (d:string, t:string):Moment => moment(t.replace(dateRex, d));
 
 export const dateFormat = 'YYYY/MM/DD';
 export const weekFormat = 'MM/DD';

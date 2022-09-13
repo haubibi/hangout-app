@@ -2,18 +2,18 @@ import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
   } from "use-places-autocomplete";
-  import {
+import {
     Combobox,
     ComboboxInput,
     ComboboxPopover,
     ComboboxList,
     ComboboxOption,
-  } from "@reach/combobox";
-  import "@reach/combobox/styles.css";
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
 
-  import { ComboboxInputStyled, ComboboxStyled, ComboboxContainer } from './places-auto-complete.styles'
-  import React, { FC, useEffect } from "react";
-  import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
+import { ComboboxInputStyled, ComboboxStyled, ComboboxContainer } from './places-auto-complete.styles'
+import React, { FC, useEffect,useState } from "react";
+import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
 
   export interface IComboboxContainer {
       width?: string;
@@ -57,13 +57,14 @@ import usePlacesAutocomplete, {
       suggestions: { status, data },
       clearSuggestions,
     } = usePlacesAutocomplete();
+    const [ ifAddressExist ] = useState<boolean>(defaultV.address?true:false)
     // const [latLng, setLatLng] = useState<LatLngLiteral>(defaultV.location);
     // const {setAddressFormInput, mapInstance, addressFormInput, addressString } = useContext(GoogleMapContext);
 
     useEffect(()=>{
         setValue(defaultV.address, false);
         clearSuggestions();
-    },[]);
+    },[clearSuggestions, setValue, defaultV.address]);
 
 
     const handleSelect = async (val: string) => {
@@ -72,12 +73,10 @@ import usePlacesAutocomplete, {
       const results = await getGeocode({ address: val });
       const locationLatLng = await getLatLng(results[0]);
       if(!locationLatLng) return;
-      // setLatLng(locationLatLng);
-
 
       onChange({
           latLng: locationLatLng,
-          address: value
+          address: results[0].formatted_address
       });
       // mapInstance!.panTo(latlng);
     };

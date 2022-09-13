@@ -48,6 +48,7 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     });
     const [addUser] = useMutation(ADDUSER);
 
+   
     useEffect(()=>{
         if(data && data.getUserById){
           setCurrentUser(data.getUserById);

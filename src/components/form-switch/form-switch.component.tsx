@@ -17,7 +17,7 @@ export const FormSwitch:FC<IFormSwitchProps> =({
     switchProps,
     formItemprops
 }) =>{
-    console.log(switchProps,formItemprops)
+    // console.log(switchProps,formItemprops)
     return (
             <Form.Item
                 labelCol = {{span: 10}}

@@ -30,4 +30,5 @@ export interface IAdditionalInfo {
 export interface IReview {
     user: IUser;
     review: string;
+    time: string;
 }

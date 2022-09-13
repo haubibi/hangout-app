@@ -50,6 +50,7 @@ const Home: FC = () =>{
     },[tasks, currentPage, pageSize])
     
     useEffect(()=>{
+        console.log(data)
         if(data && data.tasks) {
             const t: ITask[] = [...data.tasks];
             for(let i = t.length; i< 100; i++) {

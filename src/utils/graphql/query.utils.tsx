@@ -1,132 +1,27 @@
 import { gql } from '@apollo/client';
-export const GETALLMAILS = gql`
-    query{
-        getTaskById {
-        email
-        }
-    }
-`
+import { 
+  userFullObj,
+  taskFullObj
+} from './typeObject';
 
 export const GETUSER = gql`
-    query($uid:String){
-      getUserById (uid:$uid){
-          displayName
-          sex
-          uid
-          email
-          avatarImg{
-            uid
-            name
-            refPath
-            url
-          }
-        }
-    }
+query($uid:String){
+  getUserById (uid:$uid) {
+    ${userFullObj}
+  }      
+}
 `
 export const GETAllTASKS = gql`
     query{
       tasks {
-        id
-        title
-        startDate
-        startTime
-        endDate
-        endTime
-        organizer {
-            uid
-            displayName
-            email
-          }
-        showImages {
-          uid
-          name
-          refPath
-          url
-        }
-        frontCoverImage{
-          uid
-          name
-          refPath
-          url
-        }
-        latLngAndAddress {
-          latLng {
-            lng
-            lat
-          }
-          address
-        }
-        reviews{
-          user {
-            uid
-            displayName
-            email
-          }
-          review
-        }
-        participants {
-          uid
-          displayName
-          email
-        }
-        description
-        participantsNumber
-        open
-        hide
+          ${taskFullObj}
       }
     }
-`
-
+`;
 export const GETTASKBYID = gql`
     query($id:String){
-    getTaskById(id:$id){
-      id
-      title
-      startDate
-      startTime
-      endDate
-      endTime
-      organizer {
-          uid
-          displayName
-          email
-        }
-      showImages {
-        uid
-        name
-        refPath
-        url
+      getTaskById (id:$id) {
+          ${taskFullObj}
       }
-      frontCoverImage{
-        uid
-        name
-        refPath
-        url
-      }
-      latLngAndAddress {
-        latLng {
-          lng
-          lat
-        }
-        address
-      }
-      reviews{
-        user {
-          uid
-          displayName
-          email
-        }
-        review
-      }
-      participants {
-        uid
-        displayName
-        email
-      }
-      description
-      participantsNumber
-      open
-      hide
     }
-}
 `

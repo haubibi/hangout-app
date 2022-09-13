@@ -1,13 +1,15 @@
 import { gql } from '@apollo/client';
+import { 
+  userFullObj,
+  taskFullObj
+ } from './typeObject';
 
 export const ADDUSER = gql`
     mutation(
         $userInput: UserInput
     ) {
         addUser(userInput: $userInput){
-          uid
-          displayName
-          email
+            ${userFullObj}
         }
     }
 `
@@ -16,7 +18,7 @@ export const ADDTASK = gql`
       $taskObj: TaskInput
     ) {
       addTask(taskObj:$taskObj){
-        description
+          ${taskFullObj}
       } 
     }
 `

@@ -1,6 +1,11 @@
 import { UploadFile } from 'antd';
 import { UploadResult } from 'firebase/storage'
 import { updateImage, deleteImage, getImageUrl } from '../firebase/firebase.utils';
+
+
+export const maxUploadImageSize = 2;
+
+
 export interface IImageObjWithRefPath {
     uid: string;
     name: string;

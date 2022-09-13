@@ -1,0 +1,86 @@
+[debug] [2022-09-12T12:21:29.485Z] ----------------------------------------------------------------------
+[debug] [2022-09-12T12:21:29.487Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Biao\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only functions
+[debug] [2022-09-12T12:21:29.487Z] CLI Version:   11.8.0
+[debug] [2022-09-12T12:21:29.488Z] Platform:      win32
+[debug] [2022-09-12T12:21:29.488Z] Node Version:  v16.16.0
+[debug] [2022-09-12T12:21:29.489Z] Time:          Mon Sep 12 2022 20:21:29 GMT+0800 (中国标准时间)
+[debug] [2022-09-12T12:21:29.489Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-09-12T12:21:29.560Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-09-12T12:21:29.560Z] > authorizing via signed-in user (biao.huangsoultaker@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2022-09-12T12:21:29.578Z] [hub] writing locator at C:\Users\Biao\AppData\Local\Temp\hub-hang-out-213d4.json
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage, eventarc {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage, eventarc\u001b[22m"}}
+[info] +  functions: Using node@16 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Using node@16 from host."}}
+[debug] [2022-09-12T12:21:29.613Z] defaultcredentials: writing to file C:\Users\Biao\AppData\Roaming\firebase\biao_huangsoultaker_gmail.com_application_default_credentials.json
+[debug] [2022-09-12T12:21:29.620Z] Setting GAC to C:\Users\Biao\AppData\Roaming\firebase\biao_huangsoultaker_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Biao\\AppData\\Roaming\\firebase\\biao_huangsoultaker_gmail.com_application_default_credentials.json"}}
+[debug] [2022-09-12T12:21:29.621Z] > refreshing access token with scopes: []
+[debug] [2022-09-12T12:21:29.623Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-09-12T12:21:29.623Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-09-12T12:21:29.688Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2022-09-12T12:21:29.689Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-09-12T12:21:29.693Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig [none]
+[debug] [2022-09-12T12:21:29.947Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig 200
+[debug] [2022-09-12T12:21:29.948Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig {"projectId":"hang-out-213d4","databaseURL":"https://hang-out-213d4-default-rtdb.firebaseio.com","storageBucket":"hang-out-213d4.appspot.com","locationId":"us-central"}
+[debug] [2022-09-12T12:21:29.980Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-09-12T12:21:29.980Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-09-12T12:21:29.980Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\Biao\\.cache\\firebase\\emulators\\ui-v1.9.0\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\Biao\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.9.0\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2022-09-12T12:21:30.100Z] Web / API server started at localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4000\n"}}
+[info] i  functions: Watching "C:\Users\Biao\Desktop\hangout-app\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\Biao\\Desktop\\hangout-app\\functions\" for Cloud Functions..."}}
+[debug] [2022-09-12T12:21:30.254Z] Validating nodejs source
+[debug] [2022-09-12T12:21:32.582Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "apollo-server-express": "^3.10.2",
+    "express": "^4.18.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0",
+    "graphql": "^16.6.0",
+    "graphql-scalars": "^1.18.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-09-12T12:21:32.582Z] Building nodejs source
+[debug] [2022-09-12T12:21:32.583Z] Analyzing nodejs backend spec
+[debug] [2022-09-12T12:21:32.584Z] Could not find functions.yaml. Must use http discovery
+[debug] [2022-09-12T12:21:32.857Z] Serving at port 9005
+
+[debug] [2022-09-12T12:21:33.516Z] Got response from /__/functions.yaml {"endpoints":{"graphql":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"graphql"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2022-09-12T12:21:33.521Z] shutdown requested via /__/quitquitquit
+
+[info] +  functions: Loaded functions definitions from source: graphql. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: graphql."}}
+[info] +  functions[us-central1-graphql]: http function initialized (http://localhost:5001/hang-out-213d4/us-central1/graphql). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://localhost:5001/hang-out-213d4/us-central1/graphql)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ localhost:5001 │ http://localhost:4000/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

@@ -111,7 +111,6 @@ const NavigationMenu: FC = () => {
             mode="horizontal" 
             items={items}
             theme = "dark"
-
         />
     )
 }
