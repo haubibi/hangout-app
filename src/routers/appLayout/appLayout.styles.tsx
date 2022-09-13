@@ -38,7 +38,7 @@ export const ContentCon = styled(Content)`
    width: 100%;
    display: flex;
    flex-direction: column;
-   justify-content: center;
+   justify-content: flex-start;
 `;
 export const FooterCon = styled(Footer)`
    border:3px solid #000;

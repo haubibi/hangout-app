@@ -143,6 +143,7 @@ export const getImagesWithUrlAndRefPath = (imageObjs: IImageObjWithRefPath[]) =>
     const promises = imageObjs.map((imageObj)=>{
         return new Promise((resolve)=>{
             getImageUrl(imageObj.refPath).then((url)=>{
+                console.log(url);
                 resolve({
                     ...imageObj,
                     url

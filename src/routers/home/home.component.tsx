@@ -51,14 +51,21 @@ const Home: FC = () =>{
     
     useEffect(()=>{
         console.log(data)
+        const t:ITask[] = [];
         if(data && data.tasks) {
-            const t: ITask[] = [...data.tasks];
-            for(let i = t.length; i< 100; i++) {
-                t.push(data.tasks[0]);
+            
+            while(t.length< 100) {
+                for (const task of data.tasks){
+                    t.push(task);
+                }
             }
+            // const t: ITask[] = [...data.tasks];
+            // for(let i = t.length; i< 100; i++) {
+            //     t.push(data.tasks[0]);
+            // }
+            setTasks(t);
             // setTasks(data.tasks);
             
-            setTasks(t);
         }
     },[error, data]);
     if(loading || !currentTasks || !tasks) return <Spin />;

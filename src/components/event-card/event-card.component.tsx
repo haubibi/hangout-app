@@ -27,21 +27,28 @@ export interface IEventCardProps {
 
 const { Meta } = EventCardCon;
 const defaultSrc = require('../../assets/avatar/wolf.png')
-const avatar = require('../../assets/avatar/wcy.jpg');
 const coverImg = (coverImg: IImageObjWithUrl | null) => {
-    return <img alt= {coverImg?coverImg.name:'wirewolf'} src= {coverImg?coverImg.url:defaultSrc}/>;
-}
-const avatarImg = (coverImg: IImageObjWithUrl | null) => {
-    return <img alt= {'wcy'} src= {avatar}/>;
+    return <img alt= {coverImg?coverImg.name:'wirewolf'} src= {coverImg?coverImg.url:defaultSrc} height = "200px"/>;
 }
 
+
+const getSrc = (taskId: string) => {
+    switch(taskId) {
+        case 'ZvdHBdjwPNTKAQOa5S2Mo65bzU73_003874030697579145':
+            return require('../../assets/avatar/wcy.jpg');
+        case 'ZvdHBdjwPNTKAQOa5S2Mo65bzU73_06192617512878347':
+            return require('../../assets/avatar/zuo.png');
+            default:
+                return "https://joeschmoe.io/api/v1/random"; 
+    }
+}
 
 export const EventCard:FC<IEventCardProps> = ({
     task
 }) =>{
-    const { frontCoverImage, title, description } = task;
-
-
+    const { frontCoverImage, title, description, id} = task;
+    const avartaSrc = getSrc(id);
+    console.log(task)
     return (
             <EventCardCon
                 cover={coverImg(frontCoverImage)}
@@ -66,9 +73,9 @@ export const EventCard:FC<IEventCardProps> = ({
                 </ContentRow>
                 {/* <Rol */}
                 <Meta
-                    avatar={<Avatar src= {avatar} />}
+                    avatar={<Avatar src= {avartaSrc} />}
                     // title= {title}
-                    description= { description}
+                    description= { description.length> 11 ?`${description.slice(0, 11)}...`:description}
                 />
             </EventCardCon>
     )

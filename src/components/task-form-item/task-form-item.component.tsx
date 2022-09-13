@@ -269,9 +269,9 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 TaskImagesTypeName.DISPLAYINTASK,
                 currentTask.showImages,
                 values.showImages
-            ).then(()=>{
+            ).then(async ()=>{
                 const imagesWithRef = getImagesWithRefPath(ImagesTypeName.TASKS, taskId, TaskImagesTypeName.DISPLAYINTASK, values.showImages);
-                getImagesWithUrlAndRefPath(imagesWithRef).then((showImagesWithRefAndUrl)=>{
+                await getImagesWithUrlAndRefPath(imagesWithRef).then((showImagesWithRefAndUrl)=>{
                     showImages = showImagesWithRefAndUrl as IImageObjWithUrlAndRefPath[];
                 })
             });
@@ -285,9 +285,11 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 TaskImagesTypeName.FRONTCOVER,
                 (currentTask.frontCoverImage? [currentTask.frontCoverImage]: []),
                 values.frontCoverImage
-            ).then(()=>{
+            ).then(async()=>{
                 const imagesWithRef = getImagesWithRefPath(ImagesTypeName.TASKS, taskId, TaskImagesTypeName.FRONTCOVER, values.frontCoverImage);
-                getImagesWithUrlAndRefPath(imagesWithRef).then((frontCoverImageArr)=>{                    
+                // console.log(imagesWithRef)
+                await getImagesWithUrlAndRefPath(imagesWithRef).then((frontCoverImageArr)=>{      
+                    // console.log( frontCoverImageArr )              
                    frontCoverImage = frontCoverImageArr[0] as IImageObjWithUrlAndRefPath;
                 });
             });
@@ -298,9 +300,9 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             showImages,
             frontCoverImage
         }
-        console.log(currentTask, formInputDetailWithRefAndUrl)
+        // console.log(currentTask, formInputDetailWithRefAndUrl)
         const newTask = getUpdatedTask(currentTask, formInputDetailWithRefAndUrl);
-        console.log(newTask)
+        // console.log(newTask)
         await addTask({
                 variables:{taskObj: newTask} 
         }).then(()=>{
