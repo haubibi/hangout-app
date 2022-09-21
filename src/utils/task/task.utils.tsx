@@ -1,9 +1,8 @@
-import { ITask, ITaskInputMoment, ITaskFormItemDetailWithImageRefAndUrl} from "../interfaces/task.interface"
+import { ITask } from "../../interfaces/task.interface"
 import { getDateString, getDateTimeString } from '../date/date.utils'
 import { getCurrentCoords } from "../googleMap/googleMap.utils";
 import { defaultLatLng } from "../googleMap/googleMap.utils";
-import { IUser } from '../interfaces/user.interface';
-
+import { ITaskFormItemDetailWithImageRefAndUrl } from '../../interfaces/taskForm.interface';
 
 
 
@@ -12,9 +11,10 @@ export const getUid = (uid: string) => {
 }
 
 
+//create a task based on id and organizer
 export const baseTaskCreator =  async(
     id: string, 
-    organizer: IUser
+    organizer: string,
 ): Promise<ITask> => {
     const task: ITask =  {
         id,
@@ -41,29 +41,31 @@ export const baseTaskCreator =  async(
     };
     return new Promise(async (resolve, reject)=>{
         await getCurrentCoords().then((location)=>{
-            if(location){
-                task.latLngAndAddress.latLng = location;
-            }
+            task.latLngAndAddress.latLng = location!;
             resolve(task);
+        }).catch(_=> {
+            reject(task);
         })
     });
 }
 
-export const taskCreator = (baseTask: ITask, props: ITaskInputMoment):ITask => {
-    return {
-        ...baseTask,
-        ...props,
-        startDate: props.startDate ? getDateString(props.startDate): undefined,
-        startTime: props.startTime? getDateTimeString(props.startTime): undefined,
-        endDate: props.endDate? getDateString(props.endDate): undefined,
-        endTime: props.endTime? getDateTimeString(props.endTime) : undefined,
-    }
-}
 
 
+//update a task base on form input
+// export const taskCreator = (baseTask: ITask, props: ITaskInputTimeMoment):ITask => {
+//     return {
+//         ...baseTask,
+//         ...props,
+//         startDate: props.startDate ? getDateString(props.startDate): undefined,
+//         startTime: props.startTime? getDateTimeString(props.startTime): undefined,
+//         endDate: props.endDate? getDateString(props.endDate): undefined,
+//         endTime: props.endTime? getDateTimeString(props.endTime) : undefined,
+//     }
+// }
 
+
+//update a task base on form input
 export const getUpdatedTask = (currentTask: ITask, formValues: ITaskFormItemDetailWithImageRefAndUrl): ITask =>{
-    console.log(currentTask ,formValues)
     const { 
         title,
         description,

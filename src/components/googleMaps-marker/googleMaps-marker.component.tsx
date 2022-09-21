@@ -1,6 +1,6 @@
 import { MarkerF } from "@react-google-maps/api";
 import React, { FC } from 'react';
-import { IGoogleMarkerProps } from "../../utils/interfaces/google.interface";
+import { IGoogleMarkerProps } from "../../interfaces/google.interface";
 
 
 const GoogleMapsMarker:FC<IGoogleMarkerProps> = ({...googleMarkerProps}) => {

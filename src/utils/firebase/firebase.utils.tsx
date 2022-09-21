@@ -1,4 +1,3 @@
-import { verify } from 'crypto';
 import { initializeApp } from 'firebase/app';
 import { 
     getAuth, 
@@ -21,7 +20,7 @@ import {
   deleteObject,
   UploadResult
  } from "firebase/storage";
-import { IAdditionalInfo, IUserInput, IUser } from '../interfaces/user.interface';
+import { ISignUpAdditionsInfo, IUserInput, IUser } from '../../interfaces/user.interface';
 
 import { createBaseUser } from '../user/user.utils';
 
@@ -89,7 +88,7 @@ export const signInWithGoogleRedirect = async() => signInWithRedirect(auth, goog
 
 
 
-export const createAuthUserWithEmailAndPassword = async (email: string, password: string, additionalInfo: IAdditionalInfo):Promise<IUser> =>{
+export const createAuthUserWithEmailAndPassword = async (email: string, password: string, additionalInfo: ISignUpAdditionsInfo):Promise<IUser> =>{
   return new Promise(async (resolve,reject)=> {
       if(!email || !password){
           reject(new Error('email or password is invaild!'))
@@ -100,7 +99,9 @@ export const createAuthUserWithEmailAndPassword = async (email: string, password
         //verify
         sendEmailVerification(user).then(()=>{
               const { email, uid } = user;
-              const newUser  = createBaseUser({email, uid, ...additionalInfo} as IUserInput);
+              const newUser  = {email, uid, ...additionalInfo};
+              console.log('additionalInfo:',additionalInfo);
+              console.log('newUser:', newUser)
               resolve(newUser);
         }).catch((error) => {
             reject(error.code);

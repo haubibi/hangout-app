@@ -6,7 +6,7 @@ import GoogleMaps from '../googleMaps-map/googleMap-map.component'
 import { markerCreator } from '../../utils/googleMap/googleMap.utils'
 import { Spin } from "antd";
 import { googleMapLibWithPlaces } from '../../utils/googleMap/googleMap.utils'
-import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
+import { ILatLngAndAddress } from "../../interfaces/google.interface";
 
 const comboboxSettings = {
     comboboxContainerStyle:{

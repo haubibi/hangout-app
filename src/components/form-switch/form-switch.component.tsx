@@ -5,7 +5,6 @@ import {
     Form,
     FormItemProps
 } from "antd";
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 
 export interface IFormSwitchProps {
@@ -31,9 +30,3 @@ export const FormSwitch:FC<IFormSwitchProps> =({
             </Form.Item>
     )
 }
-
-// name = 'open'
-//                 label = 'Event open'
-//                 labelAlign= 'right'
-//                 labelCol = {{span: 10}}
-//                 wrapperCol = {{span: 10}}

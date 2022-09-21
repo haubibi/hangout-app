@@ -1,4 +1,4 @@
-import { ITaskFormItemDetail, ITask } from '../utils/interfaces/task.interface';
+import { ITask } from '../interfaces/task.interface';
 import { 
     getMomentByDateAndTimeString,
     getDateString,
@@ -10,7 +10,7 @@ import { message } from 'antd';
 import {
     validateStringLength
 } from './validate.utils';
-
+import { BaseTaskFormItemDetail } from '../interfaces/taskForm.interface';
 export enum TaskFormItemName {
     title = 'title',
     startDate = 'startDate',
@@ -57,7 +57,7 @@ export const taskFormRules = {
     
 }
 
-export const validateFormValues = (values: ITaskFormItemDetail, task: ITask) => {
+export const validateFormValues = (values: BaseTaskFormItemDetail, task: ITask) => {
     const { 
         startDate,
         startTime,

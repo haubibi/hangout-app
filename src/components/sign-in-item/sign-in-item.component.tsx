@@ -11,7 +11,7 @@ import {
     loginRules,
     initialValues
  } from '../../validators/login.validate';
-
+import { MenuKey, NavigationContext } from '../../context/navigation.context';
 const formitems = [
     {  name: LoginNamesEnum.email, rules: loginRules[LoginNamesEnum.email], item: <Input prefix={<UserOutlined />} placeholder="Username" />},
     {  name: LoginNamesEnum.password, rules: loginRules[LoginNamesEnum.password], item: <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="password" />},
@@ -20,6 +20,7 @@ const formitems = [
 
 const SignInItem = () => {
     const { setUserUid } = useContext(UserContext)
+    const { setCurrentMenuKey } = useContext(NavigationContext)
     const [ detail, setDetail] = useState<Record<string, any>>();
     const navigate = useNavigate();
 
@@ -33,12 +34,9 @@ const SignInItem = () => {
         console.log('Success:', values);
         const { email, password} = values;
         signInWithWithEmailAndPasswordMethod(email, password).then((credential: UserCredential | undefined)=>{
-            // if(credential) {
-            //     const uid = credential.user.uid;
-            //     console.log(uid)
-            //     setUserUid(uid);
-            // }
-            navigate(`/`);
+            setUserUid(credential.user.uid);
+            setCurrentMenuKey(MenuKey.HOME)
+            navigate(`/`,);
         }).catch(error => message.error(error));
         
       };

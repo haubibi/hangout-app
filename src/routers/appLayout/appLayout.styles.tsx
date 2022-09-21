@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import { Layout } from 'antd';
 
+
 const { Header, Footer, Content } = Layout;
 
 export const gradient = css`
@@ -24,22 +25,32 @@ export const LayoutCon = styled(Layout)`
    
    /* height: 100%; */
 `;
-export const HeaderCon= styled(Header)`
+export const HeaderCon = styled(Header)`
 
    /* margin: 20px 50px 20px 50px; */
    padding: 0;
    height: auto;
    background-color:#001529;
 `;
-export const ContentCon = styled(Content)`
+export const ContentConBase = styled(Content)`
    ${gradient}
    min-height: 700px;
    height: auto;
    width: 100%;
    display: flex;
    flex-direction: column;
-   justify-content: flex-start;
 `;
+
+export const ContentStartCon = styled(ContentConBase)`
+      justify-content: flex-start;
+      height: 100%;
+      `;
+export const ContentCenterCon = styled(ContentConBase)`
+      justify-content: center;
+      height: 100%;
+`;
+
+
 export const FooterCon = styled(Footer)`
    border:3px solid #000;
    ${gradient}

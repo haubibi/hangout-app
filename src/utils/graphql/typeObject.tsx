@@ -1,9 +1,32 @@
+// uid: string;
+//     displayName: string;
+//     email: string;
+//     sex: 'male' | 'female';
+//     avatarImg: IImageObjWithUrlAndRefPath | null;
+//     friendsList: IUser[];
 
+import { findConfigFile } from "typescript"
+
+//     notifications: NotificationTypes[];
 export const avatarImgObj = `
     uid
     name
     refPath
     url
+`
+
+export const UserSignUpInput = `
+    uid
+    email
+    displayName
+`
+
+export const ParticipantNotificationTypes = `
+    type
+    taskId
+    participantUid
+    organizerUid
+    read
 `
 
 export const userUidObj = `
@@ -17,8 +40,9 @@ export const userFullObj = `
     avatarImg {
         ${avatarImgObj}
     }
-    friendsList {
-        ${userUidObj}
+    friendsList
+    notifications {
+        ${ParticipantNotificationTypes}
     }
 `
 
@@ -35,19 +59,21 @@ export const latLngAndAddressObj = `
 `
 
 export const rateObj = `
-    user {
-        ${userFullObj}
-    }
+    userUid
     rate
 `
 
 export const reviewsObj = `
-    user {
-        ${userFullObj}
-    }
+    userUid
     review
+    time
 `
-
+export const ParticipantsObj = `
+    participantUid
+    isConfirmed
+    agreed
+    requestType
+`
 
 export const taskFullObj = `
     id
@@ -60,9 +86,7 @@ export const taskFullObj = `
         ${rateObj}
     }
     keyWords
-    organizer {
-        ${userFullObj}
-    }
+    organizer
     showImages {
         ${avatarImgObj}
     }
@@ -75,8 +99,8 @@ export const taskFullObj = `
     reviews{
         ${reviewsObj}
     }
-    participants {
-        ${userFullObj}
+    participants {    
+        ${ParticipantsObj}
     }
     description
     participantsNumber

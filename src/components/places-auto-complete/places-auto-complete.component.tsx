@@ -13,12 +13,15 @@ import "@reach/combobox/styles.css";
 
 import { ComboboxInputStyled, ComboboxStyled, ComboboxContainer } from './places-auto-complete.styles'
 import React, { FC, useEffect,useState } from "react";
-import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
+import { ILatLngAndAddress } from "../../interfaces/google.interface";
 
   export interface IComboboxContainer {
       width?: string;
       height?: string;
       left?: string;
+      top?: string;
+      maxWidth?:string;
+      position?:string;
   }
 
   export interface IComboboxStyled extends IComboboxContainer{
@@ -57,7 +60,7 @@ import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
       suggestions: { status, data },
       clearSuggestions,
     } = usePlacesAutocomplete();
-    const [ ifAddressExist ] = useState<boolean>(defaultV.address?true:false)
+    // const [ ifAddressExist ] = useState<boolean>(defaultV.address?true:false)
     // const [latLng, setLatLng] = useState<LatLngLiteral>(defaultV.location);
     // const {setAddressFormInput, mapInstance, addressFormInput, addressString } = useContext(GoogleMapContext);
 
@@ -73,7 +76,6 @@ import { ILatLngAndAddress } from "../../utils/interfaces/google.interface";
       const results = await getGeocode({ address: val });
       const locationLatLng = await getLatLng(results[0]);
       if(!locationLatLng) return;
-
       onChange({
           latLng: locationLatLng,
           address: results[0].formatted_address

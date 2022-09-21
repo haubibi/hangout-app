@@ -20,28 +20,32 @@ import {
     TaskFormItemContainer,
     InputNumberCon,
     DatePickerCon,
-    TimePickerCon
+    TimePickerCon,
+    InputCon
 } from './task-form-item.styles';
+import { ITask } from '../../interfaces/task.interface';
 import { 
-    ITask,
+    IImageObjWithUrlAndRefPath,
+    ImagesTypeName,
+    TaskImagesTypeName
+} from '../../interfaces/images.interface';
+import {
     ITaskFormItemDetail,
-    ITaskFormItemDetailWithImageRefAndUrl 
-} from '../../utils/interfaces/task.interface';
-
+    ITaskFormItemDetailWithImageRefAndUrl
+} from '../../interfaces/taskForm.interface';
 import { FormImagesUpload } from '../form-images-upload/form-images-upload.component'
 import GoogleSearchInForm from '../googleMaps-search/googleMaps-search.component';
 import { FormSwitch } from '../form-switch/form-switch.component';
+
 import { 
     updateImages, 
-    ImagesTypeName, 
-    TaskImagesTypeName,
     getImagesWithUrlAndRefPath, 
     transformImageToWithoutRefPath 
 } from '../../utils/images/images.utils';
 import { FormTag } from '../form-tag/form-tag.component';
 import { useForm } from 'antd/es/form/Form';
 import { dateFormat } from '../../utils/date/date.utils';
-import { getImagesWithRefPath, IImageObjWithUrlAndRefPath } from '../../utils/images/images.utils';
+import { getImagesWithRefPath } from '../../utils/images/images.utils';
 import { 
     TaskFormItemName,
     taskFormRules,
@@ -168,13 +172,14 @@ const subbmitButtonFormitemProps = {
 
 }
 
-
+const maxKeyWords = 3;
 
 
 export const TaskFormItem:FC<TaskFormItemProps> = ({
     task
 }) =>{
     const [ form ] = useForm();
+    
     const [ detail, setDetail] = useState<Record<string, any>>();
     const [ currentTask, setCurrentTask ] = useState<ITask>(task);
     const [ addTask ] = useMutation(ADDTASK);
@@ -185,7 +190,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
         const showImages = currentTask.showImages;
         const frontCoverImage = currentTask.frontCoverImage? [currentTask.frontCoverImage]: [];
         return [
-            [{formItemProps: titleFormProps, wrappedElement: <Input allowClear = {true}/>}],
+            [{formItemProps: titleFormProps, wrappedElement: <InputCon allowClear = {true}/>}],
             [
                 {formItemProps: startDateFormProps, wrappedElement: <DatePickerCon />},
                 {formItemProps: startTimeFormProps, wrappedElement: <TimePickerCon />}
@@ -196,7 +201,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             ],  
             [{formItemProps: participantsNumberFormProps, wrappedElement: <InputNumberCon />}],
             [{formItemProps: descriptionFormProps, wrappedElement: <TextArea rows={4} allowClear = {true} />}],
-            [{formItemProps: keyWordsFormProps, wrappedElement: <FormTag maxTagsNumber={5} />}],
+            [{formItemProps: keyWordsFormProps, wrappedElement: <FormTag maxTagsNumber={maxKeyWords} />}],
             [{formItemProps: {}, wrappedElement:<FormImagesUpload {...frontCoverFormProp} showImages = {frontCoverImage}/>}], //
             [{formItemProps: {}, wrappedElement:<FormImagesUpload {...showImagesFormProps} showImages = {showImages}/>}], //
             [{formItemProps: googleSearchFormProps, wrappedElement: <GoogleSearchInForm />}],

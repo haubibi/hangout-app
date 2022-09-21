@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
@@ -8,13 +7,21 @@ import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from './context/user.context';
 import { TaskProvider } from './context/task.context';
 import { GoogleMapProvider } from './context/google-map.context';
+import { NavigationProvider } from './context/navigation.context';
 import Geocode from 'react-geocode';
+import './index.css';
 const client = new ApolloClient({
-  uri: 'http://localhost:5000/hang-out-213d4/us-central1/graphql',
+  // uri: '/hang-out-213d4/us-central1/graphql',
+  // uri: 'http://localhost:5001/hang-out-213d4/us-central1/graphql',
+  uri: 'http://localhost:5001/hang-out-213d4/us-central1/graphql-default',
   cache: new InMemoryCache({
       addTypename: false
   })
 });
+
+
+
+
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_GEOCODE_KEY!);
 const root = ReactDOM.createRoot(
@@ -27,7 +34,9 @@ root.render(
         <TaskProvider>        
           <GoogleMapProvider>        
             <BrowserRouter>
-              <App />
+              <NavigationProvider>
+                <App />
+              </NavigationProvider>
             </BrowserRouter>
           </GoogleMapProvider>
         </TaskProvider>

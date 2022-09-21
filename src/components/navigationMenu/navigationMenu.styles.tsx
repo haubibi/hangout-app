@@ -5,9 +5,9 @@ export const MenuCon = styled(Menu)`
     display: flex;
     justify-content:flex-end;
     height: ${navigateHeight}px;
-    & .ant-menu-item {
+    .ant-menu-item {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
     }

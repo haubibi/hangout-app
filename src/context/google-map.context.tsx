@@ -1,6 +1,6 @@
 import { useState, Dispatch, useEffect,createContext, FC } from "react";
 import { getCurrentCoords } from "../utils/googleMap/googleMap.utils";
-import { LatLngLiteral } from "../utils/interfaces/google.interface";
+import { LatLngLiteral } from "../interfaces/google.interface";
 import React from 'react';
 
 // google.maps.Map

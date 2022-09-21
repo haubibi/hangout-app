@@ -1,8 +1,20 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
-import { Tag, Tooltip } from 'antd';
-import { FC, useEffect, useRef, useState } from 'react';
-import { TagCon, InputCon, TagItem } from './form-tag.styles';
+import { 
+  Tag, 
+  Tooltip 
+} from 'antd';
+import { 
+  FC, 
+  useEffect, 
+  useRef, 
+  useState 
+} from 'react';
+import { 
+  TagCon, 
+  InputCon, 
+  TagItem 
+} from './form-tag.styles';
 import { maxTagLength } from '../../validators/taskForm.validate';
 
 interface IFormTagprops {

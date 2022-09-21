@@ -1,15 +1,16 @@
 import { gql } from '@apollo/client';
 import { 
   userFullObj,
-  taskFullObj
+  taskFullObj,
 } from './typeObject';
-
+// ${userFullObj}
 export const GETUSER = gql`
-query($uid:String){
-  getUserById (uid:$uid) {
-    ${userFullObj}
-  }      
-}
+    query($uid:ID){
+      getUserById (uid:$uid) {
+          uid
+          email
+      }      
+    }
 `
 export const GETAllTASKS = gql`
     query{
@@ -19,7 +20,7 @@ export const GETAllTASKS = gql`
     }
 `;
 export const GETTASKBYID = gql`
-    query($id:String){
+    query($id:ID){
       getTaskById (id:$id) {
           ${taskFullObj}
       }

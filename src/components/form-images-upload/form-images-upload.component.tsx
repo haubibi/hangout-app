@@ -3,10 +3,13 @@ import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import React, { useState,FC, } from 'react';
 import { FormImagesUploadContainer} from './form-images-upload.styles'
-import { IImageObjWithUrl, maxUploadImageSize } from '../../utils/images/images.utils';
+import { 
+  IImageObjWithUrl, 
+  maxUploadImageSize 
+} from '../../interfaces/images.interface';
 import { Form, Modal, message} from 'antd';
 import { getBase64 } from '../../utils/usefulFunctions/imageToBase64';
-
+import ImgCrop from 'antd-img-crop';
 export interface IFormImagesUploadProps{
   maxImageLength: number;
   name: string;
@@ -97,6 +100,7 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
               wrapperCol={{ span: 20 }}
               getValueFromEvent = {normalFile}
         >
+          {/* <ImgCrop rotate> */}
             <FormImagesUploadContainer
               listType="picture-card"
               fileList={fileList}
@@ -109,6 +113,7 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
           
               {fileList.length >= maxImageLength ? null : uploadButton}
             </FormImagesUploadContainer>
+            {/* </ImgCrop> */}
         </Form.Item> 
         <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />

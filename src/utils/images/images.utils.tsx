@@ -1,40 +1,15 @@
 import { UploadFile } from 'antd';
 import { UploadResult } from 'firebase/storage'
 import { updateImage, deleteImage, getImageUrl } from '../firebase/firebase.utils';
+import {
+    IImageObjWithUrlAndRefPath,
+    IImageObjWithUrl,
+    ImagesTypeName,
+    UsermagesTypeName,
+    TaskImagesTypeName,
+    IImageObjWithRefPath
+} from '../../interfaces/images.interface';
 
-
-export const maxUploadImageSize = 2;
-
-
-export interface IImageObjWithRefPath {
-    uid: string;
-    name: string;
-    refPath: string;
-}
-export interface IImageObjWithUrlAndRefPath {
-    uid: string;
-    name: string;
-    refPath: string;
-    url: string;
-}
-export interface IImageObjWithUrl {
-    uid: string;
-    name: string;
-    url: string;
-}
-
-export enum ImagesTypeName{
-    TASKS = 'tasks',
-    DEFAULT = 'default',
-    USERS = 'users'
-};
-export enum TaskImagesTypeName{
-    FRONTCOVER = 'frontCover',
-    DISPLAYINTASK = 'displayInTask',
-};
-export enum UsermagesTypeName{
-    AVATAR = 'avatar'
-};
 
 interface IModifiedUploadFile {
     addFilesList: UploadFile[],

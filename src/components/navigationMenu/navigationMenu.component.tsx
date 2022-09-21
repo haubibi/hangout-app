@@ -15,14 +15,27 @@ import { getUid } from '../../utils/task/task.utils';
 import { PandaIcon } from '../../assets/svgIcon/custom.icon';
 import { UserContext } from '../../context/user.context';
 import { MenuCon } from './navigationMenu.styles';
+import { 
+    GithubFilled, 
+    BellFilled,
+    EnvironmentOutlined,
+    PlusSquareFilled,
+    LoginOutlined,
+    UserOutlined 
+} from '@ant-design/icons';
+import { NavigateEnum } from '../../App';
+import { MenuKey, NavigationContext } from '../../context/navigation.context';
+import Icon from '@ant-design/icons';
 
-enum MenuKey {
-    HOME = 'home',
-    ADDEVENT = 'addEvent',
-    SIGNUP = 'signUp',
-    LOGIN = 'LOG IN',
-    SIGNOUT = 'SIGN OUT',
-}
+// export enum MenuKey {
+//     HOME = 'HOME',
+//     ADDEVENT = 'ADDEVENT',
+//     SIGNUP = 'SIGNUP',
+//     LOGIN = 'LOGIN',
+//     SIGNOUT = 'SIGNOUT',
+//     USER = 'USER',
+//     NOTIFICATION = 'NOTIFICATION'
+// }
 
 
 const signUpItem = {
@@ -33,10 +46,38 @@ const logInItem = {
     label: 'LOG IN',
     key: MenuKey.LOGIN,
 };
-const signOutItem = {
-    label: 'SIGN OUT',
-    key: MenuKey.SIGNOUT,
-};
+
+const searchOnMapItem = {
+    label: 'Search on map',
+    key: MenuKey.SEARCHONMAP,
+    icon: <EnvironmentOutlined  />
+}
+
+
+const userItem = (disabledKeys: MenuKey[]) => {
+    const childrenItems = [
+        { label: 'Event', key: MenuKey.ADDEVENT , icon: <PlusSquareFilled />, disabled: false},
+        { label: 'My account', key: MenuKey.MYACCOUNT, icon: <UserOutlined  /> , disabled: false},
+        { label: 'Sign out', key: MenuKey.SIGNOUT, icon: <LoginOutlined /> , disabled: false},
+    ]
+
+    for (const item of childrenItems) {
+        for(const disabledKey of disabledKeys) {
+            if(disabledKey === item.key) item.disabled = true;
+        }
+    }
+    return {
+        key: MenuKey.USER,
+        icon: <GithubFilled style = {{transform:'scale(2.5)'}}/>,
+        children: childrenItems,
+    }
+}
+
+const getSelectedkey = (currentKey: MenuKey | ''):(MenuKey| '')[] => {
+    return currentKey === MenuKey.ADDEVENT? ['']: [currentKey];
+}
+
+
 
 const defaultItems: MenuProps['items'] = [
     {
@@ -44,71 +85,91 @@ const defaultItems: MenuProps['items'] = [
         key: MenuKey.HOME,
         icon: <PandaIcon />,
     },
-    {
-        label: '+ EVENT',
-        key: MenuKey.ADDEVENT,
-    }
+    searchOnMapItem
 ]
 
-const NavigationMenu: FC = () => {
-    const [ currentKey, setCurrentKey] = useState('');
+
+
+const NavigationMenu= () => {
+    const { currentMenuKey, setCurrentMenuKey } = useContext(NavigationContext)
     const [ items, setItems] = useState(defaultItems);
     const { currentUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(()=>{
+        const disabledKeys: [] = [];
+        // console.log('currentUser:'+currentUser)
         if(!currentUser){
             setItems([...defaultItems, signUpItem, logInItem]);
         } else {
-            setItems([...defaultItems, signOutItem]);
+            console.log(currentMenuKey ===  MenuKey.MYACCOUNT)
+            if(
+                (currentMenuKey === MenuKey.ADDEVENT) ||
+                (currentMenuKey === MenuKey.MYACCOUNT)
+            ) {
+                setItems([...defaultItems, userItem([...disabledKeys, currentMenuKey])]);
+            } else {
+                setItems([...defaultItems, userItem(disabledKeys)]);
+            }
         }
 
-    },[currentUser])
+    },[currentUser, currentMenuKey])
 
 
 
-    const navigateTo = (key: string) =>{
+    const navigateTo = (key: MenuKey) =>{
         switch(key) {
             case MenuKey.HOME:
-                console.log( MenuKey.HOME)
                 navigate(`./`);
+                setCurrentMenuKey(MenuKey.HOME);
+                break;
+            case MenuKey.MYACCOUNT:
+                navigate(`./myAccount`);
+                setCurrentMenuKey(MenuKey.MYACCOUNT);
                 break;
             case MenuKey.ADDEVENT:
-                if(!currentUser) return message.error('Please login first!');
-                const taskId = getUid(currentUser.uid);
+                const taskId = getUid(currentUser!.uid);
                 navigate(`./taskForm_${taskId}`);
+                setCurrentMenuKey(MenuKey.ADDEVENT);
                 break;
             case MenuKey.SIGNUP:
                 navigate(`./signUp`);
+                setCurrentMenuKey(MenuKey.SIGNUP);
                 break;
             case MenuKey.LOGIN:
-                navigate(`./signIn`);
+                navigate(`./logIn`);
+                setCurrentMenuKey(MenuKey.LOGIN);
+                break;
+            case MenuKey.SEARCHONMAP:
+                navigate(`./mapSearch`);
+                setCurrentMenuKey(MenuKey.SEARCHONMAP);
                 break;
             case MenuKey.SIGNOUT:
-                signOutUser();
-                break;
-            // case MenuKey.LOGIN:
-            //     // navigate(`./taskForm_${taskId}`);
-            //     break;
-                
+                signOutUser().then(()=>{
+                    console.log(111)
+                    navigate(`./`);
+                    setCurrentMenuKey(MenuKey.HOME);
+                });
+                break;           
          }
+        //  setCurrentKey(key);
+        //  setCurrentMenuKey(key);
     }
 
 
 
 
     const onClick: MenuProps['onClick'] = e => {
-        console.log('click ', e);
-        setCurrentKey(e.key);
-        if(e.key !== currentKey) {
-            navigateTo(e.key);
+        // console.log('click ', e);
+        if(e.key !== currentMenuKey) {
+            navigateTo(e.key as MenuKey);
         }
     };
     return (
         <MenuCon 
             onClick={onClick} 
-            selectedKeys={[currentKey]} 
-            mode="horizontal" 
+            selectedKeys={getSelectedkey(currentMenuKey)} 
+            mode= "horizontal" 
             items={items}
             theme = "dark"
         />

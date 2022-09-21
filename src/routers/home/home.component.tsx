@@ -8,7 +8,7 @@ import { HomeSearch } from '../../components/home-search/home-search.component';
 import { EventCardList } from '../../components/event-card-list/event-card-list.component';
 import { GETAllTASKS } from '../../utils/graphql/query.utils';
 import { PaginationBar } from '../../components/pagination/pagination.component'
-import { ITask } from '../../utils/interfaces/task.interface';
+import { ITask } from '../../interfaces/task.interface';
 import { 
     Col,
     Row,
@@ -34,7 +34,7 @@ const Home: FC = () =>{
 
 
     const paginationOnChange = (page: number, pageSize: number) => {
-        console.log(page, pageSize)
+        // console.log(page, pageSize)
         setCurrentPage(page);
         setPageSize(pageSize);
     }
@@ -50,7 +50,7 @@ const Home: FC = () =>{
     },[tasks, currentPage, pageSize])
     
     useEffect(()=>{
-        console.log(data)
+        // console.log(data)
         const t:ITask[] = [];
         if(data && data.tasks) {
             
@@ -72,7 +72,7 @@ const Home: FC = () =>{
 
 
 
-    console.log(currentTasks.length)
+    // console.log(currentTasks.length)
     return (
         <HomeContainer>
             <Row>

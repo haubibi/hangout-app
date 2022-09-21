@@ -2,9 +2,9 @@ import React, {useEffect, useState, FC } from "react";
 import { TaskFormContainer } from './task-form.styles';
 import { TaskFormItem } from '../task-form-item/task-form-item.component';
 import { Spin } from 'antd';
-import { ITask } from "../../utils/interfaces/task.interface";
+import { ITask } from "../../interfaces/task.interface";
 
-import { IUser } from '../../utils/interfaces/user.interface';
+import { IUser } from '../../interfaces/user.interface';
 import { baseTaskCreator } from '../../utils/task/task.utils';
 import { useQuery } from '@apollo/client';
 import { GETTASKBYID } from '../../utils/graphql/query.utils';
@@ -28,7 +28,7 @@ export const TaskForm:FC<ITaskFormprops> = ({
 
     useEffect(()=>{
         const getTask = async() => {
-            await baseTaskCreator(taskId, user!).then((task)=>{
+            await baseTaskCreator(taskId, user!.uid).then((task)=>{
                 setTask(task);
             });
         };
@@ -44,8 +44,8 @@ export const TaskForm:FC<ITaskFormprops> = ({
     if(loading || !task) return <Spin />;
     return ( 
         <TaskFormContainer>
-            <h2>this is a task form</h2>
-                <TaskFormItem task= { task }></TaskFormItem>
+            {/* <h2>this is a task form</h2> */}
+            <TaskFormItem task= { task }></TaskFormItem>
         </TaskFormContainer>
     )
 }

@@ -13,6 +13,10 @@ import { useNavigate } from 'react-router-dom';
 import { SignupItemContainer } from './sign-up-item.styles';
 import { createAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
 import { UserContext } from '../../context/user.context';
+import { NavigationContext, MenuKey } from '../../context/navigation.context';
+import { useMutation } from '@apollo/client';
+import { ADDUSER } from '../../utils/graphql/mutation.utils';
+import { IUserInput, ISignUpAdditionsInfo } from '../../interfaces/user.interface';
 import { 
     initialValues,
     signupRules,
@@ -28,7 +32,9 @@ import {
 
 
 const SignUpItem = () => {
-    const { setCurrentUser } = useContext(UserContext);
+    const { setUserUid } = useContext(UserContext);
+    const { setCurrentMenuKey } = useContext(NavigationContext);
+    const [ addUser ] = useMutation(ADDUSER);
     const [ detail, setDetail] = useState<Record<string, any>>();
     const navigate = useNavigate();
 
@@ -42,20 +48,23 @@ const SignUpItem = () => {
 
     const onFinish = async(values: any)=>{
         console.log('Success:', values);
-        // console.log(data)
-        const { email,password, displayName, sex} = values;
-
-
-        const additionalInfo = {
-            displayName,
-            sex,
-            avatarImg: null,
-            friendsList: []
+        const { email,password, displayName} = values;
+        const additionalInfo: ISignUpAdditionsInfo = {
+            displayName
         }
-        createAuthUserWithEmailAndPassword(email, password, additionalInfo).then((user)=>{
-            setCurrentUser(user);
-            console.log(user)
-            navigate(`/`);
+        //sign up with email and password
+        createAuthUserWithEmailAndPassword(email, password, additionalInfo).then((userInput: IUserInput)=>{
+            //add user to database
+            addUser({
+                variables:{userInput} 
+            }).then(()=>{
+                //set current user and navigate to home page
+                const {uid} = userInput;
+                setUserUid(uid);
+                setCurrentMenuKey(MenuKey.HOME)
+                navigate(`/`);
+            });
+            
         }).catch((error)=>{
             message.error(error);
         });

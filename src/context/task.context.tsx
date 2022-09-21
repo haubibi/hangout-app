@@ -1,8 +1,13 @@
-import { createContext, FC, Dispatch, useState, useEffect } from "react";
-import { gql, useQuery,useMutation } from '@apollo/client';
-import { ADDTASK , ADDUSER} from "../utils/graphql/mutation.utils";
-import { ITask } from '../utils/interfaces/task.interface';
-import React from "react";
+import { 
+  createContext, 
+  FC, 
+  Dispatch, 
+  useState, 
+  useEffect 
+} from "react";
+import { useMutation } from '@apollo/client';
+import { ADDTASK } from "../utils/graphql/mutation.utils";
+import { ITask } from '../interfaces/task.interface';
 
 export interface ITaskContext {
   currentTask: null | ITask;

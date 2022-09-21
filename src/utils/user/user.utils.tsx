@@ -1,8 +1,10 @@
-import { IUserInput, IUser } from '../interfaces/user.interface';
+import { IUserInput, IUser } from '../../interfaces/user.interface';
 export const createBaseUser = (userInput: IUserInput): IUser => {
     return {
         ...userInput,
         friendsList: [],
-        avatarImg: null
+        avatarImg: null,
+        notifications: []
     }
 }
+

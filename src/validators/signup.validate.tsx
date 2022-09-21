@@ -11,7 +11,7 @@ export const displayNameMaxLength = 10;
 
 
 export enum SignUpNamesEnum {
-    displayname = 'displayname',
+    displayname = 'displayName',
     email = 'email',
     password = 'password',
     confirm = 'confirm',

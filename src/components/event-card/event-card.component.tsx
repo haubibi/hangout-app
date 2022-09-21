@@ -1,35 +1,77 @@
-import { FC } from 'react';
+import { FC, useMemo, useContext } from 'react';
 import { 
-    EditOutlined, 
-    EllipsisOutlined, 
-    SettingOutlined 
+    EnvironmentFilled ,
+    ClockCircleFilled,
 } from '@ant-design/icons';
 import { 
     Avatar,
-    Col,
-    Row
+    Popover,
+    Divider,
+    Statistic
  } from 'antd';
 import { 
     EventCardCon,
     ContentRow,
+    LocationAndPatCol,
     ContentCol,
-    TitleDiv
+    PopoverContentDiv,
+    MetaCon,
+    CardTextSpan
  } from "./event-card.styles";
 
-import { ITask } from '../../utils/interfaces/task.interface';
-import { IImageObjWithUrl } from '../../utils/images/images.utils';
+import { ITask } from '../../interfaces/task.interface';
+import { IImageObjWithUrl } from '../../interfaces/images.interface';
+import { CardTags } from '../card-tags/card-tags.component';
+import { useNavigate } from 'react-router-dom';
+import { 
+    getCurrentFullTimeString,
+    getCurrentTimeIsBeforeComparedTime,
+    getNumberOfDaysFromNow,
+    getMomentByDateAndTimeString,
+    cardDateFormat
+ } from '../../utils/date/date.utils';
+import { MenuKey, NavigationContext } from '../../context/navigation.context';
+import { checkIsChinese } from '../../utils/usefulFunctions/judgeString';
+import { maxTagLength } from '../../validators/taskForm.validate';
 
 export interface IEventCardProps {
     task: ITask;
 }
 
+// const { Countdown } = Statistic;
 
 
-const { Meta } = EventCardCon;
+const maxChineseLength = 5;
+const maxEnglishLength = 10;
+const maxDescription = 14;
+const defaultbodyStyle = {
+    height: '150px'
+}
+
 const defaultSrc = require('../../assets/avatar/wolf.png')
 const coverImg = (coverImg: IImageObjWithUrl | null) => {
     return <img alt= {coverImg?coverImg.name:'wirewolf'} src= {coverImg?coverImg.url:defaultSrc} height = "200px"/>;
 }
+
+const getCityText = (address: string) => {
+    let cityString:string;
+    
+    const isSplitedByComma = address.indexOf(',') === -1? false:true;
+    if(isSplitedByComma) {
+        if(address.split(',')[1]){
+            const cityArr= address.split(',')[1].split(' ');
+            cityString = cityArr[cityArr.length - 1];
+        }
+    } else {
+        cityString = address;
+    }
+    // console.log(cityString)
+
+    const maxAddressLength = checkIsChinese(cityString)? maxChineseLength: maxEnglishLength;
+
+    return cityString.length > maxAddressLength ? `${cityString.slice(0, maxAddressLength)}...`: cityString; 
+}
+
 
 
 const getSrc = (taskId: string) => {
@@ -43,40 +85,123 @@ const getSrc = (taskId: string) => {
     }
 }
 
+
+
+
+
 export const EventCard:FC<IEventCardProps> = ({
     task
 }) =>{
-    const { frontCoverImage, title, description, id} = task;
+    const navigate = useNavigate();
+    const {setCurrentMenuKey}= useContext(NavigationContext);
+    const { frontCoverImage, title, description, id, keyWords, startTime, startDate, endTime, endDate, latLngAndAddress, open} = task;
     const avartaSrc = getSrc(id);
-    console.log(task)
+    const startTimeString = getCurrentFullTimeString(startDate!, startTime!);
+    const endimeString = getCurrentFullTimeString(endDate!, endTime!);
+    const cityText = getCityText(latLngAndAddress.address); 
+    const daysBetween = getNumberOfDaysFromNow(startDate!, startTime!);
+    const startTimeText = getMomentByDateAndTimeString(startDate!, startTime!).format(cardDateFormat);
+    // const deadline = getMomentByDateAndTimeString(startDate!, startTime!);
+    const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; 
+
+    const TimeContent = (
+        <PopoverContentDiv>
+            <p>{`Start time`}</p>
+            <p>{startTimeString}</p>
+            <p>{`End time`}</p>
+            <p>{endimeString}</p>
+        </PopoverContentDiv>
+    );
+    const LocationContent = (
+        <PopoverContentDiv>
+          <p>{latLngAndAddress.address}</p>
+        </PopoverContentDiv>
+    );
+
+    const cardDisabled = !open || !getCurrentTimeIsBeforeComparedTime(startTimeString);
+   
+
+
+    const onTimeChange = (value: any) => {
+        console.log(value)
+    }
+    const cardOnClick = useMemo(()=> {
+        return (e: any) =>{
+            //id
+            navigate(`/task_${id}`,{state: task});
+            setCurrentMenuKey(MenuKey.TASK);
+        }
+    },[])
+
     return (
             <EventCardCon
+            // onClick={}
                 cover={coverImg(frontCoverImage)}
-                hoverable = {false}
-                bordered
-                actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
+                hoverable
+                bodyStyle = {defaultbodyStyle}
+                onClick = {cardOnClick}
+                actions={[            
+                    <Popover content={ LocationContent }>
+                            <EnvironmentFilled key = "address"/>
+                                <CardTextSpan>{ cityText }</CardTextSpan>
+                    </Popover>,
+                    <Popover content={ TimeContent }>
+                        <ClockCircleFilled key="time" />    
+                                <CardTextSpan>{ startTimeText }</CardTextSpan>
+                    </Popover>,
+                        //  {/* <Countdown value={deadline} format="D [days] H [h]" onChange={onTimeChange}/> */}
+                        // {/* <Countdown value={deadline} format="D [d] H [h] m 分 s 秒" onChange={onTimeChange}/> */}
+                        // {/* {
+                        //     daysBetween > maxDaysBetween ? 
+                        //     <Countdown value={deadline} format="D [d] H [h] m 分 s 秒" onChange={onTimeChange}/>:
+                        //     <Countdown  value={deadline} format="HH:mm:ss:SSS" />
+                        // } */}
+                    // <Popover content={ LocationContent }>
+                    //     <EnvironmentFilled key = "address"/>,
+                    // </Popover>,
+
+                  
+                    // <EllipsisOutlined key="ellipsis" />,
+                    // <RocketFilled   key="edit" />
                 ]}
-     
+                // onTabChange = { onTabChange }
                 title = {title}
             >
-
                 <ContentRow>
-                    <ContentCol span={4}>
+                    {/* <TitleDiv>{title}</TitleDiv> */}
+                </ContentRow>
+                <ContentRow>
+                    <ContentCol span={24}>
+                        <CardTags tags = {keyWords}/>
                         {/* <Avatar src="https://joeschmoe.io/api/v1/random" /> */}
                     </ContentCol>
                     <ContentCol span={20}>
                         {/* <TitleDiv>{title}</TitleDiv> */}
                     </ContentCol>
                 </ContentRow>
-                {/* <Rol */}
-                <Meta
-                    avatar={<Avatar src= {avartaSrc} />}
-                    // title= {title}
-                    description= { description.length> 11 ?`${description.slice(0, 11)}...`:description}
-                />
+                <ContentRow>
+                    <ContentCol span={24}>
+                        <MetaCon
+                            avatar={<Avatar src= {avartaSrc} />}
+                            // title= {title}
+                            description= { description.length> maxDescription ?`${description.slice(0, maxDescription)}...`:description}
+                        />
+                    </ContentCol>
+                </ContentRow>
+                {/* <ContentRow>
+                    <LocationAndPatCol span={12}>
+                        <Popover content={ LocationContent }>
+                            <EnvironmentFilled key = "address"/>
+                            <AddressSpan>{ cityText }</AddressSpan>
+                        </Popover>
+                    </LocationAndPatCol>
+                    <LocationAndPatCol span={12}>
+                        <Popover content={ LocationContent }>
+                            <EnvironmentFilled key = "address"/>
+                        </Popover>
+                    </LocationAndPatCol>
+                </ContentRow> */}
+                
             </EventCardCon>
     )
 }

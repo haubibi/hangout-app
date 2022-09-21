@@ -1,7 +1,7 @@
 
 export type LayoutSize = 'xs'|'sm'|'md'|'lg'|'xl'|'xxl';
 export const widthArray = [576, 768, 992, 1200, 1600, 1920];
-export const cardWidth = 300;
+export const cardWidth = 350;
 
 
 export const currentSize = (clientWidth: number):LayoutSize =>{
