@@ -3,7 +3,10 @@ import {
     useState,
     useEffect
 } from 'react';
-import { HomeContainer } from './home.styles';
+import {
+    HomeContainer, 
+    ListCol 
+} from './home.styles';
 import { HomeSearch } from '../../components/home-search/home-search.component';
 import { EventCardList } from '../../components/event-card-list/event-card-list.component';
 import { GETAllTASKS } from '../../utils/graphql/query.utils';
@@ -26,31 +29,13 @@ import {
 
 
 const Home: FC = () =>{
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
     const [ tasks, setTasks ] = useState<ITask[]>();
-    const [ currentTasks, setCurrentTasks ] = useState<ITask[]>();
     const { data, loading, error} = useQuery(GETAllTASKS);
 
-
-    const paginationOnChange = (page: number, pageSize: number) => {
-        // console.log(page, pageSize)
-        setCurrentPage(page);
-        setPageSize(pageSize);
-    }
-
-
     useEffect(()=>{
-        if(tasks){
-            setCurrentTasks(tasks.slice(
-                pageSize * (currentPage -1),
-                pageSize * currentPage,
-            ));
-        }
-    },[tasks, currentPage, pageSize])
-    
-    useEffect(()=>{
-        // console.log(data)
+        // console.log('taskError:',error);
+        // console.log('taskLoading:',loading);
+        // console.log('tasksData:',data);
         const t:ITask[] = [];
         if(data && data.tasks) {
             
@@ -59,21 +44,12 @@ const Home: FC = () =>{
                     t.push(task);
                 }
             }
-            // const t: ITask[] = [...data.tasks];
-            // for(let i = t.length; i< 100; i++) {
-            //     t.push(data.tasks[0]);
-            // }
-            setTasks(t);
-            // setTasks(data.tasks);
-            
+            setTasks(t);    
         }
-    },[error, data]);
-    if(loading || !currentTasks || !tasks) return <Spin />;
-
-
-
-    // console.log(currentTasks.length)
+    },[error, data, loading]);
+    if(loading  || !tasks) return <Spin />;
     return (
+
         <HomeContainer>
             <Row>
                 <Col {...searchColSideLayout} ></Col>
@@ -84,15 +60,13 @@ const Home: FC = () =>{
             </Row>
 
             <Row>
-                <Col {...tasksColSideLayout}></Col>
-                <Col {...midColConfigue}>
+                <ListCol>
                     <EventCardList 
-                        tasks={currentTasks}
+                        tasks={tasks}
                     />
-                </Col>
-                <Col {...tasksColSideLayout}></Col>
+                </ListCol>
             </Row>
-            <Row style={{margin:'50px 0px 50px 0px'}} gutter= {30}>
+            {/* <Row style={{margin:'50px 0px 50px 0px'}} gutter= {30}>
                 <Col span = {6}></Col>
                 <Col span = {12}>
                     <PaginationBar 
@@ -102,7 +76,7 @@ const Home: FC = () =>{
                     />
                 </Col>
                 <Col span = {6}></Col>
-            </Row>
+            </Row> */}
         </HomeContainer>
     )
 }

@@ -1,10 +1,13 @@
 import { createContext, FC , useState, useEffect} from "react";
 import { IUser } from "../interfaces/user.interface";
 import React, {Dispatch} from 'react';
-import { useMutation } from '@apollo/client';
 import { GETUSER } from "../utils/graphql/query.utils";
-import { ADDUSER } from '../utils/graphql/mutation.utils';
-import { useQuery } from '@apollo/client';
+import getUserById from '../../functions/src/operateDatabaseFunctions/getUserById';
+import { 
+    useQuery,
+    NetworkStatus,
+    ApolloQueryResult
+ } from '@apollo/client';
 
 
 const defaultUser = null;
@@ -14,12 +17,16 @@ export interface IUserContext {
     setCurrentUser: Dispatch<React.SetStateAction<IUser| null>>;
     userUid: string;
     setUserUid: Dispatch<React.SetStateAction<string>>;
+    refetch: (variables?: Partial<{
+        uid: string;
+    }>) => Promise<ApolloQueryResult<any>>
 }
 const initUserContext:IUserContext = {
     currentUser: null,
     setCurrentUser: ()=>{},
     userUid: '',
     setUserUid: ()=>{},
+    refetch: (variables:{uid: null})=> { return null}
 }
 
 // export const UserContext = createContext<IUserContext>({
@@ -34,10 +41,11 @@ export interface IProviderChildrenProps {
 export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [ currentUser, setCurrentUser ] = useState<IUser | null>(defaultUser);
     const [ userUid, setUserUid ] = useState<string>(defaultUserId);
-    const { data } = useQuery(GETUSER,{
+    const { data, refetch, networkStatus } = useQuery(GETUSER,{
         variables: {
             uid: userUid
-        }
+        },
+        notifyOnNetworkStatusChange: true
     });
     console.log('userUid:',userUid);
     console.log('currentUser:',currentUser);
@@ -45,12 +53,15 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     // const [addUser] = useMutation(ADDUSER);
 
     useEffect(()=>{
+        //when refetch
         if(data && data.getUserById){
             setCurrentUser(data.getUserById);
-        } else{
-            setCurrentUser(null);
+        } else {
+            if(networkStatus !== NetworkStatus.refetch) {
+                setCurrentUser(null);
+            }
         }
-    },[data, setCurrentUser])
+    },[data, setCurrentUser, networkStatus])
     
     // console.log(currentUser)
     // useEffect(()=>{
@@ -71,6 +82,7 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
         setCurrentUser,
         userUid,
         setUserUid,
+        refetch,
     };
     return <UserContext.Provider value = {value}>{children}</UserContext.Provider>
 }

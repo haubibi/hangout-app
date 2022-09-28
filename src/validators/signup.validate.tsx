@@ -1,10 +1,11 @@
+import { message } from 'antd';
 import { 
     validateInputString,
     validateStringLength,
     validatePassword
 } from './validate.utils'
 
-export const displayNameMaxLength = 10;
+export const displayNameMaxLength = 15;
 
 
 
@@ -22,10 +23,11 @@ export const initialValues = {
     [SignUpNamesEnum.email]: '',
     [SignUpNamesEnum.password]: '',
     [SignUpNamesEnum.confirm]: '',
-    [SignUpNamesEnum.sex]: 'mail'
+    [SignUpNamesEnum.sex]: ''
 };
 
-const checkDisplayNameCallBack = (_: any, value: string) => {
+export const checkDisplayNameCallBack = (_: any, value: string) => {
+    console.log(value)
     //check name valid
     if(!validateInputString(value)) return Promise.reject(new Error('name format is invalid'));
     //check length
@@ -44,7 +46,9 @@ const checkPasswordCallBack = (_: any, value: string) => {
 
 export const signupRules = {
     [SignUpNamesEnum.displayname] :[{ 
-        required: true, 
+        required: true,
+        message: 'Please input your display name!'
+    },{
         validator: checkDisplayNameCallBack
     }],
     [SignUpNamesEnum.email] :[

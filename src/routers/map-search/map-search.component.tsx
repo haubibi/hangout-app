@@ -6,18 +6,23 @@ import {
     // PlacesCon,
     // SearchPageGoogleMapsCon,
     ContendDiv,
+    SearchButton,
     RowMap,
     RowSearch,
-    SearchCol
+    ColSearch,
+    RowEventCard,
+    ColEventCard,
+    ColSearchButton
  } from './map-search.styles';
 import { useLoadScript } from '@react-google-maps/api';
 import { googleMapLibWithPlaces } from '../../utils/googleMap/googleMap.utils'
 import { message, Spin } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import Places from '../../components/places-auto-complete/places-auto-complete.component';
 import SearchPageGoogleMaps from '../../components/search-page-googlemaps/search-page-googlemaps.conponent';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState,useMemo } from 'react';
 import { ILatLngAndAddress, LatLngLiteral } from '../../interfaces/google.interface';
-import { getCurrentCoords, markerCreator } from '../../utils/googleMap/googleMap.utils';
+import { getCurrentCoords, markerCreator, markersCreator } from '../../utils/googleMap/googleMap.utils';
 import { IComboboxContainer } from '../../components/places-auto-complete/places-auto-complete.component';
 import { FilterBar } from '../../components/filter-bar/filter-bar.components';
 import { 
@@ -25,7 +30,11 @@ import {
     ParticipantsRange,
     DistanceRange
  } from '../../interfaces/task.interface';
+import { useQuery } from '@apollo/client'; 
+import { GETFILTEREDTASKS } from '../../utils/graphql/query.utils';
 import { searchFilterValidator } from '../../validators/search-filter.valitator';
+import { ITask } from '../../../functions/src/interfaces/task.interface';
+import { EventCard } from '../../components/event-card/event-card.component';
 
 const comboboxSettings = {
     comboboxContainerStyle:{
@@ -66,18 +75,40 @@ const googleMapSettings = {
 
 //filter bar
 const initFilterValue: IFilterTasks = {
-    participantsRange: [1,5],
-    distanceRange: [0,5]
+    participantsRange: [1,50],
+    distanceRange: [0,1]
+}
+
+export const checkIfTaskExist = (id: string, tasks: ITask[]):boolean => {
+    const index = tasks.findIndex(task => task.id === id);
+    return index === -1?false: true;
 }
 
 
 const MapSearch = () => {
     const [currentLatLngAddress, setCurrentLatLngAddres] = useState<ILatLngAndAddress | null>(null);
     const [filterValue, setFilterValue] = useState<IFilterTasks>(initFilterValue);
+    const [filteredTasks, setFilteredTasks] = useState<ITask[]>([]);
+    const [clickedTask, setClickedTask] = useState<ITask>(null);
+    const [submitClick, setSubmitClick] = useState<boolean>(false);
+
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
         libraries: googleMapLibWithPlaces,
     });
+    const {data, error, loading} = useQuery(GETFILTEREDTASKS,{
+        variables: {
+            currentLatLng: (currentLatLngAddress && currentLatLngAddress.latLng),
+            taskFilter: filterValue
+        }
+    });
+
+    console.log(filterValue)
+    console.log("currentLatLngAddress: ", currentLatLngAddress && currentLatLngAddress.latLng)
+    console.log('data:',data)
+    console.log('error:',error)
+    console.log('loading:',loading)
+    //get current location
     useEffect(()=>{
         const getLatLng = async() => {
             await getCurrentCoords().then((latLng)=>{
@@ -85,31 +116,64 @@ const MapSearch = () => {
                     latLng,
                     address: ''
                 });
+                setSubmitClick(true);
             });
         }
         getLatLng();
     },[setCurrentLatLngAddres]);
 
+    //get filtered tasks
+    useEffect(() =>{
+        if(data && data.getFilteredTasks && submitClick) {
+            if(clickedTask) {
+                const taskExist = checkIfTaskExist(clickedTask.id, data.getFilteredTasks);
+                if(!taskExist) setClickedTask(null);
+            }
+            setFilteredTasks(data.getFilteredTasks);
+            setSubmitClick(false);
+        }
+        console.log(data)
+    },[data, setFilteredTasks, submitClick, setSubmitClick]);
 
-    //filter bar
-    
+
+    const taskMarkers = useMemo(()=>{
+        const props = filteredTasks.map((filterTask)=>{
+            return {task:filterTask, position: filterTask.latLngAndAddress.latLng}
+        })
+        return markersCreator(props);
+    },[filteredTasks])
+
+
+    //filter bar get the filter object   
     const filterBarOnChange = useCallback((value: IFilterTasks)=>{
         //viladate
         setFilterValue(value);
-        console.log(value)
+        setSubmitClick(true);
     },[]);
 
  
     const handlePlaceInputChange = useCallback((e: ILatLngAndAddress):void => {
         setCurrentLatLngAddres(e);
+        setSubmitClick(true);
+        console.log('place:' , e);
     },[setCurrentLatLngAddres]);
+
+
+    const onMarkerChangeHandle = useCallback((task: ITask):void => {
+        setClickedTask(task);
+        console.log(task)
+    },[setClickedTask]);
+
+    const searchOnClick = useCallback(():void => {
+        setSubmitClick(true);
+    },[]);
 
 
 
 
     if(!currentLatLngAddress || !isLoaded) return <Spin />;
     
-    const markerLocation = [markerCreator({position: currentLatLngAddress.latLng})];
+    // const markerLocation = [markerCreator({position: currentLatLngAddress.latLng})];
     return (
         <MapSearchLayout>
             <MapSearchSider>
@@ -122,18 +186,35 @@ const MapSearch = () => {
                 <ContendDiv>
                     <SearchPageGoogleMaps 
                         googleMapProps = {{center: currentLatLngAddress.latLng ,...googleMapSettings.googleMapProps}}
-                        markers = {[...markerLocation, ...googleMapSettings.markers]}
+                        markers = {[...taskMarkers, ...googleMapSettings.markers]}
                         center = { currentLatLngAddress }
+                        onMarkerChange = {onMarkerChangeHandle}
+                        searchCircle = {filterValue.distanceRange?filterValue.distanceRange[1]*1000:null}
                     />
                     <RowSearch align = "middle" justify='center'>
-                        <SearchCol xs = {20} sm = {20} md = {18} lg = {16} xl = {14}>
+                        <ColSearch xs = {20} sm = {20} md = {18} lg = {16} xl = {14}>
                             <Places 
                                 {...comboboxSettings}
                                 defaultV = { currentLatLngAddress}
                                 onChange = {handlePlaceInputChange}
                             />
-                        </SearchCol>
+                            {/* <SearchButton type="primary" icon={<SearchOutlined />} onClick = {searchOnClick}>
+                                
+                            </SearchButton> */}
+
+                        </ColSearch>
+                        <ColSearchButton>
+                        </ColSearchButton>
                     </RowSearch>
+                    {
+
+                        clickedTask && 
+                        <RowEventCard>
+                            <ColEventCard>
+                                <EventCard task = {clickedTask}/>
+                            </ColEventCard>
+                        </RowEventCard>
+                    }
                 </ContendDiv>
             </MapSearchContent>
         </MapSearchLayout>

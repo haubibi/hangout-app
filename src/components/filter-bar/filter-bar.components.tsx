@@ -9,7 +9,8 @@ import {
     useState, 
     useCallback,
     useEffect,
-    FC
+    FC,
+    MouseEventHandler
 } from 'react';
 import {
     RowContainer,
@@ -20,6 +21,7 @@ import {
     FilterBarContainer
 } from './filter-bar.styles';
 import { SearchOutlined } from '@ant-design/icons';
+
 
 interface FilterBarProps {
     value: IFilterTasks;
@@ -34,14 +36,15 @@ export const FilterBar:FC<FilterBarProps> = ({
 }) => {
     const [distance, setDistance] = useState<DistanceRange>(value.distanceRange);
     const [participantsNumber, setParticipantsNumber] = useState<ParticipantsRange>(value.participantsRange);
+  
 
-    // useEffect(()=>{
-    //     const filterValue:IFilterTasks = {
-    //         distanceRange: distance,
-    //         participantsRange: participantsNumber
-    //     };
-    //     onChange(filterValue);
-    // },[distance, participantsNumber, onChange]);
+    useEffect(()=>{
+        const filterValue:IFilterTasks = {
+            distanceRange: distance,
+            participantsRange: participantsNumber
+        };
+        onChange(filterValue);
+    },[distance, participantsNumber, onChange]);
 
     const onDistanceChange = useCallback((value: DistanceRange)=>{
         setDistance(value);
@@ -50,13 +53,13 @@ export const FilterBar:FC<FilterBarProps> = ({
         setParticipantsNumber(value);
     },[setParticipantsNumber]);
 
-    const buttonOnClick = () => {
-        const filterValue:IFilterTasks = {
-            distanceRange: distance,
-            participantsRange: participantsNumber
-        };
-        onChange(filterValue);
-    }
+    // const buttonOnClick = () => {
+    //     const filterValue:IFilterTasks = {
+    //         distanceRange: distance,
+    //         participantsRange: participantsNumber
+    //     };
+    //     onChange(filterValue);
+    // }
 
 
     return (
@@ -77,19 +80,19 @@ export const FilterBar:FC<FilterBarProps> = ({
                     />
                 </ColContainer>
             </RowContainer>
-            <RowContainer>
+            {/* <RowContainer>
                 <ColContainer span={24}>
                     <SubmitButton 
                         type="primary" 
-                        shape="circle" 
+                        // shape="circle" 
                         size = "large"
                         onClick={buttonOnClick}
-                        icon={<SearchOutlined />}
+                        // icon={<SearchOutlined />}
                     >
-
+                        Submit
                     </SubmitButton>
                 </ColContainer>
-            </RowContainer>
+            </RowContainer> */}
         </FilterBarContainer>
     )
 }

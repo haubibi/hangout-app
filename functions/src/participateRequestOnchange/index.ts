@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-duplicate-case */
 /* eslint-disable no-fallthrough */
 /* eslint-disable curly */
 /* eslint-disable max-len */
 import * as functions from "firebase-functions";
-import {AddTaskRequestEnum, IPaticipantsNotification, QuitTaskRequestEnum} from "../interfaces/notifications.interface";
+import {AddTaskRequestEnum, IPaticipantsNotification, QuitTaskRequestEnum, NotificationTypeEnum} from "../interfaces/notifications.interface";
 import getTaskById from "../operateDatabaseFunctions/getTaskById";
 import updateNotifications from "../operateDatabaseFunctions/updateNotifications";
 import {IPaticipant} from "../interfaces/participate.interface";
@@ -46,11 +50,18 @@ import {ITask} from "../interfaces/task.interface";
 
 const filterByUid = (value: IPaticipant) => value.participantUid;
 
-const updateNotifi = async (notificationToParticipant: IPaticipantsNotification) => {
+
+const updateNotifiCationToParticipant = async (notificationToParticipant: IPaticipantsNotification) => {
   const participant = await getUserById(notificationToParticipant.participantUid);
   const currentNotifications = (participant as IUser).notifications;
   const notifications = Array.isArray(currentNotifications)? currentNotifications: [];
   await updateNotifications(participant as IUser, [...notifications, notificationToParticipant]);
+};
+const updateNotifiCationToOrgnizer = async (notificationToOrginzer: IPaticipantsNotification) => {
+  const organizer = await getUserById(notificationToOrginzer.organizerUid);
+  const currentNotifications = (organizer as IUser).notifications;
+  const notifications = Array.isArray(currentNotifications)? currentNotifications: [];
+  await updateNotifications(organizer as IUser, [...notifications, notificationToOrginzer]);
 };
 
 const onParticipateChange = functions.database
@@ -70,13 +81,14 @@ const onParticipateChange = functions.database
       ) {
         const participant = _.differenceBy(beforeData, [...participants], filterByUid)![0];
         notificationToParticipant = {
+          notificationType: NotificationTypeEnum.PARTICIPANT,
           type: QuitTaskRequestEnum.PARTICIPANT_QUIT_REQUEST,
           taskId: taskId,
           participantUid: participant.participantUid,
           organizerUid: organizer,
           read: false,
         };
-        await updateNotifi(notificationToParticipant);
+        await updateNotifiCationToParticipant(notificationToParticipant);
       }
       console.log("beforeData:", beforeData);
       console.log("participants:", participants);
@@ -84,7 +96,7 @@ const onParticipateChange = functions.database
       // 更新
       if (participants) {
         const participantIndex = participants.findIndex((p:IPaticipant)=>p.newAdded);
-        console.log("participant:"+ participantIndex);
+        // console.log("participant:"+ participantIndex);
         // console.log(participant);
         if (participantIndex.index === -1) return new Error("The modfified participant dosen't exist!");
         const participant = participants[participantIndex];
@@ -96,13 +108,14 @@ const onParticipateChange = functions.database
           // 用户拒绝， 发给组织者
           case AddTaskRequestEnum.PARTICIPANT_REFUSE_REQUEST:
             notificationToOrganizer = {
+              notificationType: NotificationTypeEnum.PARTICIPANT,
               type: participant.requestType,
               taskId: taskId,
               participantUid: participant.participantUid,
               organizerUid: organizer,
               read: false,
             };
-            await updateNotifi(notificationToOrganizer);
+            await updateNotifiCationToOrgnizer(notificationToOrganizer);
             break;
           // 组织者同意， 发给用户
           case AddTaskRequestEnum.ORGANIZER_APPLY_REQUEST:
@@ -111,13 +124,14 @@ const onParticipateChange = functions.database
           // 组织者拒绝， 发给用户
           case AddTaskRequestEnum.ORGANIZER_REFUSE_REQUEST:
             notificationToParticipant = {
+              notificationType: NotificationTypeEnum.PARTICIPANT,
               type: participant.requestType,
               taskId: taskId,
               participantUid: participant.participantUid,
               organizerUid: organizer,
               read: false,
             };
-            await updateNotifi(notificationToParticipant);
+            await updateNotifiCationToParticipant(notificationToParticipant);
             break;
         }
       }

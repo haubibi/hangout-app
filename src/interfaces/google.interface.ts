@@ -1,4 +1,5 @@
 import { MarkerProps } from "@react-google-maps/api";
+import { ITask } from '../../functions/src/interfaces/task.interface';
 
 export type LatLngLiteral = google.maps.LatLngLiteral;
 export type DirectionsResult = google.maps.DirectionsResult;
@@ -16,7 +17,7 @@ export interface ILatLngAndAddress {
     address: string;
 }
 export interface IGoogleMarkerProps extends MarkerProps{
-    taskId?: string;
+    task?: ITask;
 }
 
 

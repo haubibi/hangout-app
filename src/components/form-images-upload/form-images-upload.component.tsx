@@ -1,4 +1,7 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { 
+  PlusOutlined,
+  UserAddOutlined
+ } from '@ant-design/icons';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import React, { useState,FC, } from 'react';
@@ -9,12 +12,20 @@ import {
 } from '../../interfaces/images.interface';
 import { Form, Modal, message} from 'antd';
 import { getBase64 } from '../../utils/usefulFunctions/imageToBase64';
-import ImgCrop from 'antd-img-crop';
+
+export interface ColInterface {
+    span: number;
+}
+
 export interface IFormImagesUploadProps{
   maxImageLength: number;
   name: string;
-  label: string;
+  label?: string;
   showImages: IImageObjWithUrl[];
+  type?: string; //avatar image
+  labelCol?: ColInterface;
+  wapperCol?: ColInterface;
+
 }
 
 
@@ -23,6 +34,9 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
     name = 'showImages',
     label = 'Display images',
     showImages,
+    type = 'image',
+    labelCol={ span: 4 },
+    wapperCol={ span: 20},
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isJpgOrPng, setIsJpgOrPng] = useState(true);
@@ -85,22 +99,24 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
   const handleRemove:UploadProps['onRemove'] = (file) => {
   }
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+  const uploadButton = () => {
+    const iconStyle = {
+      fontSize: '30px'
+    };
+    const icon = type === 'image'? <PlusOutlined style = {iconStyle}/>: <UserAddOutlined style = {iconStyle} />
+      return icon;
+  };
+
+
   return (
     <>
         <Form.Item 
               label= { label}
               name = { name }
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 20 }}
+              labelCol={labelCol}
+              wrapperCol={wapperCol}
               getValueFromEvent = {normalFile}
         >
-          {/* <ImgCrop rotate> */}
             <FormImagesUploadContainer
               listType="picture-card"
               fileList={fileList}
@@ -108,12 +124,10 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
               onPreview={handlePreview}
               onChange={handleChange}
               onRemove = {handleRemove}
-              // customRequest = {customUploadImage('users', 'sdf', 'avatar')}
             >
           
-              {fileList.length >= maxImageLength ? null : uploadButton}
+              {fileList.length >= maxImageLength ? null : uploadButton()}
             </FormImagesUploadContainer>
-            {/* </ImgCrop> */}
         </Form.Item> 
         <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />

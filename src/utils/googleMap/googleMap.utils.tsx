@@ -4,6 +4,7 @@ import {
     LatLngLiteral
 } from '../../interfaces/google.interface';
 import Geocode from 'react-geocode';
+import Icon from '@ant-design/icons';
 
 
 export const defaultLatLng = {
@@ -62,8 +63,8 @@ export const mapStarIcon = {
 
 
 
-export const markerCreator = (props: IGoogleMarkerProps) =>{
-    const icon = props.icon || mapStarIcon;
+export const markerCreator = (props: IGoogleMarkerProps):IGoogleMarkerProps =>{
+    const icon = (props.icon || mapStarIcon) as IGoogleMarkerProps["icon"];
     return {
         icon,
         // animation,
@@ -71,3 +72,6 @@ export const markerCreator = (props: IGoogleMarkerProps) =>{
     }
 };
 
+export const markersCreator = (markersProps: IGoogleMarkerProps[]):IGoogleMarkerProps[] =>{
+    return markersProps.map((markerProps) => markerCreator(markerProps));
+}

@@ -27,6 +27,7 @@ export const ParticipantNotificationTypes = `
     participantUid
     organizerUid
     read
+    notificationType
 `
 
 export const userUidObj = `
@@ -73,7 +74,9 @@ export const ParticipantsObj = `
     isConfirmed
     agreed
     requestType
-`
+`;
+
+
 
 export const taskFullObj = `
     id
@@ -106,4 +109,16 @@ export const taskFullObj = `
     participantsNumber
     open
     hide
+`
+export const participantNotificationObj = `
+    task{
+        ${taskFullObj}
+    }
+    participant {
+        ${userFullObj}
+    }
+    organizer {
+        ${userFullObj}
+    }
+
 `

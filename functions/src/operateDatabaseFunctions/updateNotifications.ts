@@ -9,7 +9,7 @@ const updateNotifications = async (
   const {uid} = userInput;
   // eslint-disable-next-line max-len
   const userNotificationsRef = db.ref(`${Collection.users}/${uid}/${UserChildren.notifications}`);
-  userNotificationsRef.set(notifications);
+  await userNotificationsRef.set(notifications);
 
   return notifications;
 };

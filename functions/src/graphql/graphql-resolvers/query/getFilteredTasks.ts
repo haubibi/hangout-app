@@ -4,14 +4,16 @@ import {IFilterTasks, ITask} from "../../../interfaces/task.interface";
 const queryGetFilteredTasks = async (
     _:any,
     {
-      currentLatlng,
+      currentLatLng,
       taskFilter,
     }: {
-        currentLatlng: LatLngLiteral,
+      currentLatLng: LatLngLiteral,
         taskFilter: IFilterTasks
     }
 ): Promise<ITask[]>=>{
-  return getFilteredTasks(currentLatlng, taskFilter);
+  console.log("currentLatLng:", currentLatLng, "111111111111");
+  // console.log("taskFilter:", taskFilter, "222222222");
+  return getFilteredTasks(currentLatLng, taskFilter);
 };
 
 

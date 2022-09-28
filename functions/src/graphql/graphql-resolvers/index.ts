@@ -1,8 +1,12 @@
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import queryTasks from "./query/tasks";
 import queryUsers from "./query/users";
 import queryGetTaskById from "./query/getTaskById";
 import queryGetUserById from "./query/getUserById";
+import queryGetFilteredTasks from "./query/getFilteredTasks";
+import queryGetParticipantNotification from "./query/getParticipantNotification";
 
 import mutationAddTask from "./mutation/addTask";
 import mutationAddUser from "./mutation/addUser";
@@ -15,6 +19,8 @@ const resolvers = {
     tasks: queryTasks,
     getTaskById: queryGetTaskById,
     getUserById: queryGetUserById,
+    getFilteredTasks: queryGetFilteredTasks,
+    getParticipantNotification: queryGetParticipantNotification,
   },
   Mutation: {
     addTask: mutationAddTask,

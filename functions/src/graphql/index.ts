@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as functions from "firebase-functions";
 import express from "express";
 import {ApolloServer} from "apollo-server-express";

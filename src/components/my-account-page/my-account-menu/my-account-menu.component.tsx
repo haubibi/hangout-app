@@ -3,19 +3,11 @@ import { MyMenuCon } from './my-account-menu.styles';
 import {
     UserOutlined,
     BellFilled,
-    AppstoreOutlined,
-    ContainerOutlined,
     BulbOutlined,
-    DesktopOutlined,
-    MailOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    PieChartOutlined,
   } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import {
-    Menu, 
-    message
+    Menu,
  } from 'antd';
 import { useNavigate } from 'react-router-dom';
 

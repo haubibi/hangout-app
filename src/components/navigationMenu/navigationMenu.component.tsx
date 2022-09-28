@@ -26,7 +26,9 @@ import {
 import { NavigateEnum } from '../../App';
 import { MenuKey, NavigationContext } from '../../context/navigation.context';
 import Icon from '@ant-design/icons';
-
+import { UserAvatarBase } from '../user-avatar/user-avatar-base/user-avatar-base.component';
+import { IUser } from '../../interfaces/user.interface';
+import { IImageObjWithUrlAndRefPath } from '../../interfaces/images.interface';
 // export enum MenuKey {
 //     HOME = 'HOME',
 //     ADDEVENT = 'ADDEVENT',
@@ -54,7 +56,7 @@ const searchOnMapItem = {
 }
 
 
-const userItem = (disabledKeys: MenuKey[]) => {
+const userItem = (disabledKeys: MenuKey[], userAvatarImg: IImageObjWithUrlAndRefPath) => {
     const childrenItems = [
         { label: 'Event', key: MenuKey.ADDEVENT , icon: <PlusSquareFilled />, disabled: false},
         { label: 'My account', key: MenuKey.MYACCOUNT, icon: <UserOutlined  /> , disabled: false},
@@ -68,7 +70,8 @@ const userItem = (disabledKeys: MenuKey[]) => {
     }
     return {
         key: MenuKey.USER,
-        icon: <GithubFilled style = {{transform:'scale(2.5)'}}/>,
+        icon: <UserAvatarBase userAvatarImg={userAvatarImg}/>,
+        // icon: <GithubFilled style = {{transform:'scale(2.5)'}}/>,
         children: childrenItems,
     }
 }
@@ -107,9 +110,9 @@ const NavigationMenu= () => {
                 (currentMenuKey === MenuKey.ADDEVENT) ||
                 (currentMenuKey === MenuKey.MYACCOUNT)
             ) {
-                setItems([...defaultItems, userItem([...disabledKeys, currentMenuKey])]);
+                setItems([...defaultItems, userItem([...disabledKeys, currentMenuKey],currentUser.avatarImg)]);
             } else {
-                setItems([...defaultItems, userItem(disabledKeys)]);
+                setItems([...defaultItems, userItem(disabledKeys,currentUser.avatarImg)]);
             }
         }
 

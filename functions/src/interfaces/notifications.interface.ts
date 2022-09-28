@@ -1,4 +1,10 @@
+import {ITask} from "./task.interface";
+import {IUser} from "./user.interface";
 /* eslint-disable max-len */
+export enum NotificationTypeEnum {
+    PARTICIPANT = "PARTICIPANT"
+}
+
 export enum AddTaskRequestEnum {
     PARTICIPANT_APPLY_REQUEST = "PARTICIPANT_APPLY_QEQUEST",
     PARTICIPANT_ARGEE_REQUEST = "PARTICIPANT_ARGEE_REQUEST",
@@ -14,6 +20,7 @@ export enum QuitTaskRequestEnum {
 
 
 export interface IPaticipantsNotification {
+    notificationType: NotificationTypeEnum.PARTICIPANT;
     type: AddTaskRequestEnum | QuitTaskRequestEnum;
     taskId: string;
     participantUid: string;
@@ -21,6 +28,10 @@ export interface IPaticipantsNotification {
     read: boolean;
 }
 
-
+export interface ParticipantNotification{
+    task: ITask;
+    participant: IUser;
+    organizer: IUser;
+}
 // eslint-disable-next-line max-len
 export type NotificationTypes = IPaticipantsNotification;

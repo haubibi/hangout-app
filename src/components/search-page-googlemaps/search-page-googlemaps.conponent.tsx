@@ -19,18 +19,37 @@ import { GoogleMapContext } from "../../context/google-map.context";
 import { useContext } from "react";
 import { IGoogleMarkerProps } from "../../interfaces/google.interface";
 import { ILatLngAndAddress } from "../../interfaces/google.interface";
+import { ITask } from '../../../functions/src/interfaces/task.interface';
 
 interface IGoogleMapsProps{
     googleMapProps: GoogleMapProps;
     markers: IGoogleMarkerProps[];
     center: ILatLngAndAddress;
+    onMarkerChange?: (task: ITask)=> void;
+    searchCircle?: number;
+}
+
+
+const circleOption = {
+    strokeOpacity: 0.5,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    visible: true,
+    zIndex: 3,
+    fillOpacity: 0.05,
+    strokeColor: "#0000ff",
+    fillColor: "#0000ff",
 }
 
 
  const SearchPageGoogleMaps:FC<IGoogleMapsProps> = ({
     googleMapProps,
     markers,
-    center
+    center,
+    onMarkerChange,
+    searchCircle
 }) => {
     // const mapRef = useRef<GoogleMap>();
     // if(mapRef.current) {
@@ -48,11 +67,12 @@ interface IGoogleMapsProps{
     }, []);
 
     const markerOnload = (marker:google.maps.Marker) => {
-        console.log(marker, center)
+        console.log(marker.get('0'))
+        console.log(1111111111111111111111111)
     }
-    const markOnClick = (e:google.maps.MapMouseEvent) =>{
-        console.log(e)
-    
+    const markOnClick = (task:ITask) =>{
+        // console.log(task)
+        onMarkerChange(task);
     }
     return (
         <SearchPageGoogleMapCon>
@@ -63,9 +83,13 @@ interface IGoogleMapsProps{
                 center = {center.latLng}
             >
             {
-                markers.map((markProps,index)=><MarkerF  key = {index} {...markProps} onClick = {markOnClick} onLoad = {markerOnload} />)
+                markers.map((markProps,index)=><MarkerF key = {index} {...markProps} onClick = {(e:google.maps.MapMouseEvent) => {markOnClick(markProps.task)}} onLoad = {markerOnload} />)
             }
             
+            {
+                searchCircle &&
+                <Circle center={center.latLng} radius={searchCircle} options={circleOption} />
+            }
             </GoogleMap>
         </SearchPageGoogleMapCon>
     )

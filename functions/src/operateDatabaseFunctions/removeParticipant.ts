@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable space-before-blocks */
 /* eslint-disable max-len */
 import getTaskById from "./getTaskById";

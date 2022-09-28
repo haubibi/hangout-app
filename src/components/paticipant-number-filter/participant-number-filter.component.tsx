@@ -31,6 +31,7 @@ export const ParticipantsFilter:FC<ParticipantsFilterProps> = ({
 
 
     useEffect(()=>{
+        console.log(smallValue, largeValue)
         onChange([smallValue, largeValue]);
     },[smallValue, largeValue,onChange]);
 
@@ -51,7 +52,7 @@ export const ParticipantsFilter:FC<ParticipantsFilterProps> = ({
                 <Col span={11}>
                     <InputNumberContainer 
                         defaultValue={value[0]}
-                        onStep = {smallValueOnChange}
+                        onChange = {smallValueOnChange}
                         max = {largeValue}
                         min = {1}
                     />
@@ -60,7 +61,7 @@ export const ParticipantsFilter:FC<ParticipantsFilterProps> = ({
                 <Col span={11}>
                     <InputNumberContainer 
                         defaultValue={value[1]}
-                        onStep = {largeValueOnChange}
+                        onChange = {largeValueOnChange}
                         min = {smallValue}
                     />
                 </Col>

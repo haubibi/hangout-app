@@ -13,6 +13,7 @@ export const ComboboxContainer = styled.div`
 
 export const ComboboxInputStyled = styled(ComboboxInput)`
     width: ${(props: IComboboxInputStyled) => props.width || '80%'};
+    height: ${(props: IComboboxInputStyled) => props.height || '32px'};
     left: ${(props: IComboboxInputStyled) => props.height || '10%'};
 `
 export const ComboboxStyled = styled(Combobox)`

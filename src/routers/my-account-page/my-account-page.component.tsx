@@ -12,7 +12,7 @@ import {
     message,
     Layout
  } from 'antd';
-import { MyAccountMenu } from '../../components/my-account-menu/my-account-menu.component';
+import { MyAccountMenu } from '../../components/my-account-page/my-account-menu/my-account-menu.component';
 import { Outlet } from 'react-router-dom';
 
 

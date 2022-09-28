@@ -54,8 +54,7 @@ const coverImg = (coverImg: IImageObjWithUrl | null) => {
 }
 
 const getCityText = (address: string) => {
-    let cityString:string;
-    
+    let cityString:string;  
     const isSplitedByComma = address.indexOf(',') === -1? false:true;
     if(isSplitedByComma) {
         if(address.split(',')[1]){
@@ -68,7 +67,6 @@ const getCityText = (address: string) => {
     // console.log(cityString)
 
     const maxAddressLength = checkIsChinese(cityString)? maxChineseLength: maxEnglishLength;
-
     return cityString.length > maxAddressLength ? `${cityString.slice(0, maxAddressLength)}...`: cityString; 
 }
 
@@ -142,66 +140,31 @@ export const EventCard:FC<IEventCardProps> = ({
                 onClick = {cardOnClick}
                 actions={[            
                     <Popover content={ LocationContent }>
-                            <EnvironmentFilled key = "address"/>
-                                <CardTextSpan>{ cityText }</CardTextSpan>
+                        <EnvironmentFilled key = "address"/>
+                        <CardTextSpan>{ cityText }</CardTextSpan>
                     </Popover>,
                     <Popover content={ TimeContent }>
                         <ClockCircleFilled key="time" />    
                                 <CardTextSpan>{ startTimeText }</CardTextSpan>
                     </Popover>,
-                        //  {/* <Countdown value={deadline} format="D [days] H [h]" onChange={onTimeChange}/> */}
-                        // {/* <Countdown value={deadline} format="D [d] H [h] m 分 s 秒" onChange={onTimeChange}/> */}
-                        // {/* {
-                        //     daysBetween > maxDaysBetween ? 
-                        //     <Countdown value={deadline} format="D [d] H [h] m 分 s 秒" onChange={onTimeChange}/>:
-                        //     <Countdown  value={deadline} format="HH:mm:ss:SSS" />
-                        // } */}
-                    // <Popover content={ LocationContent }>
-                    //     <EnvironmentFilled key = "address"/>,
-                    // </Popover>,
-
-                  
-                    // <EllipsisOutlined key="ellipsis" />,
-                    // <RocketFilled   key="edit" />
                 ]}
                 // onTabChange = { onTabChange }
                 title = {title}
             >
                 <ContentRow>
-                    {/* <TitleDiv>{title}</TitleDiv> */}
-                </ContentRow>
-                <ContentRow>
                     <ContentCol span={24}>
                         <CardTags tags = {keyWords}/>
                         {/* <Avatar src="https://joeschmoe.io/api/v1/random" /> */}
-                    </ContentCol>
-                    <ContentCol span={20}>
-                        {/* <TitleDiv>{title}</TitleDiv> */}
                     </ContentCol>
                 </ContentRow>
                 <ContentRow>
                     <ContentCol span={24}>
                         <MetaCon
                             avatar={<Avatar src= {avartaSrc} />}
-                            // title= {title}
                             description= { description.length> maxDescription ?`${description.slice(0, maxDescription)}...`:description}
                         />
                     </ContentCol>
-                </ContentRow>
-                {/* <ContentRow>
-                    <LocationAndPatCol span={12}>
-                        <Popover content={ LocationContent }>
-                            <EnvironmentFilled key = "address"/>
-                            <AddressSpan>{ cityText }</AddressSpan>
-                        </Popover>
-                    </LocationAndPatCol>
-                    <LocationAndPatCol span={12}>
-                        <Popover content={ LocationContent }>
-                            <EnvironmentFilled key = "address"/>
-                        </Popover>
-                    </LocationAndPatCol>
-                </ContentRow> */}
-                
+                </ContentRow>    
             </EventCardCon>
     )
 }

@@ -15,10 +15,10 @@ export const EventCardCon = styled(Card)`
     &:hover {
         transform: scale(1.07);
     }
-    &>.ant-card-body{
+    .ant-card-body{
         padding: 6px;
     }
-    &>.ant-card-head>.ant-card-head-wrapper>.ant-card-head-title{
+    .ant-card-head>.ant-card-head-wrapper>.ant-card-head-title{
         font-size: 30px;
         font-weight: bolder;
         padding: 10px 0;

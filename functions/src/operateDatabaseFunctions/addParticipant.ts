@@ -27,7 +27,7 @@ const checkIfMax = (paticipants: IPaticipant[], maxNumberOfPaticipants: number):
 const addParticipant = async (participantUid: string, taskId: string, addTaskRequestType: AddTaskRequestEnum):Promise<Error | IPaticipant[]> => {
   // eslint-disable-next-line no-async-promise-executor
 
-  // eslint-disable-next-line no-async-promise-executor
+  // eslint-disable-next-line no-async-promise-executor, @typescript-eslint/no-misused-promises
   return new Promise( async (resolve, reject)=>{
     console.log("addTaskRequestType:" + addTaskRequestType);
     // check if task exist

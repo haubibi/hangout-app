@@ -14,7 +14,7 @@ const addUser = async (userInput:IUserInput):Promise<string | IUserInput> => {
   if (ifUidExist) return uid;
 
   const userRef = db.ref(`${Collection.users}/${uid}`);
-  userRef.set(userInput);
+  await userRef.set(userInput);
   return userInput;
 };
 

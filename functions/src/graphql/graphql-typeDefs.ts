@@ -34,6 +34,7 @@ const typeDefs = gql`
         participantUid: ID
         organizerUid: ID
         read: Boolean
+        notificationType: String
     }
 
     input ParticipantRequestTypesInput {
@@ -42,6 +43,7 @@ const typeDefs = gql`
         participantUid: ID
         organizerUid: ID
         read: Boolean
+        notificationType:String
     }
 
 
@@ -135,7 +137,7 @@ const typeDefs = gql`
 
     input TaskFilterInput {
         distanceRange: [Float]
-        paticipantsRange: [Float]
+        participantsRange: [Float]
     }
 
 
@@ -186,12 +188,21 @@ const typeDefs = gql`
         frontCoverImage: ImageObjWithUrlAndRefPathInput
     }
 
+    type ParticipantNotification {
+        task: Task
+        participant: User
+        organizer: User
+    }
+
+
+
     type Query {
         users: [User]
         tasks: [Task]
         getTaskById(id: ID): Task
         getUserById(uid: ID): User
         getFilteredTasks(currentLatLng: LatLngLiteralInput, taskFilter: TaskFilterInput): [Task]
+        getParticipantNotification(participantUid: ID, taskId: ID, organizerUid: ID): ParticipantNotification
      }
     type Mutation {
         addTask(taskObj: TaskInput): Task

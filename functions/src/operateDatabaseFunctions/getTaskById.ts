@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {db, Collection} from "../db";
 import {ITask} from "../../../src/interfaces/task.interface";
 
