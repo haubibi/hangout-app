@@ -38,7 +38,11 @@ const MyAccountPage = () => {
     return (
 
         <MyAccountPageCon>
-            <MyAccountPageSideCon>
+            <MyAccountPageSideCon
+                width={250}
+                collapsedWidth ={0}
+                collapsible
+            >
                 <MyAccountMenu></MyAccountMenu>
             </MyAccountPageSideCon>
             <MyAccountPageContentCon>

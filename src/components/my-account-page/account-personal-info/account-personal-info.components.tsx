@@ -10,7 +10,7 @@ import {
     FormSubmitButtonItem,
     FormSubmitButton
 } from './account-personal-info.styles';
-import { FormImagesUpload } from '../../form-images-upload/form-images-upload.component';
+import { FormImagesUpload } from '../../form-component/form-images-upload/form-images-upload.component';
 import { 
     useContext,
     useState,

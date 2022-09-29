@@ -75,10 +75,14 @@ const MyNotifications = () => {
     return (
         <MyNotificationsCon>
             My Notifications
-            <ListCon
-                dataSource = {currentUser.notifications}
-                renderItem = {renderNotification}
-            />
+            {
+                (currentUser.notifications && currentUser.notifications.length > 0) ?
+                <ListCon
+                    dataSource = {currentUser.notifications}
+                    renderItem = {renderNotification}
+                />:
+                <h2>You don't have notifications</h2>
+            }
             
             {/* <EventCardList /> */}
         </MyNotificationsCon>

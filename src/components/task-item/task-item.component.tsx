@@ -1,7 +1,7 @@
 import { useContext, FC } from "react";
 import { ITask } from "../../interfaces/task.interface";
 import { useMutation } from "@apollo/client";
-import { TaskCarousel } from '../task-carousel/task-carousel.component';
+import { TaskCarousel } from '../task-component/task-carousel/task-carousel.component';
 import { ADDPARTICIPANT } from "../../utils/graphql/mutation.utils";
 import { 
     Button,

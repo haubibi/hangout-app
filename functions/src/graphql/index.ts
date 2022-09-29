@@ -12,18 +12,18 @@ const app = express();
 
 const serverStart = async () => {
   const corsOptions = {
-    origin: ["http://localhost:3000", "https://venerable-parfait-755a0a.netlify.app/"],
+    origin: ["http://localhost:3000", "https://venerable-parfait-755a0a.netlify.app"],
     credentials: true,
   };
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    csrfPrevention: true,
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
     path: "/",
-    // cors: true,
     cors: corsOptions,
   });
 };

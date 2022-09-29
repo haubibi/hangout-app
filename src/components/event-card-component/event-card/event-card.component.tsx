@@ -1,27 +1,27 @@
-import { FC, useMemo, useContext } from 'react';
+import { 
+    FC, 
+    useMemo, 
+    useContext 
+} from 'react';
 import { 
     EnvironmentFilled ,
     ClockCircleFilled,
 } from '@ant-design/icons';
 import { 
     Avatar,
-    Popover,
-    Divider,
-    Statistic
+    Popover
  } from 'antd';
 import { 
     EventCardCon,
     ContentRow,
-    LocationAndPatCol,
     ContentCol,
     PopoverContentDiv,
     MetaCon,
     CardTextSpan
- } from "./event-card.styles";
+} from "./event-card.styles";
 
-import { ITask } from '../../interfaces/task.interface';
-import { IImageObjWithUrl } from '../../interfaces/images.interface';
-import { CardTags } from '../card-tags/card-tags.component';
+import { ITask } from '../../../interfaces/task.interface';
+import { IImageObjWithUrl } from '../../../interfaces/images.interface';
 import { useNavigate } from 'react-router-dom';
 import { 
     getCurrentFullTimeString,
@@ -29,16 +29,14 @@ import {
     getNumberOfDaysFromNow,
     getMomentByDateAndTimeString,
     cardDateFormat
- } from '../../utils/date/date.utils';
-import { MenuKey, NavigationContext } from '../../context/navigation.context';
-import { checkIsChinese } from '../../utils/usefulFunctions/judgeString';
-import { maxTagLength } from '../../validators/taskForm.validate';
+} from '../../../utils/date/date.utils';
+import { CardTags } from '../card-tags/card-tags.component';
+import { MenuKey, NavigationContext } from '../../../context/navigation.context';
+import { checkIsChinese } from '../../../utils/usefulFunctions/judgeString';
 
 export interface IEventCardProps {
     task: ITask;
 }
-
-// const { Countdown } = Statistic;
 
 
 const maxChineseLength = 5;
@@ -48,7 +46,7 @@ const defaultbodyStyle = {
     height: '150px'
 }
 
-const defaultSrc = require('../../assets/avatar/wolf.png')
+const defaultSrc = require('../../../assets/avatar/wolf.png')
 const coverImg = (coverImg: IImageObjWithUrl | null) => {
     return <img alt= {coverImg?coverImg.name:'wirewolf'} src= {coverImg?coverImg.url:defaultSrc} height = "200px"/>;
 }
@@ -75,9 +73,9 @@ const getCityText = (address: string) => {
 const getSrc = (taskId: string) => {
     switch(taskId) {
         case 'ZvdHBdjwPNTKAQOa5S2Mo65bzU73_003874030697579145':
-            return require('../../assets/avatar/wcy.jpg');
+            return require('../../../assets/avatar/wcy.jpg');
         case 'ZvdHBdjwPNTKAQOa5S2Mo65bzU73_06192617512878347':
-            return require('../../assets/avatar/zuo.png');
+            return require('../../../assets/avatar/zuo.png');
             default:
                 return "https://joeschmoe.io/api/v1/random"; 
     }

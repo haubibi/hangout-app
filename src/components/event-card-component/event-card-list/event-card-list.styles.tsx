@@ -3,7 +3,7 @@ import {
     List
 } from 'antd';
 import styled from "styled-components";
-import { cardWidth } from '../../utils/layout-antdesign/layout';
+import { cardWidth } from '../../../utils/layout-antdesign/layout';
 export const EventCardListCon = styled.div`
 `;
 

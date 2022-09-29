@@ -9,9 +9,9 @@ import { FormImagesUploadContainer} from './form-images-upload.styles'
 import { 
   IImageObjWithUrl, 
   maxUploadImageSize 
-} from '../../interfaces/images.interface';
+} from '../../../interfaces/images.interface';
 import { Form, Modal, message} from 'antd';
-import { getBase64 } from '../../utils/usefulFunctions/imageToBase64';
+import { getBase64 } from '../../../utils/usefulFunctions/imageToBase64';
 
 export interface ColInterface {
     span: number;

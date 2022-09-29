@@ -24,7 +24,7 @@ import { useCallback, useEffect, useState,useMemo } from 'react';
 import { ILatLngAndAddress, LatLngLiteral } from '../../interfaces/google.interface';
 import { getCurrentCoords, markerCreator, markersCreator } from '../../utils/googleMap/googleMap.utils';
 import { IComboboxContainer } from '../../components/places-auto-complete/places-auto-complete.component';
-import { FilterBar } from '../../components/filter-bar/filter-bar.components';
+import { FilterBar } from '../../components/filter-component/filter-bar/filter-bar.components';
 import { 
     IFilterTasks,
     ParticipantsRange,
@@ -34,7 +34,7 @@ import { useQuery } from '@apollo/client';
 import { GETFILTEREDTASKS } from '../../utils/graphql/query.utils';
 import { searchFilterValidator } from '../../validators/search-filter.valitator';
 import { ITask } from '../../../functions/src/interfaces/task.interface';
-import { EventCard } from '../../components/event-card/event-card.component';
+import { EventCard } from '../../components/event-card-component/event-card/event-card.component';
 
 const comboboxSettings = {
     comboboxContainerStyle:{
@@ -133,7 +133,7 @@ const MapSearch = () => {
             setSubmitClick(false);
         }
         console.log(data)
-    },[data, setFilteredTasks, submitClick, setSubmitClick]);
+    },[data, setFilteredTasks, submitClick, setSubmitClick, clickedTask]);
 
 
     const taskMarkers = useMemo(()=>{
@@ -176,7 +176,12 @@ const MapSearch = () => {
     // const markerLocation = [markerCreator({position: currentLatLngAddress.latLng})];
     return (
         <MapSearchLayout>
-            <MapSearchSider>
+            <MapSearchSider
+                collapsible
+                collapsedWidth={0}
+                width = {300}
+                theme = "dark"
+            >
                 <FilterBar 
                     value = {filterValue}
                     onChange = {filterBarOnChange}

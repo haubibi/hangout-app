@@ -36,8 +36,9 @@ const  App: FC = () => {
     onUserAuthStateChanged(async(user) =>{
       console.log('changed user:', user)
       if(!user){
-          setUserUid('');
+        setUserUid('');
       } else {
+        
         // const {uid} = user;
         // setUserUid(uid);
       }

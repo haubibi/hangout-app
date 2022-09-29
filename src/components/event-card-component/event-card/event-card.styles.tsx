@@ -4,8 +4,8 @@ import {
     Col,
     Row
  } from 'antd';
-import { cardWidth } from '../../utils/layout-antdesign/layout';
-import { strangeFontFamily, normalFontFamily } from "../../index.styles";
+import { cardWidth } from '../../../utils/layout-antdesign/layout';
+import { strangeFontFamily, normalFontFamily } from "../../../index.styles";
 
 
 export const EventCardCon = styled(Card)`

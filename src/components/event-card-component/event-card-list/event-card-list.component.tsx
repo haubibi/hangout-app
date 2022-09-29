@@ -6,11 +6,11 @@ import {
     EventCardListCon, 
     ColContainer 
 } from './event-card-list.styles';
-import { ITask } from '../../interfaces/task.interface';
+import { ITask } from '../../../interfaces/task.interface';
 import { 
     spanObj, 
     gutter 
-} from '../../utils/layout-antdesign/layout';
+} from '../../../utils/layout-antdesign/layout';
 import {
     Row
 } from 'antd';

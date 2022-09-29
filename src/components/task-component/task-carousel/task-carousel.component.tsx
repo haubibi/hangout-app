@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IImageObjWithUrl, IImageObjWithUrlAndRefPath } from '../../interfaces/images.interface';
+import { IImageObjWithUrl, IImageObjWithUrlAndRefPath } from '../../../interfaces/images.interface';
 import {
     TaskCarouselCon,
     ImageCon

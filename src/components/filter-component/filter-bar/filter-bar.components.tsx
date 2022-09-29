@@ -1,10 +1,10 @@
-import { DistanceFilter } from '../distance-filter/distance-filter.component';
+import { DistanceFilter } from '../../distance-filter/distance-filter.component';
 import { ParticipantsFilter } from '../paticipant-number-filter/participant-number-filter.component';
 import { 
     ParticipantsRange, 
     DistanceRange, 
     IFilterTasks,
-} from '../../interfaces/task.interface';
+} from '../../../interfaces/task.interface';
 import { 
     useState, 
     useCallback,
@@ -15,20 +15,16 @@ import {
 import {
     RowContainer,
     ColContainer,
-    SubmitButton
  } from './filter-bar.styles';
  import {
     FilterBarContainer
 } from './filter-bar.styles';
-import { SearchOutlined } from '@ant-design/icons';
 
 
 interface FilterBarProps {
     value: IFilterTasks;
     onChange: (value: IFilterTasks)=> void;
 }
-
-const dafaultParticipantsRange: ParticipantsRange = [0,5];
 
 export const FilterBar:FC<FilterBarProps> = ({
     value,

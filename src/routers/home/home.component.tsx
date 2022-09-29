@@ -8,7 +8,7 @@ import {
     ListCol 
 } from './home.styles';
 import { HomeSearch } from '../../components/home-search/home-search.component';
-import { EventCardList } from '../../components/event-card-list/event-card-list.component';
+import { EventCardList } from '../../components/event-card-component/event-card-list/event-card-list.component';
 import { GETAllTASKS } from '../../utils/graphql/query.utils';
 import { PaginationBar } from '../../components/pagination/pagination.component'
 import { ITask } from '../../interfaces/task.interface';

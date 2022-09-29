@@ -41,7 +41,12 @@ const SignUpItem = () => {
     //set initial values when component mounted
     useEffect(()=> {
         setDetail(initialValues);
-    },[])
+    },[]);
+
+    //set the key of menu
+    useEffect(()=> {
+        setCurrentMenuKey(MenuKey.SIGNUP)
+    },[setCurrentMenuKey])
 
 
 
@@ -53,18 +58,27 @@ const SignUpItem = () => {
             displayName
         }
         //sign up with email and password
-        createAuthUserWithEmailAndPassword(email, password, additionalInfo).then((userInput: IUserInput)=>{
+        createAuthUserWithEmailAndPassword(email, password, additionalInfo).then(async (userInfo: (IUserInput & {emailVerified: boolean}))=>{
+            const {emailVerified, ...otherProps} =userInfo;
+            console.log('emailVerified:', userInfo.emailVerified)
+            console.log('userInfo:', userInfo)
+            console.log('otherProps:', otherProps)
             //add user to database
-            addUser({
-                variables:{userInput} 
+            await addUser({
+                variables:{userInput: otherProps} 
             }).then(()=>{
-                //set current user and navigate to home page
-                const {uid} = userInput;
-                setUserUid(uid);
-                setCurrentMenuKey(MenuKey.HOME)
-                navigate(`/`);
+                //check if the email is verified
+                if(emailVerified){
+                    const {uid} = userInfo;
+                    setUserUid(uid);
+                } else {
+                    message
+                    .success('You have signed up successfully, it will redirect to home page in 3s...', 3)
+                    .then(() => message.success('Loading finished', 2.5))
+                    .then(() => message.info('Loading finished is finished', 2.5));
+                }
             });
-            
+            navigate(`/`);
         }).catch((error)=>{
             message.error(error);
         });

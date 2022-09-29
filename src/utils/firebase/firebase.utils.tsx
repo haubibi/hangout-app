@@ -98,8 +98,8 @@ export const createAuthUserWithEmailAndPassword = async (email: string, password
       createUserWithEmailAndPassword(auth, email, password).then(({user}) => {
         //verify
         sendEmailVerification(user).then(()=>{
-              const { email, uid } = user;
-              const newUser  = {email, uid, ...additionalInfo};
+              const { email, uid, emailVerified } = user;
+              const newUser  = {email, uid, emailVerified, ...additionalInfo};
               console.log('additionalInfo:',additionalInfo);
               console.log('newUser:', newUser)
               resolve(newUser);

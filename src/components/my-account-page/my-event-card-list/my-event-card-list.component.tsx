@@ -1,7 +1,7 @@
 
 import { MyEventCardListCon } from './my-event-card-list.styles';
 import { ITask } from '../../../../functions/src/interfaces/task.interface';
-import {EventCardList} from '../../event-card-list/event-card-list.component';
+import {EventCardList} from '../../event-card-component/event-card-list/event-card-list.component';
 interface EventCardListProps {
     tasks: ITask[]
 }

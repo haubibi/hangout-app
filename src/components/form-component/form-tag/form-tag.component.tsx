@@ -15,7 +15,7 @@ import {
   InputCon, 
   TagItem 
 } from './form-tag.styles';
-import { maxTagLength } from '../../validators/taskForm.validate';
+import { maxTagLength } from '../../../validators/taskForm.validate';
 
 interface IFormTagprops {
     value?: string[];

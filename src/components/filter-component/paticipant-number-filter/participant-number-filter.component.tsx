@@ -14,7 +14,7 @@ import {
     InputNumberContainer,
     TextColContainer,
  } from './participant-number-filter.styles';
-import { ParticipantsRange } from '../../interfaces/task.interface';
+import { ParticipantsRange } from '../../../interfaces/task.interface';
 
 interface ParticipantsFilterProps {
     onChange: (value: ParticipantsRange) => void;

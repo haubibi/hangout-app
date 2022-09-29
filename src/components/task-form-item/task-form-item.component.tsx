@@ -33,16 +33,16 @@ import {
     ITaskFormItemDetail,
     ITaskFormItemDetailWithImageRefAndUrl
 } from '../../interfaces/taskForm.interface';
-import { FormImagesUpload } from '../form-images-upload/form-images-upload.component'
+import { FormImagesUpload } from '../form-component/form-images-upload/form-images-upload.component'
 import GoogleSearchInForm from '../googleMaps-search/googleMaps-search.component';
-import { FormSwitch } from '../form-switch/form-switch.component';
+import { FormSwitch } from '../form-component/form-switch/form-switch.component';
 
 import { 
     updateImages, 
     getImagesWithUrlAndRefPath, 
     transformImageToWithoutRefPath 
 } from '../../utils/images/images.utils';
-import { FormTag } from '../form-tag/form-tag.component';
+import { FormTag } from '../form-component/form-tag/form-tag.component';
 import { useForm } from 'antd/es/form/Form';
 import { dateFormat } from '../../utils/date/date.utils';
 import { getImagesWithRefPath } from '../../utils/images/images.utils';

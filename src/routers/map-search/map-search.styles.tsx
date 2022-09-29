@@ -20,26 +20,14 @@ export const MapSearchContent = styled(Content)`
 
 
 export const MapSearchSider = styled(Sider)`
-    background-color: #4bb3cc;
-    min-width: 300px !important;
 `
 
 
 export const ContendDiv = styled.div`
     height: 100vh;
     position: relative;
-
-    /* .kQCMba{
-        position: absolute;
-        top: 50px;
-    } */
 `
-// export const PlacesCon = styled(Places)`
-//     z-index: 2;
-// `
-// export const SearchPageGoogleMapsCon = styled(SearchPageGoogleMaps)`
-//     z-index: 1;
-// `
+
 
 export const RowMap = styled(Row)`
      height: 100vh;
