@@ -1,0 +1,100 @@
+[debug] [2022-09-29T00:10:46.343Z] ----------------------------------------------------------------------
+[debug] [2022-09-29T00:10:46.345Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Biao\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2022-09-29T00:10:46.345Z] CLI Version:   11.11.0
+[debug] [2022-09-29T00:10:46.345Z] Platform:      win32
+[debug] [2022-09-29T00:10:46.345Z] Node Version:  v16.16.0
+[debug] [2022-09-29T00:10:46.346Z] Time:          Thu Sep 29 2022 08:10:46 GMT+0800 (中国标准时间)
+[debug] [2022-09-29T00:10:46.347Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-09-29T00:10:46.440Z] Object ".remoteconfig" in "firebase.json" is missing required property: {"missingProperty":"template"}
+[debug] [2022-09-29T00:10:46.446Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-09-29T00:10:46.447Z] > authorizing via signed-in user (biao.huangsoultaker@gmail.com)
+[debug] [2022-09-29T00:10:46.541Z] java version "17.0.4.1" 2022-08-18 LTS
+
+[debug] [2022-09-29T00:10:46.542Z] Java(TM) SE Runtime Environment (build 17.0.4.1+1-LTS-2)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0.4.1+1-LTS-2, mixed mode, sharing)
+
+[debug] [2022-09-29T00:10:46.558Z] Parsed Java major version: 17
+[info] i  emulators: Starting emulators: functions, firestore, database, hosting, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, firestore, database, hosting, storage"}}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project hang-out-213d4. This may result in unexpected behavior. 
+[debug] [2022-09-29T00:10:46.573Z] [hub] writing locator at C:\Users\Biao\AppData\Local\Temp\hub-hang-out-213d4.json
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, pubsub, eventarc {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, pubsub, eventarc\u001b[22m"}}
+[info] +  functions: Using node@16 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Using node@16 from host."}}
+[debug] [2022-09-29T00:10:46.604Z] defaultcredentials: writing to file C:\Users\Biao\AppData\Roaming\firebase\biao_huangsoultaker_gmail.com_application_default_credentials.json
+[debug] [2022-09-29T00:10:46.607Z] Setting GAC to C:\Users\Biao\AppData\Roaming\firebase\biao_huangsoultaker_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Biao\\AppData\\Roaming\\firebase\\biao_huangsoultaker_gmail.com_application_default_credentials.json"}}
+[debug] [2022-09-29T00:10:46.609Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig [none]
+[debug] [2022-09-29T00:10:46.871Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig 200
+[debug] [2022-09-29T00:10:46.872Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/adminSdkConfig {"projectId":"hang-out-213d4","databaseURL":"https://hang-out-213d4-default-rtdb.firebaseio.com","storageBucket":"hang-out-213d4.appspot.com","locationId":"us-central"}
+[debug] [2022-09-29T00:10:46.895Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2022-09-29T00:10:46.895Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-09-29T00:10:46.895Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\Biao\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.14.4.jar","--host","localhost","--port",8080,"--rules","C:\\Users\\Biao\\Desktop\\hangout-app\\firestore.rules","--functions_emulator","localhost:5001"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\Biao\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.14.4.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--rules\",\"C:\\\\Users\\\\Biao\\\\Desktop\\\\hangout-app\\\\firestore.rules\",\"--functions_emulator\",\"localhost:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2022-09-29T00:10:48.199Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4 [none]
+[debug] [2022-09-29T00:10:48.395Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4 200
+[debug] [2022-09-29T00:10:48.395Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4 {"projectId":"hang-out-213d4","projectNumber":"290230702663","displayName":"Hang out","name":"projects/hang-out-213d4","resources":{"hostingSite":"hang-out-213d4","realtimeDatabaseInstance":"hang-out-213d4-default-rtdb","storageBucket":"hang-out-213d4.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_c3337d5b-c14b-4e36-a131-d4c0c697cbd1"}
+[debug] [2022-09-29T00:10:48.395Z] database rules config:  [{"instance":"hang-out-213d4-default-rtdb","rules":"C:\\Users\\Biao\\Desktop\\hangout-app\\database.rules.json"}]
+[debug] [2022-09-29T00:10:48.398Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2022-09-29T00:10:48.399Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-09-29T00:10:48.399Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2022-09-29T00:10:48.399Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\Biao\\.cache\\firebase\\emulators\\firebase-database-emulator-v4.9.0.jar","--host","localhost","--port",9000,"--functions_emulator_host","localhost","--functions_emulator_port",5001],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host"],"joinArgs":false} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\Biao\\\\.cache\\\\firebase\\\\emulators\\\\firebase-database-emulator-v4.9.0.jar\",\"--host\",\"localhost\",\"--port\",9000,\"--functions_emulator_host\",\"localhost\",\"--functions_emulator_port\",5001],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\"],\"joinArgs\":false}"}}
+[info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
+[debug] [2022-09-29T00:10:49.703Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-09-29T00:10:50.393Z] Temp file directory for storage emulator: C:\Users\Biao\AppData\Local\Temp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: C:\\Users\\Biao\\AppData\\Local\\Temp/firebase/storage/blobs"}}
+[debug] [2022-09-29T00:10:50.401Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hang-out-213d4/sites 
+[debug] [2022-09-29T00:10:51.248Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hang-out-213d4/sites 200
+[debug] [2022-09-29T00:10:51.248Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hang-out-213d4/sites {"sites":[{"name":"projects/hang-out-213d4/sites/hang-out-213d4","defaultUrl":"https://hang-out-213d4.web.app","appId":"1:290230702663:web:f6f3a7f74c3e50aeb89762","type":"DEFAULT_SITE"}]}
+[debug] [2022-09-29T00:10:51.248Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/webApps/1:290230702663:web:f6f3a7f74c3e50aeb89762/config [none]
+[debug] [2022-09-29T00:10:52.122Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/webApps/1:290230702663:web:f6f3a7f74c3e50aeb89762/config 200
+[debug] [2022-09-29T00:10:52.122Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hang-out-213d4/webApps/1:290230702663:web:f6f3a7f74c3e50aeb89762/config {"projectId":"hang-out-213d4","appId":"1:290230702663:web:f6f3a7f74c3e50aeb89762","databaseURL":"https://hang-out-213d4-default-rtdb.firebaseio.com","storageBucket":"hang-out-213d4.appspot.com","locationId":"us-central","apiKey":"AIzaSyCeT3ANdqXNbquxmYay1gm9O-8NgqlpakA","authDomain":"hang-out-213d4.firebaseapp.com","messagingSenderId":"290230702663","measurementId":"G-1312EJCKX0"}
+[info] i  hosting: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[warn] !  ui: Emulator UI unable to start on port 4000, starting on 4002 instead. {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI unable to start on port 4000, starting on 4002 instead."}}
+[debug] [2022-09-29T00:10:52.167Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-09-29T00:10:52.167Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-09-29T00:10:52.167Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\Biao\\.cache\\firebase\\emulators\\ui-v1.9.0\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\Biao\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.9.0\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2022-09-29T00:10:52.307Z] Web / API server started at localhost:4002
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4002\n"}}
+[info] i  functions: Watching "C:\Users\Biao\Desktop\hangout-app\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\Biao\\Desktop\\hangout-app\\functions\" for Cloud Functions..."}}
+[debug] [2022-09-29T00:10:52.443Z] Validating nodejs source
+[debug] [2022-09-29T00:10:55.348Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "serveAll": "npm run build && firebase emulators:start",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "npm run build && firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "lib/functions/src/index.js",
+  "dependencies": {
+    "apollo-server-express": "^3.10.2",
+    "express": "^4.18.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.24.0",
+    "graphql": "^16.6.0",
+    "load-module": "^4.2.1",
+    "lodash": "^4.17.21",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^0.2.0",
+    "typescript": "^4.8.4"
+  },
+  "private": true
+}
+[debug] [2022-09-29T00:10:55.349Z] Building nodejs source
+[debug] [2022-09-29T00:10:55.349Z] Analyzing nodejs backend spec
+[debug] [2022-09-29T00:10:55.350Z] Could not find functions.yaml. Must use http discovery
