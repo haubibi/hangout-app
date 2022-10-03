@@ -21,6 +21,7 @@
     "firebase": "^9.9.4",
     "firebase-admin": "^11.0.1",
     "firebase-functions": "^3.23.0",
+    "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.18.0",
     "lodash": "^4.17.21",
