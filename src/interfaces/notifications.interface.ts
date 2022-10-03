@@ -1,8 +1,8 @@
-import { ITask } from './task.interface'; 
-import { IUser } from './user.interface';
+import {ITask} from "./task.interface";
+import {IUser} from "./user.interface";
 /* eslint-disable max-len */
 export enum NotificationTypeEnum {
-    PARTICIPANT =  "PARTICIPANT"
+    PARTICIPANT = "PARTICIPANT"
 }
 
 export enum AddTaskRequestEnum {
@@ -16,6 +16,7 @@ export enum AddTaskRequestEnum {
 
 export enum QuitTaskRequestEnum {
     PARTICIPANT_QUIT_REQUEST = "PARTICIPANT_QUIT_REQUEST",
+    ORGNIZER_QUIT_REQUEST = "ORGNIZER_QUIT_REQUEST",
 }
 
 

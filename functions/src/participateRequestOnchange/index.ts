@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable no-duplicate-case */
 /* eslint-disable no-fallthrough */
-/* eslint-disable curly */
-/* eslint-disable max-len */
+
 import * as functions from "firebase-functions";
-import {AddTaskRequestEnum, IPaticipantsNotification, QuitTaskRequestEnum, NotificationTypeEnum} from "../interfaces/notifications.interface";
+import {
+  AddTaskRequestEnum, 
+  IPaticipantsNotification, 
+  QuitTaskRequestEnum, 
+  NotificationTypeEnum
+} from "../interfaces/notifications.interface";
 import getTaskById from "../operateDatabaseFunctions/getTaskById";
 import updateNotifications from "../operateDatabaseFunctions/updateNotifications";
 import {IPaticipant} from "../interfaces/participate.interface";
@@ -15,6 +14,7 @@ import getUserById from "../operateDatabaseFunctions/getUserById";
 import * as _ from "lodash";
 import {IUser} from "../interfaces/user.interface";
 import {ITask} from "../interfaces/task.interface";
+import updateParticipant from "../operateDatabaseFunctions/updateParticipant";
 // export enum AddTaskRequestEnum {
 //   PARTICIPANT_APPLY_REQUEST = "PARTICIPANT_APPLY_QEQUEST",
 //   PARTICIPANT_ARGEE_REQUEST = "PARTICIPANT_ARGEE_REQUEST",
@@ -55,13 +55,13 @@ const updateNotifiCationToParticipant = async (notificationToParticipant: IPatic
   const participant = await getUserById(notificationToParticipant.participantUid);
   const currentNotifications = (participant as IUser).notifications;
   const notifications = Array.isArray(currentNotifications)? currentNotifications: [];
-  await updateNotifications(participant as IUser, [...notifications, notificationToParticipant]);
+  updateNotifications(participant as IUser, [...notifications, notificationToParticipant]);
 };
 const updateNotifiCationToOrgnizer = async (notificationToOrginzer: IPaticipantsNotification) => {
   const organizer = await getUserById(notificationToOrginzer.organizerUid);
   const currentNotifications = (organizer as IUser).notifications;
   const notifications = Array.isArray(currentNotifications)? currentNotifications: [];
-  await updateNotifications(organizer as IUser, [...notifications, notificationToOrginzer]);
+  updateNotifications(organizer as IUser, [...notifications, notificationToOrginzer]);
 };
 
 const onParticipateChange = functions.database
@@ -90,15 +90,14 @@ const onParticipateChange = functions.database
         };
         await updateNotifiCationToParticipant(notificationToParticipant);
       }
-      console.log("beforeData:", beforeData);
-      console.log("participants:", participants);
+      // console.log("beforeData:", beforeData);
+      // console.log("participants:", participants);
 
       // 更新
       if (participants) {
         const participantIndex = participants.findIndex((p:IPaticipant)=>p.newAdded);
         // console.log("participant:"+ participantIndex);
-        // console.log(participant);
-        if (participantIndex.index === -1) return new Error("The modfified participant dosen't exist!");
+        if (participantIndex === -1) return new Error("The modfified participant dosen't exist!");
         const participant = participants[participantIndex];
         switch (participant.requestType) {
           // 用户同意， 发给组织者
@@ -115,6 +114,7 @@ const onParticipateChange = functions.database
               organizerUid: organizer,
               read: false,
             };
+            
             await updateNotifiCationToOrgnizer(notificationToOrganizer);
             break;
           // 组织者同意， 发给用户
@@ -134,20 +134,10 @@ const onParticipateChange = functions.database
             await updateNotifiCationToParticipant(notificationToParticipant);
             break;
         }
+        participants[participantIndex].newAdded = false;
+        console.log("participant:",participants[participantIndex])
+        await updateParticipant(taskId, participants);
       }
-
-
-      // if (notificationToParticipant) {
-      //   const participant = await getUserById(notificationToParticipant.participantUid);
-      //   const {notifications} = participant as IUser;
-      //   await updateNotifications(participant as IUser, [...notifications, notificationToParticipant]);
-      // }
-
-      // if (notificationToOrganizer) {
-      //   const organizer = await getUserById(notificationToOrganizer.organizerUid);
-      //   const {notifications} = organizer as IUser;
-      //   await updateNotifications(organizer as IUser, [...notifications, notificationToOrganizer]);
-      // }
     });
 
 export default onParticipateChange;

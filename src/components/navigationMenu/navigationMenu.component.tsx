@@ -23,7 +23,6 @@ import {
     LoginOutlined,
     UserOutlined 
 } from '@ant-design/icons';
-import { NavigateEnum } from '../../App';
 import { MenuKey, NavigationContext } from '../../context/navigation.context';
 import Icon from '@ant-design/icons';
 import { UserAvatarBase } from '../user-avatar/user-avatar-base/user-avatar-base.component';

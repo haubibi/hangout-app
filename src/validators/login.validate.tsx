@@ -8,7 +8,7 @@ export const initialValues = {
     [LoginNamesEnum.password]: '',
 };
 
-export const loginRules = {
+export const loginRules:Record<LoginNamesEnum, any[]> = {
     [LoginNamesEnum.email] :[
         {
             type: 'email',

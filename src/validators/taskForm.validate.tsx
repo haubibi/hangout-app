@@ -11,6 +11,7 @@ import {
     validateStringLength
 } from './validate.utils';
 import { BaseTaskFormItemDetail } from '../interfaces/taskForm.interface';
+import { IPaticipant } from '../interfaces/participate.interface';
 export enum TaskFormItemName {
     title = 'title',
     startDate = 'startDate',
@@ -55,6 +56,12 @@ export const taskFormRules = {
         validator: checkDescriptionCallback
     }],
     
+}
+
+const getCurrentNumerOfParticipaints = (
+    partipants: IPaticipant[]
+) => {
+    // return partipants.filter(())
 }
 
 export const validateFormValues = (values: BaseTaskFormItemDetail, task: ITask) => {

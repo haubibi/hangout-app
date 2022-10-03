@@ -208,6 +208,7 @@ const typeDefs = gql`
         addTask(taskObj: TaskInput): Task
         addUser(userInput: UserInput): User
         addParticipant(participantUid: ID, taskId: ID, addTaskRequestType: String): Paticipant
+        quitParticipant(participantUid: ID, taskId: ID, quitTaskRequestType: String): Paticipant
      }  
 `;
 

@@ -16,6 +16,7 @@ export enum AddTaskRequestEnum {
 
 export enum QuitTaskRequestEnum {
     PARTICIPANT_QUIT_REQUEST = "PARTICIPANT_QUIT_REQUEST",
+    ORGNIZER_QUIT_REQUEST = "ORGNIZER_QUIT_REQUEST",
 }
 
 

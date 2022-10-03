@@ -44,3 +44,18 @@ export const ADDPARTICIPANT = gql`
       } 
     }
 `
+export const QUITPARTICIPANT = gql`
+    mutation (
+      $participantUid: ID,
+      $taskId: ID,
+      $quitTaskRequestType: String
+    ) {
+        quitParticipant(
+          participantUid:$participantUid,
+          taskId:$taskId,
+          quitTaskRequestType:$quitTaskRequestType
+        ){
+          ${ParticipantsObj}
+      } 
+    }
+`

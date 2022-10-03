@@ -5,6 +5,7 @@ import {ITaskInputTimeMoment, ITaskInputTimeString} from "./time.interface";
 import {ILatLngAndAddress} from "./google.interface";
 import {TaskImagesWithUrlAndRefPath} from "./images.interface";
 import {IPaticipant} from "./participate.interface";
+import { ApolloQueryResult } from "@apollo/client";
 
 export interface ITaskBase {
     id: string;
@@ -37,3 +38,20 @@ export interface IFilterTasks {
     distanceRange?: DistanceRange;
     participantsRange?: ParticipantsRange;
 }
+
+
+export enum CurrentTaskUserTypeEnum {
+    ORGNIZER =  "ORGNIZER",
+    PARTICIPANT_AGREED =  "PARTICIPANT_AGREED",
+    PARTICIPANT_NOT_CONFIRMED =  "PARTICIPANT_NOT_CONFIRMED",
+    GUEST_LOGIN = "GUEST_LOGIN",
+    GUEST_WITHOUT_LOGIN =  "GUEST_WITHOUT_LOGIN",
+};
+
+export interface ITaskRefetchFC {
+    (variables: Partial<{id: string;}>): Promise<ApolloQueryResult<any>>;
+}
+
+// (variables?: Partial<{
+    //     id: string;
+    // }>) => Promise<ApolloQueryResult<any>>

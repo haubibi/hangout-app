@@ -11,6 +11,7 @@ import queryGetParticipantNotification from "./query/getParticipantNotification"
 import mutationAddTask from "./mutation/addTask";
 import mutationAddUser from "./mutation/addUser";
 import mutationAddParticipant from "./mutation/addParticipant";
+import mutationQuitParticipant from "./mutation/quitParticipant";
 
 const resolvers = {
   // ScalarName: ScalarNameResolver,
@@ -26,6 +27,7 @@ const resolvers = {
     addTask: mutationAddTask,
     addUser: mutationAddUser,
     addParticipant: mutationAddParticipant,
+    quitParticipant: mutationQuitParticipant,
   },
 };
 

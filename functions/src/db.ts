@@ -1,10 +1,11 @@
+/* eslint-disable no-restricted-globals */
 import * as admin from "firebase-admin";
 // eslint-disable-next-line max-len, @typescript-eslint/no-var-requires
 import serviceAccount from "../hang-out-213d4-firebase-adminsdk-tegov-4bac51b898.json";
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  databaseURL: "https://hang-out-213d4-default-rtdb.firebaseio.com",
+    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+    databaseURL:  "https://hang-out-213d4-default-rtdb.firebaseio.com"
 });
 
 export enum Collection {

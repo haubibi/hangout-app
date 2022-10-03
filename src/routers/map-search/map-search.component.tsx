@@ -20,7 +20,13 @@ import { message, Spin } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Places from '../../components/places-auto-complete/places-auto-complete.component';
 import SearchPageGoogleMaps from '../../components/search-page-googlemaps/search-page-googlemaps.conponent';
-import { useCallback, useEffect, useState,useMemo } from 'react';
+import { 
+    useCallback,
+    useEffect,
+    useState,
+    useMemo,
+    useContext
+} from 'react';
 import { ILatLngAndAddress, LatLngLiteral } from '../../interfaces/google.interface';
 import { getCurrentCoords, markerCreator, markersCreator } from '../../utils/googleMap/googleMap.utils';
 import { IComboboxContainer } from '../../components/places-auto-complete/places-auto-complete.component';
@@ -35,6 +41,7 @@ import { GETFILTEREDTASKS } from '../../utils/graphql/query.utils';
 import { searchFilterValidator } from '../../validators/search-filter.valitator';
 import { ITask } from '../../../functions/src/interfaces/task.interface';
 import { EventCard } from '../../components/event-card-component/event-card/event-card.component';
+import { NavigationContext, MenuKey } from '../../context/navigation.context';
 
 const comboboxSettings = {
     comboboxContainerStyle:{
@@ -91,7 +98,7 @@ const MapSearch = () => {
     const [filteredTasks, setFilteredTasks] = useState<ITask[]>([]);
     const [clickedTask, setClickedTask] = useState<ITask>(null);
     const [submitClick, setSubmitClick] = useState<boolean>(false);
-
+    const { setCurrentMenuKey } = useContext(NavigationContext);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
         libraries: googleMapLibWithPlaces,
@@ -102,6 +109,14 @@ const MapSearch = () => {
             taskFilter: filterValue
         }
     });
+
+
+    useEffect(()=> {
+        setCurrentMenuKey(MenuKey.SEARCHONMAP);
+    },[setCurrentMenuKey])
+
+
+
 
     console.log(filterValue)
     console.log("currentLatLngAddress: ", currentLatLngAddress && currentLatLngAddress.latLng)
@@ -134,6 +149,9 @@ const MapSearch = () => {
         }
         console.log(data)
     },[data, setFilteredTasks, submitClick, setSubmitClick, clickedTask]);
+
+
+
 
 
     const taskMarkers = useMemo(()=>{

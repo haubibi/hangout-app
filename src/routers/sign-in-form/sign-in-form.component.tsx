@@ -1,24 +1,17 @@
-import React from "react";
 import { 
-    Col
-} from "antd";
-import SignInItem from "../../components/sign-in-item/sign-in-item.component";
-import { SigninFormContainer, SigninFormRow, SigninFormCol } from './sign-in-form.styles'
-export const signInFormColSideLeftLayout = {
-    xs: 4,
-    sm: 5,
-    md: 6,
-    lg: 7,
-    xl: 8
-};
-export const signInFormColSideRightLayout = {
-    xs: 4,
-    sm: 5,
-    md: 6,
-    lg: 7,
-    xl: 8
-};
-export const signInFormColSideMiddleLayout = {
+    useEffect,
+    useContext,
+} from 'react';
+import SignInItem from "../../components/log-component/sign-in-item/sign-in-item.component";
+import { 
+    SigninFormContainer, 
+    SigninFormRow, 
+    SigninFormCol 
+} from './sign-in-form.styles';
+import { NavigationContext, MenuKey } from '../../context/navigation.context';
+
+
+export const signInFormCol = {
     xs: 16,
     sm: 14,
     md: 12,
@@ -26,14 +19,17 @@ export const signInFormColSideMiddleLayout = {
     xl: 8
 };
 const SignInForm = () => {
+    const { setCurrentMenuKey } = useContext(NavigationContext)
+    useEffect(()=> {
+        setCurrentMenuKey(MenuKey.LOGIN);
+    },[setCurrentMenuKey])
+
     return (
         <SigninFormContainer >
             <SigninFormRow>
-                <Col {...signInFormColSideLeftLayout} ></Col>
-                <SigninFormCol {...signInFormColSideMiddleLayout}>
+                <SigninFormCol {...signInFormCol}>
                     <SignInItem />
                 </SigninFormCol>
-                <Col {...signInFormColSideRightLayout}></Col>
             </SigninFormRow>
         </SigninFormContainer>
     )

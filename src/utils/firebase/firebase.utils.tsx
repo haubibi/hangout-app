@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { initializeApp } from 'firebase/app';
 import { 
     getAuth, 
@@ -10,7 +11,10 @@ import {
     onAuthStateChanged,
     NextOrObserver,
     User,
-    sendEmailVerification
+    sendEmailVerification,
+    sendPasswordResetEmail,
+    confirmPasswordReset,
+    checkActionCode
 } from 'firebase/auth';
 import { 
   getStorage,
@@ -20,6 +24,7 @@ import {
   deleteObject,
   UploadResult
  } from "firebase/storage";
+import { stringify } from 'querystring';
 import { ISignUpAdditionsInfo, IUserInput, IUser } from '../../interfaces/user.interface';
 
 import { createBaseUser } from '../user/user.utils';
@@ -34,7 +39,6 @@ const firebaseConfig = {
   appId: "1:290230702663:web:f6f3a7f74c3e50aeb89762",
   measurementId: "G-1312EJCKX0"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app,'gs://hang-out-213d4.appspot.com/');
@@ -113,6 +117,42 @@ export const createAuthUserWithEmailAndPassword = async (email: string, password
         // ..
       });
   })
+}
+
+const actionCodeSettings = {
+  url: 'http://localhost:3000/logIn',
+}; 
+
+export const forgetPassword = (email: string) => {
+  if (!email) return;
+  console.log(email)
+  return sendPasswordResetEmail(auth, email, actionCodeSettings);
+}
+
+export const resetPassword = (oobCode: string, newPassword: string): Promise<string | Error> => {
+  console.log('oobCode:',oobCode)
+  console.log('newPassword:',newPassword)
+  if (!oobCode || !newPassword) return;
+  return new Promise((resolve, reject)=>{
+    checkActionCode(auth, oobCode).then(()=>{
+        confirmPasswordReset(auth, oobCode, newPassword).then(()=>{
+            resolve(newPassword)
+        })
+        .catch(error => reject(error));
+    })
+    .catch(error => reject(error));
+  }); 
+  // return confirmPasswordReset(auth, oobCode, newPassword);
+  // return new Promise( async (resolve, reject)=>{
+  //   try {
+  //     console.log(oobCode, newPassword)
+  //     await confirmPasswordReset(auth, oobCode, newPassword);
+  //     resolve(newPassword);
+  //   } catch(error) {
+  //     reject(error);
+  //   }
+  //   // return confirmPasswordReset(auth, oobCode, newPassword);
+  // });
 }
 
 export const signInWithWithEmailAndPasswordMethod = async (email:string,password:string) =>{

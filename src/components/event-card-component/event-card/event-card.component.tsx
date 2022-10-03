@@ -33,6 +33,7 @@ import {
 import { CardTags } from '../card-tags/card-tags.component';
 import { MenuKey, NavigationContext } from '../../../context/navigation.context';
 import { checkIsChinese } from '../../../utils/usefulFunctions/judgeString';
+import { useCallback } from 'react';
 
 export interface IEventCardProps {
     task: ITask;
@@ -121,13 +122,11 @@ export const EventCard:FC<IEventCardProps> = ({
     const onTimeChange = (value: any) => {
         console.log(value)
     }
-    const cardOnClick = useMemo(()=> {
-        return (e: any) =>{
-            //id
-            navigate(`/task_${id}`,{state: task});
-            setCurrentMenuKey(MenuKey.TASK);
-        }
-    },[])
+    const cardOnClick = useCallback((e: any)=> {
+        console.log("taskId:", task.id)
+        navigate(`/task_${id}`,{state: task.id});
+        setCurrentMenuKey(MenuKey.TASK);
+    },[id, setCurrentMenuKey, navigate, task]);
 
     return (
             <EventCardCon
@@ -136,16 +135,18 @@ export const EventCard:FC<IEventCardProps> = ({
                 hoverable
                 bodyStyle = {defaultbodyStyle}
                 onClick = {cardOnClick}
-                actions={[            
+                actions={ 
+                    [            
                     <Popover content={ LocationContent }>
                         <EnvironmentFilled key = "address"/>
                         <CardTextSpan>{ cityText }</CardTextSpan>
                     </Popover>,
                     <Popover content={ TimeContent }>
-                        <ClockCircleFilled key="time" />    
-                                <CardTextSpan>{ startTimeText }</CardTextSpan>
-                    </Popover>,
-                ]}
+                        <ClockCircleFilled key="time"  />    
+                        <CardTextSpan>{ startTimeText }</CardTextSpan>
+                    </Popover>
+                ]
+            }
                 // onTabChange = { onTabChange }
                 title = {title}
             >

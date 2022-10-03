@@ -11,17 +11,17 @@ import {
 } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { SignupItemContainer } from './sign-up-item.styles';
-import { createAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
-import { UserContext } from '../../context/user.context';
-import { NavigationContext, MenuKey } from '../../context/navigation.context';
+import { createAuthUserWithEmailAndPassword } from '../../../utils/firebase/firebase.utils';
+import { UserContext } from '../../../context/user.context';
+import { NavigationContext, MenuKey } from '../../../context/navigation.context';
 import { useMutation } from '@apollo/client';
-import { ADDUSER } from '../../utils/graphql/mutation.utils';
-import { IUserInput, ISignUpAdditionsInfo } from '../../interfaces/user.interface';
+import { ADDUSER } from '../../../utils/graphql/mutation.utils';
+import { IUserInput, ISignUpAdditionsInfo } from '../../../interfaces/user.interface';
 import { 
     initialValues,
     signupRules,
     SignUpNamesEnum
- } from '../../validators/signup.validate';
+ } from '../../../validators/signup.validate';
 
  const formitems = [
     { label: 'Displayname', name: SignUpNamesEnum.displayname, rules: signupRules[SignUpNamesEnum.displayname],item: <Input placeholder='display name'/>},
@@ -36,6 +36,7 @@ const SignUpItem = () => {
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const [ addUser ] = useMutation(ADDUSER);
     const [ detail, setDetail] = useState<Record<string, any>>();
+    const [ formDisabled, setFormDisabled] = useState<boolean>(false);
     const navigate = useNavigate();
 
     //set initial values when component mounted
@@ -72,13 +73,14 @@ const SignUpItem = () => {
                     const {uid} = userInfo;
                     setUserUid(uid);
                 } else {
+                    setDetail(initialValues);
+                    setFormDisabled(true);
                     message
-                    .success('You have signed up successfully, it will redirect to home page in 3s...', 3)
-                    .then(() => message.success('Loading finished', 2.5))
-                    .then(() => message.info('Loading finished is finished', 2.5));
+                    .success('Please verify it in you e-mail!', 3);
                 }
+                navigate(`/`);
             });
-            navigate(`/`);
+            
         }).catch((error)=>{
             message.error(error);
         });
@@ -98,6 +100,7 @@ const SignUpItem = () => {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                disabled = {formDisabled}
             >
 
                 {

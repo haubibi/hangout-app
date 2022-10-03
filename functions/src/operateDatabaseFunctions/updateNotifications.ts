@@ -10,8 +10,6 @@ const updateNotifications = async (
   // eslint-disable-next-line max-len
   const userNotificationsRef = db.ref(`${Collection.users}/${uid}/${UserChildren.notifications}`);
   await userNotificationsRef.set(notifications);
-
-  return notifications;
 };
 
 export default updateNotifications;

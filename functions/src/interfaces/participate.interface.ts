@@ -7,3 +7,8 @@ export interface IPaticipant{
     agreed: boolean;
     requestType: AddTaskRequestEnum | QuitTaskRequestEnum;
 }
+
+export enum UpdateParticipantType {
+    UPDATE = "UPDATE",
+    ADD = "Add"
+};

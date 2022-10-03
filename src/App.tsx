@@ -10,6 +10,8 @@ import Home from './routers/home/home.component';
 import TaskFormPage from './routers/taskFormPage/task-form-page.component';
 import SignUpForm from './routers/sign-up-form/sign-up-form.component';
 import SignInForm from './routers/sign-in-form/sign-in-form.component';
+import ResetPassWordForm from './routers/reset-password-form/reset-password-form.component';
+import ForgetPassWordForm from './routers/forget-password-form/forget-password-form.component';
 import Task from './routers/task/task.component';
 import MyEventCardList from './components/my-account-page/my-event-card-list/my-event-card-list.component';
 import MyNotifications from './components/my-account-page/my-notifications/my-notifications.component';
@@ -20,14 +22,16 @@ import { UserContext } from './context/user.context';
 import "antd/dist/antd.css";
 
 
-export enum NavigateEnum {
-  LOGINFINISHED = "LOGINFINISHED",
-  LOGOUTFINISHED = "LOGOUTFINISHED",
-  ADDTAKFORM = "ADDTAKFORM",
-  SIGNUP = "SIGNUP",
-  SIGNIN = "SIGNIN",
-  GOTOHOMEPAGE = "GOTOHOMEPAGE"
-}
+// export enum NavigateEnum {
+//   LOGINFINISHED = "LOGINFINISHED",
+//   LOGOUTFINISHED = "LOGOUTFINISHED",
+//   ADDTAKFORM = "ADDTAKFORM",
+//   SIGNUP = "SIGNUP",
+//   SIGNIN = "SIGNIN",
+//   GOTOHOMEPAGE = "GOTOHOMEPAGE",
+//   FORGETPASSWORD = "FORGETPASSWORD",
+//   RESETPASSWORD = "RESETPASSWORD",
+// }
 
 
 const  App: FC = () => {
@@ -59,6 +63,8 @@ const  App: FC = () => {
 
         <Route path = 'mapSearch' element = { <MapSearch />} />
         <Route path = 'logIn' element = { <SignInForm />} />
+        <Route path = 'reset-password' element = { <ResetPassWordForm />} />
+        <Route path = 'forget-password' element = { <ForgetPassWordForm />} />
         <Route path = 'taskForm_:taskId' element = { <TaskFormPage />} />
         <Route path = 'task_:taskID' element = { <Task />} />
       </Route>

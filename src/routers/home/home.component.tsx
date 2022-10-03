@@ -1,7 +1,8 @@
 import { 
     FC, 
     useState,
-    useEffect
+    useEffect,
+    useContext,
 } from 'react';
 import {
     HomeContainer, 
@@ -17,20 +18,23 @@ import {
     Row,
     Spin
 } from 'antd';
-
+import { NavigationContext } from '../../context/navigation.context';
 
 import { useQuery } from '@apollo/client';
 import { 
-    tasksColSideLayout,
     tasksColMiddleLayout,
     searchColSideLayout,
-    midColConfigue
 } from '../../utils/layout-antdesign/layout';
-
+import { MenuKey } from '../../context/navigation.context';
 
 const Home: FC = () =>{
     const [ tasks, setTasks ] = useState<ITask[]>();
     const { data, loading, error} = useQuery(GETAllTASKS);
+    const { setCurrentMenuKey } = useContext(NavigationContext);
+
+    useEffect(()=> {
+        setCurrentMenuKey(MenuKey.HOME)
+    },[setCurrentMenuKey])
 
     useEffect(()=>{
         // console.log('taskError:',error);

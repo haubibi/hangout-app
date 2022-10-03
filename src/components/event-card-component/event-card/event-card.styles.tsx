@@ -13,7 +13,7 @@ export const EventCardCon = styled(Card)`
     overflow: hidden;
     border-radius: 10px;
     &:hover {
-        transform: scale(1.07);
+        transform: scale(1.05);
     }
     .ant-card-body{
         padding: 6px;

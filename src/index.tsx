@@ -11,7 +11,7 @@ import { NavigationProvider } from './context/navigation.context';
 import Geocode from 'react-geocode';
 import './index.css';
 const client = new ApolloClient({
-  // uri: 'http://localhost:5001/hang-out-213d4/us-central1/graphql-default',
+  // uri: 'http://localhost:5002/hang-out-213d4/us-central1/graphql-default',
   uri: 'https://us-central1-hang-out-213d4.cloudfunctions.net/graphql-default',
   cache: new InMemoryCache({
       addTypename: false
