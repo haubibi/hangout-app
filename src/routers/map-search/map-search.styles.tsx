@@ -15,7 +15,9 @@ export const MapSearchLayout = styled(Layout)`
     /* height: 100%; */
 `
 export const MapSearchContent = styled(Content)`
-
+    width: 100%;
+    height: auto;
+    min-height: 700px;
 `
 
 
@@ -25,6 +27,7 @@ export const MapSearchSider = styled(Sider)`
 
 export const ContendDiv = styled.div`
     height: 100vh;
+    min-height: 700px;
     position: relative;
 `
 
@@ -55,11 +58,15 @@ export const RowEventCard = styled(Row)`
     width: 100%;
     height: 30px;
     position: absolute;
-    bottom: 500px;
-    left:40%;
+    bottom: 466px;
+    left:30px;
 `;
 export const ColEventCard = styled(Col)`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    .ant-card{
+        position: absolute;
+        left: 0px
+    }
 `;

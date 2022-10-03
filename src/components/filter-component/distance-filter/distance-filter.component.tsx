@@ -4,7 +4,7 @@ import {
     Select 
 } from 'antd';
 import { FC } from 'react';
-import { DistanceRange } from '../../interfaces/task.interface';
+import { DistanceRange } from '../../../interfaces/task.interface';
 import { 
     DistanceFilterContainer,
     TitleContainer,

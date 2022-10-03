@@ -8,11 +8,11 @@ const { Search } = Input;
 
 
 interface IHomeSearchProps {
-    onChange: (value: string)=>void;
+    onSearch: (value: string)=>void;
 }
 
 export const HomeSearch:FC<IHomeSearchProps> = ({
-    onChange,
+    onSearch,
 }) =>{
     return(
         <HomeSearchContainer>
@@ -20,7 +20,7 @@ export const HomeSearch:FC<IHomeSearchProps> = ({
                 placeholder="input search text" 
                 enterButton="Search" 
                 size="large"
-                onSearch={onChange} 
+                onSearch={onSearch} 
                 // onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
                 // onSubmit = {(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
             />

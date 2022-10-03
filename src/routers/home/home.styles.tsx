@@ -26,3 +26,7 @@ export const SearchRow = styled(Row)`
     flex-direction: row;
     justify-content: center;
 `
+
+export const ErrorH2 = styled.h2`
+    
+`;

@@ -20,8 +20,7 @@ export const PaginationBar:FC<IPaginationProps> = ({
         onChange(current)
     };
     return(
-        <PaginationContainer>
-            
+        <PaginationContainer>     
              <PaginationUl
                 style={{}}
                 showQuickJumper

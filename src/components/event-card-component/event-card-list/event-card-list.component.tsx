@@ -7,10 +7,11 @@ import {
     ColContainer 
 } from './event-card-list.styles';
 import { 
-    ITask
+    ITask,
+    TaskRefetchType,
  } from '../../../interfaces/task.interface';
-import { NumberLiteralType } from 'typescript';
 
+import { OperationVariables } from '@apollo/client';
 const gridStyle = {
     gutter: 30,
     xs: 1,
@@ -29,12 +30,14 @@ const renderEventCard = (task: ITask) => (
 
 interface EventCardListProps {
     tasks: ITask[];
+    tasksRefetch: TaskRefetchType<OperationVariables>
 }
 
 
 
 export const EventCardList:FC<EventCardListProps> = ({
-    tasks
+    tasks,
+    tasksRefetch
 }) => {
 
     return (

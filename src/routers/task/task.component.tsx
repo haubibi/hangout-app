@@ -1,16 +1,21 @@
 import {
     useEffect,
-    useState
+    useState,
+    useContext
 } from "react";
 import { TaskContainer } from './task.styles';
 import { TaskItem } from "../../components/task-item/task-item.component";
 import { useLocation } from 'react-router-dom';
 import { 
     ITask,
-    ITaskRefetchFC
+    TaskRefetchType
  } from '../../interfaces/task.interface';
 import { useQuery } from "@apollo/client";
 import { GETTASKBYID } from "../../utils/graphql/query.utils";
+import { 
+    NavigationContext,
+    MenuKey,
+ } from "../../context/navigation.context";
 import { Spin } from "antd";
 
 const getTaskIdFromPath = (
@@ -27,24 +32,27 @@ const Task = () =>{
     const { pathname } = useLocation();
     const [ taskId, setTaskId ] = useState<string>('');
     const [ task, setTask ] = useState<ITask>();
+    const { setCurrentMenuKey } = useContext(NavigationContext);
     const { data, loading, error, refetch } = useQuery(GETTASKBYID,{
         variables: {
             id: taskId
         }
     });
+    //set menu key
+    useEffect(()=> {
+        setCurrentMenuKey(MenuKey.TASK)
+    },[setCurrentMenuKey])
+
     
     //get the taskId
     useEffect(()=>{
         const taskId = getTaskIdFromPath(pathname);
-        // console.log('taskId:', taskId);
         setTaskId(taskId);
     },[pathname]);
 
 
     useEffect(()=>{
         if(taskId !== '' && data && data.getTaskById){
-            // console.log("Task:", data.getTaskById)
-            console.log(data.getTaskById)
             setTask(data.getTaskById);
         }
     },[taskId, data]);

@@ -10,11 +10,12 @@ import {
     HomeContainer, 
     ListCol,
     SearchRow,
-    SearchCol
+    SearchCol,
+    ErrorH2
 } from './home.styles';
 import { HomeSearch } from '../../components/home-search/home-search.component';
 import { EventCardList } from '../../components/event-card-component/event-card-list/event-card-list.component';
-import { GETAllTASKS, GETSEARCHTASKS } from '../../utils/graphql/query.utils';
+import { GETAllTASKS } from '../../utils/graphql/query.utils';
 import { PaginationBar } from '../../components/pagination/pagination.component'
 import { ITask } from '../../interfaces/task.interface';
 import { 
@@ -30,7 +31,8 @@ import {
     searchColSideLayout,
 } from '../../utils/layout-antdesign/layout';
 import { MenuKey } from '../../context/navigation.context';
-import getSearchTasks from '../../../functions/src/input-search-tasks/input-search';
+import getSearchTasks from '../../utils/task/task.fuse';
+import { message } from 'antd';
 
 const pageTasksAmout = 12;
 
@@ -40,20 +42,12 @@ const Home: FC = () =>{
     const [ tasksTotalLength, setTasksTotalLength ] = useState<number>(0);
     const [ searchInputValue, setSearchInputValue ] = useState<string>('');
     const [ currentPage, setCurrentPage ] = useState<number>(1);
-    // const { data, loading, error} = useQuery(GETAllTASKS);
-
-    const { data, loading, error} = useQuery(GETSEARCHTASKS,{
-        variables: {
-            input: searchInputValue,
-            taskStartIndex: (currentPage - 1) * pageTasksAmout,
-            amout: pageTasksAmout
-        }
-    });
+    const { data, loading, error, refetch} = useQuery(GETAllTASKS);
     const { setCurrentMenuKey } = useContext(NavigationContext);
 
-    console.log("data:" + data)
-    console.log("loading:" + loading)
-    console.log("error:" + error)
+    console.log("data:", data)
+    console.log("loading:" , loading)
+    console.log("error:" , error)
 
 
     useEffect(()=> {
@@ -64,22 +58,27 @@ const Home: FC = () =>{
         // console.log('taskError:',error);
         // console.log('taskLoading:',loading);
         // console.log('tasksData:',data);
-        const t:ITask[] = [];
-        if(data && data.getSearchTasks) {
+        // const t:ITask[] = [];
+        if(data && data.tasks) {
             // const {tasks} = data;
-            const {totalLength, tasks} = data.getSearchTasks;
-            setTasksTotalLength(totalLength);
-            while(t.length< 100) {
-                for (const task of tasks){
-                    t.push(task);
-                }
-            }
-            setTasks(t);    
+            const tasksAndTotalLength = getSearchTasks(
+                data.tasks,
+                searchInputValue,
+                (currentPage - 1) * pageTasksAmout,
+                pageTasksAmout,
+            ); 
+            const {totalLength, tasks} = tasksAndTotalLength;
+
+            console.log("data:", data)
+            console.log("searchInputValue:", searchInputValue)
+            console.log("tasksAndTotalLength:", tasksAndTotalLength)
+
+            setTasksTotalLength(totalLength);   
             setTasks(tasks);    
         }
-    },[error, data, loading]);
+    },[data, currentPage, setTasksTotalLength, setTasks, searchInputValue]);
 
-    const searchOnChangeHandle = useCallback((value: string)=>{
+    const searchOnSearchHandle = useCallback((value: string)=>{
         setSearchInputValue(value);
     },[]);
     
@@ -95,22 +94,31 @@ const Home: FC = () =>{
 
         <HomeContainer>
             <SearchRow>
-                {/* <Col {...searchColSideLayout} ></Col> */}
                 <SearchCol {...tasksColMiddleLayout}>
                     <HomeSearch 
-                        onChange={searchOnChangeHandle}
-                        // value = {searchInputValue}
+                        onSearch={searchOnSearchHandle}
                     />
                 </SearchCol>
-                {/* <Col {...searchColSideLayout}></Col> */}
             </SearchRow>
+            <>
             {
-                (loading  || !tasks || error)?<Spin />:
-                <>
+                error? 
+                    message.error(error.toString(), 5)
+                    .then(()=> message.info(`Please try again!`)):
+                    undefined
+            }
+            {
+                loading? <Spin /> : undefined
+            }
+            {
+                tasks && tasks.length === 0?
+                    <ErrorH2>No matched event, please try again!</ErrorH2>:
+                    <>
                     <Row>
                         <ListCol span={24}>
                             <EventCardList 
                                 tasks={tasks}
+                                tasksRefetch = {refetch}
                             />
                         </ListCol>
                     </Row>
@@ -125,9 +133,9 @@ const Home: FC = () =>{
                         </Col>
                         <Col span = {6}></Col>
                     </Row>
-                </>
-                 
+                 </>
             }
+           </>
         </HomeContainer>
     )
 }

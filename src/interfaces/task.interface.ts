@@ -58,18 +58,8 @@ export enum CurrentTaskUserTypeEnum {
 };
 
 
-export interface ITaskSearchInput {
-    input: string;
-    taskStartIndex: number;
-    amout: number;
-}
-
-
-export interface ITaskRefetchFC {
-    (variables: Partial<{id: string;}>): Promise<ApolloQueryResult<any>>;
-}
-export interface ITaskSearchInputRefetchFC {
-    (variables: Partial<ITaskSearchInput>): Promise<ApolloQueryResult<any>>;
+export interface TaskRefetchType <T> {
+    (variables: Partial<T>): Promise<ApolloQueryResult<any>>;
 }
 
 

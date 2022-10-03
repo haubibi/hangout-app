@@ -8,7 +8,7 @@ import {
 import { 
     ITask, 
     CurrentTaskUserTypeEnum,
-    ITaskRefetchFC
+    TaskRefetchType
  } from '../../interfaces/task.interface';
 import { useMutation } from "@apollo/client";
 import { TaskCarousel } from '../task-component/task-carousel/task-carousel.component';
@@ -40,7 +40,7 @@ import {
 
 interface ITaskItemProps{
     task: ITask;
-    taskRefetch: ITaskRefetchFC;
+    taskRefetch: TaskRefetchType<{id: string}>;
 }
 
 

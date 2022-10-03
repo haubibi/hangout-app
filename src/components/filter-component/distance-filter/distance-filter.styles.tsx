@@ -6,6 +6,7 @@ export const DistanceFilterContainer = styled.div`
 `;
 
 export const TitleContainer = styled.h2`
+    color: #ffffff;
 `
 export const SpanContainer = styled.span`
     font-size: larger;

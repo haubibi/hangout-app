@@ -10,6 +10,7 @@ import { strangeFontFamily, normalFontFamily } from "../../../index.styles";
 
 export const EventCardCon = styled(Card)`
     width: ${cardWidth}px;
+    min-width: ${cardWidth}px;
     overflow: hidden;
     border-radius: 10px;
     &:hover {

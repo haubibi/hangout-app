@@ -1,4 +1,4 @@
-import { DistanceFilter } from '../../distance-filter/distance-filter.component';
+import { DistanceFilter } from '../distance-filter/distance-filter.component';
 import { ParticipantsFilter } from '../paticipant-number-filter/participant-number-filter.component';
 import { 
     ParticipantsRange, 
@@ -76,19 +76,6 @@ export const FilterBar:FC<FilterBarProps> = ({
                     />
                 </ColContainer>
             </RowContainer>
-            {/* <RowContainer>
-                <ColContainer span={24}>
-                    <SubmitButton 
-                        type="primary" 
-                        // shape="circle" 
-                        size = "large"
-                        onClick={buttonOnClick}
-                        // icon={<SearchOutlined />}
-                    >
-                        Submit
-                    </SubmitButton>
-                </ColContainer>
-            </RowContainer> */}
         </FilterBarContainer>
     )
 }

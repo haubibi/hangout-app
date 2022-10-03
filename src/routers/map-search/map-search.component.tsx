@@ -37,11 +37,12 @@ import {
     DistanceRange
  } from '../../interfaces/task.interface';
 import { useQuery } from '@apollo/client'; 
-import { GETFILTEREDTASKS } from '../../utils/graphql/query.utils';
+import { GETAllTASKS } from '../../utils/graphql/query.utils';
 import { searchFilterValidator } from '../../validators/search-filter.valitator';
 import { ITask } from '../../../functions/src/interfaces/task.interface';
 import { EventCard } from '../../components/event-card-component/event-card/event-card.component';
 import { NavigationContext, MenuKey } from '../../context/navigation.context';
+import { getFilteredTasks } from '../../utils/task/task.filter';
 
 const comboboxSettings = {
     comboboxContainerStyle:{
@@ -93,36 +94,37 @@ export const checkIfTaskExist = (id: string, tasks: ITask[]):boolean => {
 
 
 const MapSearch = () => {
-    const [currentLatLngAddress, setCurrentLatLngAddres] = useState<ILatLngAndAddress | null>(null);
-    const [filterValue, setFilterValue] = useState<IFilterTasks>(initFilterValue);
-    const [filteredTasks, setFilteredTasks] = useState<ITask[]>([]);
-    const [clickedTask, setClickedTask] = useState<ITask>(null);
-    const [submitClick, setSubmitClick] = useState<boolean>(false);
+    const [ currentLatLngAddress, setCurrentLatLngAddres ] = useState<ILatLngAndAddress | null>(null);
+    const [ filterValue, setFilterValue ] = useState<IFilterTasks>(initFilterValue);
+    const [ tasks, setTasks ] = useState<ITask[]>([]);
+    const [ filteredTasks, setFilteredTasks ] = useState<ITask[]>([]);
+    const [ clickedTask, setClickedTask ] = useState<ITask>(null);
+    const [ submitClick, setSubmitClick ] = useState<boolean>(false);
+    const { data, loading, error} = useQuery(GETAllTASKS);
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
         libraries: googleMapLibWithPlaces,
     });
-    const {data, error, loading} = useQuery(GETFILTEREDTASKS,{
-        variables: {
-            currentLatLng: (currentLatLngAddress && currentLatLngAddress.latLng),
-            taskFilter: filterValue
-        }
-    });
-
-
-    useEffect(()=> {
-        setCurrentMenuKey(MenuKey.SEARCHONMAP);
-    },[setCurrentMenuKey])
-
-
-
+    // const {data, error, loading} = useQuery(GETFILTEREDTASKS,{
+    //     variables: {
+    //         currentLatLng: (currentLatLngAddress && currentLatLngAddress.latLng),
+    //         taskFilter: filterValue
+    //     }
+    // });
 
     console.log(filterValue)
     console.log("currentLatLngAddress: ", currentLatLngAddress && currentLatLngAddress.latLng)
     console.log('data:',data)
     console.log('error:',error)
     console.log('loading:',loading)
+
+
+    //set the menu key
+    useEffect(()=> {
+        setCurrentMenuKey(MenuKey.SEARCHONMAP);
+    },[setCurrentMenuKey])
+   
     //get current location
     useEffect(()=>{
         const getLatLng = async() => {
@@ -137,18 +139,48 @@ const MapSearch = () => {
         getLatLng();
     },[setCurrentLatLngAddres]);
 
-    //get filtered tasks
-    useEffect(() =>{
-        if(data && data.getFilteredTasks && submitClick) {
-            if(clickedTask) {
-                const taskExist = checkIfTaskExist(clickedTask.id, data.getFilteredTasks);
-                if(!taskExist) setClickedTask(null);
-            }
-            setFilteredTasks(data.getFilteredTasks);
-            setSubmitClick(false);
+    //get all the tasks
+    useEffect(()=>{
+        if(data && data.tasks) {
+            setTasks(data.tasks);
         }
-        console.log(data)
-    },[data, setFilteredTasks, submitClick, setSubmitClick, clickedTask]);
+    },[data])
+
+    //get filtered tasks
+    useEffect(()=>{
+       if(tasks && currentLatLngAddress?.latLng && filterValue && submitClick) {
+            const filteredTasks = getFilteredTasks(
+                currentLatLngAddress.latLng,
+                filterValue,
+                tasks
+            );
+
+            setFilteredTasks(filteredTasks);
+       }
+    },[tasks, currentLatLngAddress, filterValue, submitClick])
+
+    //set clicked task
+    useEffect(()=>{
+        if(filteredTasks && clickedTask){
+            const taskExist = checkIfTaskExist(clickedTask.id, filteredTasks);
+            if(!taskExist) setClickedTask(null);
+        } else {
+            setClickedTask(null);
+        }
+    },[clickedTask, filteredTasks])
+
+    // //get filtered tasks
+    // useEffect(() =>{
+    //     if(data && data.tasks && submitClick) {
+    //         if(clickedTask) {
+    //             const taskExist = checkIfTaskExist(clickedTask.id, data.getFilteredTasks);
+    //             if(!taskExist) setClickedTask(null);
+    //         }
+    //         setFilteredTasks(data.getFilteredTasks);
+    //         setSubmitClick(false);
+    //     }
+    //     console.log(data)
+    // },[data, setFilteredTasks, submitClick, setSubmitClick, clickedTask]);
 
 
 
@@ -179,7 +211,6 @@ const MapSearch = () => {
 
     const onMarkerChangeHandle = useCallback((task: ITask):void => {
         setClickedTask(task);
-        console.log(task)
     },[setClickedTask]);
 
     const searchOnClick = useCallback(():void => {
