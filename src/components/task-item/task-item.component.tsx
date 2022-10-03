@@ -32,6 +32,7 @@ import {
 import { UserContext } from "../../context/user.context";
 import { AddTaskRequestEnum, QuitTaskRequestEnum } from '../../interfaces/notifications.interface';
 import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { 
     IPaticipant,
     checkIfParticipantsMax,
@@ -79,6 +80,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
     task,
     taskRefetch
 }) => {
+    const navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
     const [ userType, setUserType ] = useState<CurrentTaskUserTypeEnum>();
     const [ userApplyIsLoading, setUserApplyIsLoading ] = useState<boolean>(false);
@@ -87,7 +89,6 @@ export const TaskItem:FC<ITaskItemProps> = ({
     const [ addParticipant ] = useMutation(ADDPARTICIPANT);
     const [ quitParticipant ] = useMutation(QUITPARTICIPANT);
     const { title, description, showImages, organizer } = task;
-    console.log(task)
 
 
     //set current user type
@@ -153,6 +154,13 @@ export const TaskItem:FC<ITaskItemProps> = ({
             }).catch((error)=> message.error(error.toString(), 5).then(()=> setUserQuitIsLoading(false)));
         }
     },[quitParticipant, taskRefetch, currentUser, task]);
+
+
+
+
+    const modifyFormOnClick = useCallback(async () => {
+        navigate(`/taskForm_${task.id}`)
+    },[navigate, task]);
 
    return (
     <TaskitemContainer>
@@ -226,7 +234,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
             </RowCon>:
             undefined
         }
-        {/* {
+        {
             userType === CurrentTaskUserTypeEnum.ORGNIZER?
             <RowCon>
                 <CenterAlignCol span={24}>
@@ -234,14 +242,14 @@ export const TaskItem:FC<ITaskItemProps> = ({
                         type="primary" 
                         htmlType="button"
                         disabled = {userQuitIsLoading}
-                        onClick={ (e: any) => {quitOnClick();} }
+                        onClick={ (e: any) => {modifyFormOnClick();} }
                     >
-                        Attend
+                        Modify
                     </Button>
                 </CenterAlignCol>
             </RowCon>:
             undefined
-        } */}
+        }
         
         
     </TaskitemContainer>

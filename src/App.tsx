@@ -66,7 +66,7 @@ const  App: FC = () => {
         <Route path = 'reset-password' element = { <ResetPassWordForm />} />
         <Route path = 'forget-password' element = { <ForgetPassWordForm />} />
         <Route path = 'taskForm_:taskId' element = { <TaskFormPage />} />
-        <Route path = 'task_:taskID' element = { <Task />} />
+        <Route path = 'task_:taskId' element = { <Task />} />
       </Route>
     </Routes>
   );

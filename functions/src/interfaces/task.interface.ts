@@ -34,6 +34,15 @@ export type ITaskMoment = ITaskBase & ITaskInputTimeMoment & BothTaskProps & Tas
 export type DistanceRange = [number, number];
 export type ParticipantsRange = [number, number];
 
+
+export type TaskSearchExtraPropersType  = {
+    refIndex: number
+    score?: number
+}
+
+export type TaskSearchInputType= ITask & TaskSearchExtraPropersType;
+
+
 export interface IFilterTasks {
     distanceRange?: DistanceRange;
     participantsRange?: ParticipantsRange;
@@ -48,9 +57,27 @@ export enum CurrentTaskUserTypeEnum {
     GUEST_WITHOUT_LOGIN =  "GUEST_WITHOUT_LOGIN",
 };
 
+
+export interface ITaskSearchInput {
+    input: string;
+    taskStartIndex: number;
+    amout: number;
+}
+
+
 export interface ITaskRefetchFC {
     (variables: Partial<{id: string;}>): Promise<ApolloQueryResult<any>>;
 }
+export interface ITaskSearchInputRefetchFC {
+    (variables: Partial<ITaskSearchInput>): Promise<ApolloQueryResult<any>>;
+}
+
+
+export type ISearchTaskReturnType = {
+    tasks: ITask[];
+    totalLength: number;
+};
+
 
 // (variables?: Partial<{
     //     id: string;

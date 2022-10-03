@@ -8,7 +8,7 @@ const queryGetFilteredTasks = async (
       taskFilter,
     }: {
       currentLatLng: LatLngLiteral,
-        taskFilter: IFilterTasks
+      taskFilter: IFilterTasks
     }
 ): Promise<ITask[]>=>{
   console.log("currentLatLng:", currentLatLng, "111111111111");

@@ -6,7 +6,7 @@ import type { PaginationProps } from 'antd';
 interface IPaginationProps {
     total: number;
     pageSize:number;
-    onChange: (e: number, size: number) =>void;
+    onChange: (e: number) =>void;
 }
 
 export const PaginationBar:FC<IPaginationProps> = ({
@@ -15,9 +15,9 @@ export const PaginationBar:FC<IPaginationProps> = ({
     pageSize
 }) => {
     
-    const onPageChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-        console.log(current, pageSize);
-        onChange(current, pageSize)
+    const onPageChange: PaginationProps['onShowSizeChange'] = (current) => {
+        console.log(current);
+        onChange(current)
     };
     return(
         <PaginationContainer>
@@ -25,12 +25,13 @@ export const PaginationBar:FC<IPaginationProps> = ({
              <PaginationUl
                 style={{}}
                 showQuickJumper
-                showSizeChanger = {true}
+                showSizeChanger
                 onChange={onPageChange}
                 defaultCurrent={1}
                 total={total}
                 pageSize = { pageSize }
                 pageSizeOptions = {[10,20,30,40,50]}
+                hideOnSinglePage
             />
         </PaginationContainer>
     )

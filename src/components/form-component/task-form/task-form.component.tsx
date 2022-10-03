@@ -2,12 +2,12 @@ import React, {useEffect, useState, FC } from "react";
 import { TaskFormContainer } from './task-form.styles';
 import { TaskFormItem } from '../task-form-item/task-form-item.component';
 import { Spin } from 'antd';
-import { ITask } from "../../interfaces/task.interface";
+import { ITask } from "../../../interfaces/task.interface";
 
-import { IUser } from '../../interfaces/user.interface';
-import { baseTaskCreator } from '../../utils/task/task.utils';
+import { IUser } from '../../../interfaces/user.interface';
+import { baseTaskCreator } from '../../../utils/task/task.utils';
 import { useQuery } from '@apollo/client';
-import { GETTASKBYID } from '../../utils/graphql/query.utils';
+import { GETTASKBYID } from '../../../utils/graphql/query.utils';
 
 interface ITaskFormprops {
     user: IUser;

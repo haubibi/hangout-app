@@ -6,15 +6,10 @@ import {
     EventCardListCon, 
     ColContainer 
 } from './event-card-list.styles';
-import { ITask } from '../../../interfaces/task.interface';
 import { 
-    spanObj, 
-    gutter 
-} from '../../../utils/layout-antdesign/layout';
-import {
-    Row
-} from 'antd';
-import { Gutter } from 'antd/lib/grid/row';
+    ITask
+ } from '../../../interfaces/task.interface';
+import { NumberLiteralType } from 'typescript';
 
 const gridStyle = {
     gutter: 30,
@@ -33,7 +28,7 @@ const renderEventCard = (task: ITask) => (
 )
 
 interface EventCardListProps {
-    tasks: ITask[]
+    tasks: ITask[];
 }
 
 
@@ -42,20 +37,11 @@ export const EventCardList:FC<EventCardListProps> = ({
     tasks
 }) => {
 
-    
-
     return (
         <ListContainer
             grid={gridStyle}
             dataSource={tasks}
             renderItem= {renderEventCard}
-            pagination = {{
-                onChange: page => {
-                  console.log(page);
-                },
-                pageSize: 12,
-                showSizeChanger: false
-              }}
         />
         // <EventCardListCon>
         //     <Row align = 'middle' justify = 'center' gutter= {gutter as [Gutter, Gutter]}>

@@ -19,12 +19,21 @@ export const ListContainer = styled(List)`
         flex-direction: row;
         justify-content: center;
         padding-top:40px;
-   }
+    }
+    .ant-spin-container .ant-row{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        &>div{
+            min-width: ${cardWidth}px;
+            margin-left: 50px;
+        }
+    }
    .ant-list-pagination{
         display: flex;
         flex-direction: row;
         justify-content: center;
-        padding:40px 0px 40px 0px;
+        padding:100px 0px 40px 0px;
    }
    max-width: 2000px;
 `

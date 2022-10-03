@@ -55,3 +55,22 @@ export const GETFILTEREDTASKS = gql`
       }
     }
 `
+
+export const GETSEARCHTASKS = gql`
+    query(
+      $input: String,
+      $taskStartIndex: Int,
+      $amout: Int
+    ){
+      getSearchTasks (
+        input: $input,
+        taskStartIndex: $taskStartIndex,
+        amout: $amout
+      ) {
+          totalLength
+          tasks {
+            ${taskFullObj}
+          }
+      }
+    }
+`

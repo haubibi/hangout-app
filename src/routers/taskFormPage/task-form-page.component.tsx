@@ -3,7 +3,7 @@ import {
     Spin
  } from "antd";
 import { useParams } from "react-router-dom";
-import { TaskForm } from "../../components/task-form/task-form.component";
+import { TaskForm } from "../../components/form-component/task-form/task-form.component";
 import { TaskFormPageContainer } from './task-form-page.styles';
 import { UserContext } from '../../context/user.context';
 

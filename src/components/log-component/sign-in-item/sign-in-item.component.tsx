@@ -62,7 +62,8 @@ const SignInItem = () => {
             console.log(2222, credential.user.emailVerified)
             // if(credential.user.emailVerified){
                 setUserUid(credential.user.uid);
-                navigate(`/`);
+                navigate(-1);
+                // navigate(`/`);
             // } else {
             //     setButtonDisabled(true);
             //     message.info('Please verify it in you e-mail!', 5, () => setButtonDisabled(false));

@@ -5,7 +5,7 @@ import React, { FC,
 } from 'react';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { ADDTASK } from '../../utils/graphql/mutation.utils';
+import { ADDTASK } from '../../../utils/graphql/mutation.utils';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import {
@@ -23,36 +23,36 @@ import {
     TimePickerCon,
     InputCon
 } from './task-form-item.styles';
-import { ITask } from '../../interfaces/task.interface';
+import { ITask } from '../../../interfaces/task.interface';
 import { 
     IImageObjWithUrlAndRefPath,
     ImagesTypeName,
     TaskImagesTypeName
-} from '../../interfaces/images.interface';
+} from '../../../interfaces/images.interface';
 import {
     ITaskFormItemDetail,
     ITaskFormItemDetailWithImageRefAndUrl
-} from '../../interfaces/taskForm.interface';
-import { FormImagesUpload } from '../form-component/form-images-upload/form-images-upload.component'
-import GoogleSearchInForm from '../googleMaps-search/googleMaps-search.component';
-import { FormSwitch } from '../form-component/form-switch/form-switch.component';
+} from '../../../interfaces/taskForm.interface';
+import { FormImagesUpload } from '../form-images-upload/form-images-upload.component'
+import GoogleSearchInForm from '../../googleMaps-search/googleMaps-search.component';
+import { FormSwitch } from '../form-switch/form-switch.component';
 
 import { 
     updateImages, 
     getImagesWithUrlAndRefPath, 
     transformImageToWithoutRefPath 
-} from '../../utils/images/images.utils';
-import { FormTag } from '../form-component/form-tag/form-tag.component';
+} from '../../../utils/images/images.utils';
+import { FormTag } from '../form-tag/form-tag.component';
 import { useForm } from 'antd/es/form/Form';
-import { dateFormat } from '../../utils/date/date.utils';
-import { getImagesWithRefPath } from '../../utils/images/images.utils';
+import { dateFormat } from '../../../utils/date/date.utils';
+import { getImagesWithRefPath } from '../../../utils/images/images.utils';
 import { 
     TaskFormItemName,
     taskFormRules,
     validateFormValues
- } from '../../validators/taskForm.validate';
+ } from '../../../validators/taskForm.validate';
 
-import { getUpdatedTask } from '../../utils/task/task.utils';
+import { getUpdatedTask } from '../../../utils/task/task.utils';
 
 import './task.less';
 const { TextArea } = Input;
@@ -324,14 +324,15 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             <Form
                 form={form}
                 name='taskform'
-                layout="horizontal"
+                layout="vertical"
                 onFinish={onFinish}
                 onFinishFailed = {onFinishFailed}
                 initialValues = {detail}
                 colon = {false}
+                
             >   
 
-                {
+                {/* {
                     FormItemsArr.map((rowArr,index)=>{
                         const elementsNum = rowArr.length;
                         return(
@@ -347,23 +348,23 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                              </Row>
                         )
                     })
-                }
-                {/* <Row>
+                } */}
+                <Row>
                     <Col span={24}>
                         <Form.Item 
                             {...titleFormProps}
                         >
-                            <Input allowClear = {true}/>
+                            <InputCon allowClear = {true}/>
                         </Form.Item>
                     </Col>
                 </Row>
 
-                <Row>
+                <Row gutter={16 + 8}>
                     <Col span={12}>
                         <Form.Item
                             {...startDateFormProps}
                         >
-                            <DatePicker />
+                            <DatePickerCon />
                         </Form.Item>
                         
                     </Col>
@@ -371,16 +372,16 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         <Form.Item 
                             {...startTimeFormProps}
                         >
-                            <TimePicker />
+                            <TimePickerCon />
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row>
+                <Row gutter={16 + 8}>
                     <Col span={12}>
                         <Form.Item
                            {...endDateFormProps}
                         >
-                            <DatePicker />
+                            <DatePickerCon />
                         </Form.Item>
                         
                     </Col>
@@ -388,7 +389,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         <Form.Item 
                            {...endTimeFormProps}
                         >
-                            <TimePicker />
+                            <TimePickerCon />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -411,7 +412,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                             wrapperCol={{ span: 3 }}
                             rules={[{ required: true, message: '' }]}
                         >
-                            <InputNumber />
+                            <InputNumberCon />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -466,7 +467,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         </Form.Item>
                     </Col>
                 </Row>
-                 */}
+                
 
             </Form>
 

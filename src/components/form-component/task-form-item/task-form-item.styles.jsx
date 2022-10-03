@@ -17,19 +17,6 @@ export const colorShadow = '#BABECC';
 export const colorWhite = '#FFF';
 
 
-export const transparentCss = css`
-    background-color: transparent;
-`
-export const inputCss = css`
-    margin-right: $ruler/2;
-    box-shadow:  inset 2px 2px 5px ${colorShadow}, inset -5px -5px 10px ${colorWhite};
-    width: 100%;
-    box-sizing: border-box;
-    transition: all 0.2s ease-in-out;
-    appearance: none;
-    -webkit-appearance: none;
-    ${transparentCss}
-`;
 
 
 export const FlexStart = css`
@@ -52,9 +39,7 @@ export const TaskFormItemContainer = styled.div`
 
 
 export const InputCon = styled(Input)`
-    & > input{
-        ${inputCss}
-    }
+    
 `
 
 

@@ -194,11 +194,17 @@ const typeDefs = gql`
         organizer: User
     }
 
+    type SearchTasksReturnType {
+        totalLength: Int
+        tasks: [Task]
+    }
+
 
 
     type Query {
         users: [User]
         tasks: [Task]
+        getSearchTasks(input: String, taskStartIndex: Int, amout: Int): SearchTasksReturnType
         getTaskById(id: ID): Task
         getUserById(uid: ID): User
         getFilteredTasks(currentLatLng: LatLngLiteralInput, taskFilter: TaskFilterInput): [Task]

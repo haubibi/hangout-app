@@ -7,6 +7,7 @@ import queryGetTaskById from "./query/getTaskById";
 import queryGetUserById from "./query/getUserById";
 import queryGetFilteredTasks from "./query/getFilteredTasks";
 import queryGetParticipantNotification from "./query/getParticipantNotification";
+import queryGetSearchTasks from "./query/getSearchTasks";
 
 import mutationAddTask from "./mutation/addTask";
 import mutationAddUser from "./mutation/addUser";
@@ -22,6 +23,7 @@ const resolvers = {
     getUserById: queryGetUserById,
     getFilteredTasks: queryGetFilteredTasks,
     getParticipantNotification: queryGetParticipantNotification,
+    getSearchTasks: queryGetSearchTasks,
   },
   Mutation: {
     addTask: mutationAddTask,

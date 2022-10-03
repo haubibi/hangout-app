@@ -1,12 +1,30 @@
 import { Input } from 'antd';
-import { FC } from 'react';
+import { 
+    FC,
+    ChangeEvent
+ } from 'react';
 import { HomeSearchContainer } from './home-search.styles';
 const { Search } = Input;
 
-export const HomeSearch:FC = () =>{
+
+interface IHomeSearchProps {
+    onChange: (value: string)=>void;
+}
+
+export const HomeSearch:FC<IHomeSearchProps> = ({
+    onChange,
+}) =>{
     return(
         <HomeSearchContainer>
-            <Search placeholder="input search text" enterButton="Search" size="large" loading />
+            <Search 
+                placeholder="input search text" 
+                enterButton="Search" 
+                size="large"
+                onSearch={onChange} 
+                // onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+                // onSubmit = {(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+            />
+            {/* ChangeEventHandler<HTMLInputElement></HTMLInputElement> */}
         </HomeSearchContainer>
     )
 }

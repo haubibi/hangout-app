@@ -90,7 +90,6 @@ export const EventCard:FC<IEventCardProps> = ({
     task
 }) =>{
     const navigate = useNavigate();
-    const {setCurrentMenuKey}= useContext(NavigationContext);
     const { frontCoverImage, title, description, id, keyWords, startTime, startDate, endTime, endDate, latLngAndAddress, open} = task;
     const avartaSrc = getSrc(id);
     const startTimeString = getCurrentFullTimeString(startDate!, startTime!);
@@ -125,8 +124,7 @@ export const EventCard:FC<IEventCardProps> = ({
     const cardOnClick = useCallback((e: any)=> {
         console.log("taskId:", task.id)
         navigate(`/task_${id}`,{state: task.id});
-        setCurrentMenuKey(MenuKey.TASK);
-    },[id, setCurrentMenuKey, navigate, task]);
+    },[id, navigate, task]);
 
     return (
             <EventCardCon
