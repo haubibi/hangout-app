@@ -20,11 +20,11 @@ import {
 } from '../../../validators/signup.validate';
 
 import { UserContext } from '../../../context/user.context'; 
-import { getImageObjWithUrl } from '../../../utils/user/user.utils';
-import { IPersonalInfoInput } from '../../../interfaces/personal-infor.interface';
+import { getImageObjWithUrl } from '../../../utils/images/images.utils';
+import { IPersonalInfoInput } from '../../../interfaces/user.interface';
 import { 
     Spin,
-    RadioChangeEvent 
+    message 
 } from 'antd';
 import { UserSexEnum } from '../../../interfaces/user.interface';
 import { personalInfoRules } from '../../../validators/user-information.validator';
@@ -49,6 +49,7 @@ const sexRadioGroupOptions = [
 export const AccountPersonalInfo = () => {
     const { currentUser } = useContext(UserContext);
     const [ detail, setDetail] = useState<Record<string, any>>();
+    const [ updateButtonDisabled, setUpdateButtonDisabled] = useState<boolean>(false);
     const avartImageWithUrl = currentUser.avatarImg? getImageObjWithUrl(currentUser.avatarImg): null;
     console.log(avartImageWithUrl)
 
@@ -58,10 +59,15 @@ export const AccountPersonalInfo = () => {
    
     const onFinish = async (values: IPersonalInfoInput) => {
         // const {avatarImg, displayName, sex} = values;
+
+        setUpdateButtonDisabled(true);
         console.log(values);
         const { uid } = currentUser;
         let avatarImg: (IImageObjWithUrlAndRefPath | null) = currentUser.avatarImg;
-        if(values.avatarImg.length > 0){
+        if(
+            values.avatarImg&&
+            values.avatarImg.length > 0
+        ){
             await updateImages(
                 ImagesTypeName.USERS,
                 uid,
@@ -75,6 +81,9 @@ export const AccountPersonalInfo = () => {
                     // console.log( avatarImageArr )              
                     avatarImg= avatarImageArr[0] as IImageObjWithUrlAndRefPath;
                 });
+            }).catch((error)=>{
+                message.error(error.toString(), 3);
+                setUpdateButtonDisabled(false);
             });
         }
     }
@@ -120,7 +129,7 @@ export const AccountPersonalInfo = () => {
                         />
                     </FormSexItem>
                     <FormSubmitButtonItem>
-                        <FormSubmitButton htmlType='submit'>Apply</FormSubmitButton>
+                        <FormSubmitButton htmlType='submit' type='primary'>Update</FormSubmitButton>
                     </FormSubmitButtonItem>
                 </FormCon>
                 </ColInfoCon>

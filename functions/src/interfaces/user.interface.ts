@@ -24,8 +24,20 @@ export interface IUserExtraInfo {
     sex: UserSexEnum;
     avatarImg: IImageObjWithUrlAndRefPath | null;
     friendsList: string[];
-    notifications: NotificationTypes[];
+    notifications: NotificationTypes;
 }
 
 export type IUser = IUserBase & ISignUpAdditionsInfo & Partial<IUserExtraInfo>;
 
+
+export interface IPersonalInfoInput {
+    displayName: string;
+    avatarImg: IImageObjWithUrlAndRefPath | null;
+    sex: UserSexEnum;
+}
+
+// export interface NotificationTypes {
+//     taskUpdateNotification: TaskUpdateNotificationType[],
+//     participantRequestNotification: PaticipantRequestNotificationType[],
+//     friendRequestNotification: frendRequestNotificationType[]
+// };

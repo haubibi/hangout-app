@@ -10,9 +10,12 @@ import queryGetParticipantNotification from "./query/getParticipantNotification"
 import queryGetSearchTasks from "./query/getSearchTasks";
 
 import mutationAddTask from "./mutation/addTask";
+import mutationDeleteTask from "./mutation/deleteTask";
 import mutationAddUser from "./mutation/addUser";
 import mutationAddParticipant from "./mutation/addParticipant";
 import mutationQuitParticipant from "./mutation/quitParticipant";
+import mutationUpdateTaskUpdateNotifications from "./mutation/updateTaskUpdateNotifications";
+import mutationUpdateParticipantNotifications from "./mutation/updateParticipantNotifications";
 
 const resolvers = {
   // ScalarName: ScalarNameResolver,
@@ -27,9 +30,12 @@ const resolvers = {
   },
   Mutation: {
     addTask: mutationAddTask,
+    deleteTask: mutationDeleteTask,
     addUser: mutationAddUser,
     addParticipant: mutationAddParticipant,
     quitParticipant: mutationQuitParticipant,
+    updateTaskUpdateNotifications: mutationUpdateTaskUpdateNotifications,
+    updateParticipantNotifications: mutationUpdateParticipantNotifications,
   },
 };
 

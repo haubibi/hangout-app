@@ -1,4 +1,4 @@
-import getTasks from "../../../operateDatabaseFunctions/getTasks";
+import getTasks from "../../../utils/getTasks";
 const queryTasks = async () =>{
   return getTasks();
 };

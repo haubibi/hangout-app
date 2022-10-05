@@ -38,13 +38,8 @@ const  App: FC = () => {
   const {setUserUid} = useContext(UserContext);
   useEffect(()=>{
     onUserAuthStateChanged(async(user) =>{
-      console.log('changed user:', user)
       if(!user){
         setUserUid('');
-      } else {
-        
-        // const {uid} = user;
-        // setUserUid(uid);
       }
     });
   },[setUserUid]);

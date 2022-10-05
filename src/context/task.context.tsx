@@ -6,7 +6,7 @@ import {
   useEffect 
 } from "react";
 import { useMutation } from '@apollo/client';
-import { ADDTASK } from "../utils/graphql/mutation.utils";
+import { ADD_TASK } from "../utils/graphql/mutation.utils";
 import { ITask } from '../interfaces/task.interface';
 
 export interface ITaskContext {
@@ -27,7 +27,7 @@ export interface IProviderChildrenProps {
 
 export const TaskProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [currentTask, setCurrentTask] = useState<ITask | null>(null);
-    const [addTask] = useMutation(ADDTASK);
+    const [addTask] = useMutation(ADD_TASK);
     useEffect(()=>{
       if(currentTask !== null){
           const add = async()=>{

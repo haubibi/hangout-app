@@ -2,7 +2,9 @@ import {ITask} from "./task.interface";
 import {IUser} from "./user.interface";
 /* eslint-disable max-len */
 export enum NotificationTypeEnum {
-    PARTICIPANT = "PARTICIPANT"
+    PARTICIPANT = "PARTICIPANT",
+    TASK = "TASK",
+    FRIEND = "FRIEND"
 }
 
 export enum AddTaskRequestEnum {
@@ -18,21 +20,51 @@ export enum QuitTaskRequestEnum {
     PARTICIPANT_QUIT_REQUEST = "PARTICIPANT_QUIT_REQUEST",
     ORGNIZER_QUIT_REQUEST = "ORGNIZER_QUIT_REQUEST",
 }
+export enum UpdateTaskEnum {
+    TASK_UPDATE = "TASK_UPDATE",
+}
+export enum FRIENDEnum {
+    FRIEND_REQUEST = "FRIEND_REQUEST",
+    FRIEND_RECEIVE= "FRIEND_RECEIVE",
+}
 
 
-export interface IPaticipantsNotification {
-    notificationType: NotificationTypeEnum.PARTICIPANT;
-    type: AddTaskRequestEnum | QuitTaskRequestEnum;
-    taskId: string;
-    participantUid: string;
-    organizerUid: string;
+export interface INotificationBase<T, U> {
+    notificationType: T;
+    type: U;
     read: boolean;
 }
+
+export interface ITaskNotification<T, U> extends INotificationBase <T, U>{
+    taskId: string;
+    participantUid: string;
+    organizerUid: string; 
+}
+
+
+
+
+export type PaticipantRequestNotificationType = ITaskNotification<NotificationTypeEnum.PARTICIPANT, AddTaskRequestEnum | QuitTaskRequestEnum>;
+export type TaskUpdateNotificationType = ITaskNotification<NotificationTypeEnum.TASK, UpdateTaskEnum.TASK_UPDATE>;
+export type frendRequestNotificationType = INotificationBase<NotificationTypeEnum.FRIEND, FRIENDEnum> & {
+    senderUid:string;
+    receiverUid:string;
+}
+
+export interface NotificationTypes {
+    taskUpdateNotification: TaskUpdateNotificationType[],
+    participantRequestNotification: PaticipantRequestNotificationType[],
+    friendRequestNotification: frendRequestNotificationType[]
+};
+
 
 export interface ParticipantNotification{
     task: ITask;
     participant: IUser;
     organizer: IUser;
 }
-// eslint-disable-next-line max-len
-export type NotificationTypes = IPaticipantsNotification;
+export interface TaskUpdateNotification{
+    task: ITask;
+    organizer: IUser;
+}
+

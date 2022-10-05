@@ -1,13 +1,4 @@
-// uid: string;
-//     displayName: string;
-//     email: string;
-//     sex: 'male' | 'female';
-//     avatarImg: IImageObjWithUrlAndRefPath | null;
-//     friendsList: IUser[];
 
-import { findConfigFile } from "typescript"
-
-//     notifications: NotificationTypes[];
 export const avatarImgObj = `
     uid
     name
@@ -21,13 +12,40 @@ export const UserSignUpInput = `
     displayName
 `
 
-export const ParticipantNotificationTypes = `
+export const ParticipantNotificationObj = `
     type
     taskId
     participantUid
     organizerUid
     read
     notificationType
+`
+export const TaskUpdateNotificationObj = `
+    type
+    taskId
+    participantUid
+    organizerUid
+    read
+    notificationType
+`
+export const FriendNotificationObj = `
+    type
+    notificationType
+    read
+    senderUid
+    receiverUid
+`
+export const NotificationObj = `
+    taskUpdateNotification {
+        ${TaskUpdateNotificationObj}
+    }
+    participantRequestNotification {
+        ${ParticipantNotificationObj}
+    }
+    friendRequestNotification {
+        ${FriendNotificationObj}
+    }
+
 `
 
 export const userUidObj = `
@@ -43,7 +61,7 @@ export const userFullObj = `
     }
     friendsList
     notifications {
-        ${ParticipantNotificationTypes}
+        ${NotificationObj}
     }
 `
 
@@ -75,7 +93,6 @@ export const ParticipantsObj = `
     agreed
     requestType
 `;
-
 
 
 export const taskFullObj = `

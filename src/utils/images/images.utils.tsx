@@ -26,6 +26,14 @@ export const defaultFrontCoverImage = {
 }
 
 
+export const getImageObjWithUrl = (
+    imageObjWithUrlAndRefPath:IImageObjWithUrlAndRefPath
+): IImageObjWithUrl => {
+    const {refPath, ...otherProps} = imageObjWithUrlAndRefPath;
+    return {...otherProps};
+}
+
+
 
 export const transformImageToWithoutRefPath = (imagesWithUrlAndRefPath: IImageObjWithUrlAndRefPath[] | []):(IImageObjWithUrl[] | []) => {
     if(Array.isArray(imagesWithUrlAndRefPath)){

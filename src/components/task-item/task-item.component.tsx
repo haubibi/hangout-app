@@ -13,8 +13,8 @@ import {
 import { useMutation } from "@apollo/client";
 import { TaskCarousel } from '../task-component/task-carousel/task-carousel.component';
 import { 
-    ADDPARTICIPANT, 
-    QUITPARTICIPANT 
+    ADD_PARTICIPANT, 
+    QUIT_PARTICIPANT,
 } from "../../utils/graphql/mutation.utils";
 import { 
     Button,
@@ -86,8 +86,8 @@ export const TaskItem:FC<ITaskItemProps> = ({
     const [ userApplyIsLoading, setUserApplyIsLoading ] = useState<boolean>(false);
     const [ userQuitIsLoading, setUserQuitIsLoading ] = useState<boolean>(false);
     const [ isReachMax, setIsReachMax ] = useState<boolean>();
-    const [ addParticipant ] = useMutation(ADDPARTICIPANT);
-    const [ quitParticipant ] = useMutation(QUITPARTICIPANT);
+    const [ addParticipant ] = useMutation(ADD_PARTICIPANT);
+    const [ quitParticipant ] = useMutation(QUIT_PARTICIPANT);
     const { title, description, showImages, organizer } = task;
 
 
@@ -107,7 +107,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
             setUserType(userType);
         }
         console.log(userType)
-    },[currentUser, task])
+    },[currentUser, task, userType])
 
 
 

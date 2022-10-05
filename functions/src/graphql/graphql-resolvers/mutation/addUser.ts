@@ -1,4 +1,4 @@
-import addUser from "../../../operateDatabaseFunctions/addUser";
+import addUser from "../../../utils/addUser";
 import {IUserInput} from "../../../interfaces/user.interface";
 const mutationAddUser = async (
     _: any,

@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { strangeFontFamily } from "../../index.styles";
+import { 
+    strangeFontFamily,
+    eventTaskTitleFontSize,
+    eventTaskDescriptionFontSize
+ } from "../../utils/default-settings/font.settings";
 import { 
     Row,
     Col
@@ -14,8 +18,8 @@ export const TaskitemContainer = styled.div`
 `
 
 export const TitleCon = styled.h2`
-    ${strangeFontFamily}
-    font-size: 50px;
+    font-family: ${strangeFontFamily};
+    font-size: ${eventTaskTitleFontSize}px;
 `
 export const RowCon = styled(Row)`
 `
@@ -29,6 +33,6 @@ export const CenterAlignCol = styled(BaseCol)`
     align-items: center;
 `
 export const DescriptionCon = styled.h2`
-    ${strangeFontFamily}
-    font-size: 30px;
+    font-family:${strangeFontFamily};
+    font-size: ${eventTaskDescriptionFontSize}px;
 `

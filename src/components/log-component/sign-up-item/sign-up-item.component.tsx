@@ -9,21 +9,26 @@ import {
     Input,
     message
 } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { 
+    useNavigate,
+    useLocation
+ } from 'react-router-dom';
 import { SignupItemContainer } from './sign-up-item.styles';
 import { createAuthUserWithEmailAndPassword } from '../../../utils/firebase/firebase.utils';
 import { UserContext } from '../../../context/user.context';
 import { NavigationContext, MenuKey } from '../../../context/navigation.context';
 import { useMutation } from '@apollo/client';
-import { ADDUSER } from '../../../utils/graphql/mutation.utils';
+import { ADD_USER } from '../../../utils/graphql/mutation.utils';
 import { IUserInput, ISignUpAdditionsInfo } from '../../../interfaces/user.interface';
 import { 
     initialValues,
     signupRules,
     SignUpNamesEnum
  } from '../../../validators/signup.validate';
+import { IStateWithPathname } from '../sign-in-item/sign-in-item.component';
 
- const formitems = [
+
+const formitems = [
     { label: 'Displayname', name: SignUpNamesEnum.displayname, rules: signupRules[SignUpNamesEnum.displayname],item: <Input placeholder='display name'/>},
     { label: 'E-mail', name: SignUpNamesEnum.email, rules: signupRules[SignUpNamesEnum.email], item: <Input placeholder='e-mail address'/>},
     { label: 'Password', name: SignUpNamesEnum.password, rules: signupRules[SignUpNamesEnum.password], item: <Input.Password placeholder='password'/>},
@@ -34,11 +39,11 @@ import {
 const SignUpItem = () => {
     const { setUserUid } = useContext(UserContext);
     const { setCurrentMenuKey } = useContext(NavigationContext);
-    const [ addUser ] = useMutation(ADDUSER);
+    const [ addUser ] = useMutation(ADD_USER);
     const [ detail, setDetail] = useState<Record<string, any>>();
     const [ formDisabled, setFormDisabled] = useState<boolean>(false);
     const navigate = useNavigate();
-
+    const { state } = useLocation();
     //set initial values when component mounted
     useEffect(()=> {
         setDetail(initialValues);
@@ -78,7 +83,15 @@ const SignUpItem = () => {
                     message
                     .success('Please verify it in you e-mail!', 3);
                 }
-                navigate(`/`);
+
+                if(
+                    Object.prototype.toString.call(state) === '[object Object]' &&
+                    Object.prototype.hasOwnProperty.call(state, 'pathname')
+                ) {
+                    navigate(`${(state as IStateWithPathname).pathname}`,{replace: true});
+                } else {
+                    navigate(`/`);
+                }
             });
             
         }).catch((error)=>{

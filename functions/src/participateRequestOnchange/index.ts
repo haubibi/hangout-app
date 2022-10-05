@@ -3,18 +3,25 @@
 import * as functions from "firebase-functions";
 import {
   AddTaskRequestEnum, 
-  IPaticipantsNotification, 
+  PaticipantRequestNotificationType, 
   QuitTaskRequestEnum, 
-  NotificationTypeEnum
+  NotificationTypeEnum,
 } from "../interfaces/notifications.interface";
-import getTaskById from "../operateDatabaseFunctions/getTaskById";
-import updateNotifications from "../operateDatabaseFunctions/updateNotifications";
+import getTaskById from "../utils/getTaskById";
+import updateParticipantsNotification from "../utils/notifications/updateParticipantsNotifications";
 import {IPaticipant} from "../interfaces/participate.interface";
-import getUserById from "../operateDatabaseFunctions/getUserById";
 import * as _ from "lodash";
-import {IUser} from "../interfaces/user.interface";
 import {ITask} from "../interfaces/task.interface";
-import updateParticipant from "../operateDatabaseFunctions/updateParticipant";
+import updateParticipant from "../utils/updateParticipant";
+
+
+// export interface NotificationTypes {
+//   taskUpdateNotification: TaskUpdateNotificationType[],
+//   participantRequestNotification: PaticipantRequestNotificationType[],
+//   friendRequestNotification: frendRequestNotificationType[]
+// };
+
+
 // export enum AddTaskRequestEnum {
 //   PARTICIPANT_APPLY_REQUEST = "PARTICIPANT_APPLY_QEQUEST",
 //   PARTICIPANT_ARGEE_REQUEST = "PARTICIPANT_ARGEE_REQUEST",
@@ -26,15 +33,6 @@ import updateParticipant from "../operateDatabaseFunctions/updateParticipant";
 
 // export enum QuitTaskRequestEnum {
 //   PARTICIPANT_QUIT_REQUEST = "PARTICIPANT_QUIT_REQUEST",
-// }
-
-
-// export interface IPaticipantsNotification {
-//   type: AddTaskRequestEnum | QuitTaskRequestEnum;
-//   taskId: string;
-//   participantUid: string;
-//   organizerUid: string;
-//   read: boolean;
 // }
 
 // export interface IPaticipant{
@@ -51,29 +49,17 @@ import updateParticipant from "../operateDatabaseFunctions/updateParticipant";
 const filterByUid = (value: IPaticipant) => value.participantUid;
 
 
-const updateNotifiCationToParticipant = async (notificationToParticipant: IPaticipantsNotification) => {
-  const participant = await getUserById(notificationToParticipant.participantUid);
-  const currentNotifications = (participant as IUser).notifications;
-  const notifications = Array.isArray(currentNotifications)? currentNotifications: [];
-  updateNotifications(participant as IUser, [...notifications, notificationToParticipant]);
-};
-const updateNotifiCationToOrgnizer = async (notificationToOrginzer: IPaticipantsNotification) => {
-  const organizer = await getUserById(notificationToOrginzer.organizerUid);
-  const currentNotifications = (organizer as IUser).notifications;
-  const notifications = Array.isArray(currentNotifications)? currentNotifications: [];
-  updateNotifications(organizer as IUser, [...notifications, notificationToOrginzer]);
-};
-
 const onParticipateChange = functions.database
     .ref("/tasks/{taskId}/participants")
     .onWrite(async (change, context): Promise<any>=> {
       const taskId = context.params.taskId;
+      const task = await getTaskById(taskId);
+      if(!task) return;
       const beforeData = await change.before.val();
       const participants = await change.after.val();
-      const task = await getTaskById(taskId);
       const {organizer} = task as ITask;
-      let notificationToParticipant: IPaticipantsNotification;
-      let notificationToOrganizer: IPaticipantsNotification;
+      let notificationToParticipant: PaticipantRequestNotificationType;
+      let notificationToOrganizer: PaticipantRequestNotificationType;
       // 删除
       if (
         (beforeData && participants && beforeData.length > participants) ||
@@ -88,7 +74,7 @@ const onParticipateChange = functions.database
           organizerUid: organizer,
           read: false,
         };
-        await updateNotifiCationToParticipant(notificationToParticipant);
+        await updateParticipantsNotification(participant.participantUid, [notificationToParticipant]);
       }
       // console.log("beforeData:", beforeData);
       // console.log("participants:", participants);
@@ -114,8 +100,7 @@ const onParticipateChange = functions.database
               organizerUid: organizer,
               read: false,
             };
-            
-            await updateNotifiCationToOrgnizer(notificationToOrganizer);
+            await updateParticipantsNotification(organizer, [notificationToOrganizer]);
             break;
           // 组织者同意， 发给用户
           case AddTaskRequestEnum.ORGANIZER_APPLY_REQUEST:
@@ -131,7 +116,7 @@ const onParticipateChange = functions.database
               organizerUid: organizer,
               read: false,
             };
-            await updateNotifiCationToParticipant(notificationToParticipant);
+            await updateParticipantsNotification(participant.participantUid, [notificationToParticipant]);
             break;
         }
         participants[participantIndex].newAdded = false;

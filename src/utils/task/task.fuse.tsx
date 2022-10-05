@@ -59,6 +59,7 @@ const getSearchTasks = (
         console.log("newTasks:", newTasks)
         totalLength = result.length;
     }
+
     return {
         tasks: newTasks,
         totalLength

@@ -16,13 +16,10 @@ import {
     AddTaskRequestEnum,
     QuitTaskRequestEnum,
     NotificationTypes,
-    IPaticipantsNotification,
+    // IPaticipantsNotification,
     NotificationTypeEnum
 } from '../../../interfaces/notifications.interface';
-import { 
-    isParticipantNotification,
-    NotificationElement
- } from '../../../utils/notification/notifications';
+
 import { Spin } from 'antd';
 
 
@@ -62,12 +59,6 @@ interface IAccountNotificationProps {
 
 
 
-const renderNotification= (notification: NotificationTypes) => (
-    <ListItem>
-        <NotificationElement notification = {notification}/>
-    </ListItem>
-)
-
 const MyNotifications = () => {
     const {currentUser} = useContext(UserContext);
     console.log('notifications:', currentUser)
@@ -75,7 +66,7 @@ const MyNotifications = () => {
     return (
         <MyNotificationsCon>
             My Notifications
-            {
+            {/* {
                 (currentUser.notifications && currentUser.notifications.length > 0) ?
                 <ListCon
                     dataSource = {currentUser.notifications}
@@ -83,7 +74,7 @@ const MyNotifications = () => {
                 />:
                 <h2>You don't have notifications</h2>
             }
-            
+             */}
             {/* <EventCardList /> */}
         </MyNotificationsCon>
     )

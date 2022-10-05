@@ -49,16 +49,20 @@ const Home: FC = () =>{
     console.log("loading:" , loading)
     console.log("error:" , error)
 
-
+    //set the menu key
     useEffect(()=> {
-        setCurrentMenuKey(MenuKey.HOME)
-    },[setCurrentMenuKey])
+        setCurrentMenuKey(MenuKey.HOME);
+    },[setCurrentMenuKey]);
+
+    //refetch every time
+    useEffect(()=> {
+        refetch();
+    },[refetch]);
 
     useEffect(()=>{
         // console.log('taskError:',error);
         // console.log('taskLoading:',loading);
         // console.log('tasksData:',data);
-        // const t:ITask[] = [];
         if(data && data.tasks) {
             // const {tasks} = data;
             const tasksAndTotalLength = getSearchTasks(
@@ -74,7 +78,7 @@ const Home: FC = () =>{
             console.log("tasksAndTotalLength:", tasksAndTotalLength)
 
             setTasksTotalLength(totalLength);   
-            setTasks(tasks);    
+            setTasks(tasks.concat(tasks));    
         }
     },[data, currentPage, setTasksTotalLength, setTasks, searchInputValue]);
 
@@ -86,10 +90,6 @@ const Home: FC = () =>{
         setCurrentPage(page);
     },[setCurrentPage]);
 
-
-   
-
-    
     return (
 
         <HomeContainer>
@@ -97,44 +97,41 @@ const Home: FC = () =>{
                 <SearchCol {...tasksColMiddleLayout}>
                     <HomeSearch 
                         onSearch={searchOnSearchHandle}
+                        loading = {loading}
                     />
                 </SearchCol>
             </SearchRow>
             <>
             {
-                error? 
+                loading? <Spin /> :
+                    error? 
                     message.error(error.toString(), 5)
                     .then(()=> message.info(`Please try again!`)):
-                    undefined
+                        tasks && tasks.length === 0?
+                        <ErrorH2>No matched event, please try again!</ErrorH2>:
+                        <>
+                            <Row>
+                                <ListCol span={24}>
+                                    <EventCardList 
+                                        tasks={tasks}
+                                        tasksRefetch = {refetch}
+                                    />
+                                </ListCol>
+                            </Row>
+                            <Row style={{margin:'50px 0px 50px 0px'}} gutter= {30}>
+                                <Col span = {6}></Col>
+                                <Col span = {12}>
+                                    <PaginationBar 
+                                        onChange={onPageChangeHandle}
+                                        total = {tasksTotalLength}
+                                        pageSize = {pageTasksAmout}
+                                    />
+                                </Col>
+                                <Col span = {6}></Col>
+                            </Row>
+                        </>
             }
-            {
-                loading? <Spin /> : undefined
-            }
-            {
-                tasks && tasks.length === 0?
-                    <ErrorH2>No matched event, please try again!</ErrorH2>:
-                    <>
-                    <Row>
-                        <ListCol span={24}>
-                            <EventCardList 
-                                tasks={tasks}
-                                tasksRefetch = {refetch}
-                            />
-                        </ListCol>
-                    </Row>
-                    <Row style={{margin:'50px 0px 50px 0px'}} gutter= {30}>
-                        <Col span = {6}></Col>
-                        <Col span = {12}>
-                            <PaginationBar 
-                                onChange={onPageChangeHandle}
-                                total = {tasksTotalLength}
-                                pageSize = {pageTasksAmout}
-                            />
-                        </Col>
-                        <Col span = {6}></Col>
-                    </Row>
-                 </>
-            }
+
            </>
         </HomeContainer>
     )

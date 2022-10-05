@@ -4,7 +4,8 @@ import {
     Form , 
     InputNumber,
     DatePicker,
-    TimePicker
+    TimePicker,
+    Popconfirm
 } from 'antd';
 // $ruler: 16px;
 // $color-red: #AE1100;
@@ -57,4 +58,6 @@ export const DatePickerCon = styled(DatePicker)`
 `;
 export const TimePickerCon = styled(TimePicker)`
     ${FlexStart}
+`;
+export const PopconfirmCon = styled(Popconfirm)`
 `;

@@ -1,10 +1,16 @@
-import addTask from "../../../operateDatabaseFunctions/addTask";
+import addTask from "../../../utils/addTask";
 import {ITask} from "../../../interfaces/task.interface";
 const mutationAddTask = async (
     _:any,
-    {taskObj}:{taskObj: ITask}
+    {
+      taskObj,
+      isNewTaskForm
+    }:{
+      taskObj: ITask,
+      isNewTaskForm: boolean
+    }
 ) => {
-  return addTask(taskObj);
+  return addTask(taskObj, isNewTaskForm);
 };
 
 export default mutationAddTask;

@@ -2,7 +2,6 @@ import {
     FC,
     useEffect,
     useState,
-    ReactElement
 } from 'react';
 import { useQuery } from '@apollo/client';
 import { GETPARTICIPANTNOTIFICATION } from '../../../utils/graphql/query.utils';
@@ -16,7 +15,8 @@ import {
 import {
     AddTaskRequestEnum,
     QuitTaskRequestEnum,
-    IPaticipantsNotification,
+    PaticipantRequestNotificationType,
+    // IPaticipantsNotification,
     ParticipantNotification
 } from '../../../interfaces/notifications.interface';
 import { 
@@ -25,7 +25,7 @@ import {
 } from 'antd';
 
 interface INotificationParticipantsProps {
-    notification: IPaticipantsNotification
+    notification: PaticipantRequestNotificationType
 }
 
 
@@ -80,7 +80,7 @@ interface INotificationFormat {
 }
 
 interface INotificationFormatInput {
-    notification: IPaticipantsNotification;
+    notification: PaticipantRequestNotificationType;
     participantNotification: ParticipantNotification;
 }
 

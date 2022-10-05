@@ -5,11 +5,14 @@ import {
   userFullObj,
   taskFullObj,
   ParticipantsObj,
-  UserSignUpInput
+  UserSignUpInput,
+  ParticipantNotificationObj,
+  TaskUpdateNotificationObj,
+  FriendNotificationObj
  } from './typeObject';
 
 //  # ${userFullObj}
-export const ADDUSER = gql`
+export const ADD_USER = gql`
     mutation(
         $userInput: UserInput
     ) {
@@ -18,18 +21,31 @@ export const ADDUSER = gql`
         }
     }
 `
-export const ADDTASK = gql`
+export const ADD_TASK = gql`
     mutation (
-      $taskObj: TaskInput
+      $taskObj: TaskInput,
+      $isNewTaskForm: Boolean
     ) {
-      addTask(taskObj:$taskObj){
+      addTask(
+        taskObj:$taskObj,
+        isNewTaskForm:$isNewTaskForm
+      ){
+          ${taskFullObj}
+      } 
+    }
+`
+export const DELETE_TASK = gql`
+    mutation (
+      $taskId: ID
+    ) {
+      deleteTask(taskId:$taskId){
           ${taskFullObj}
       } 
     }
 `
 // addParticipant(participantUid: ID, taskId: ID, addUserUid: ID, type: AddParticipantRequestEnum): Paticipant
 
-export const ADDPARTICIPANT = gql`
+export const ADD_PARTICIPANT = gql`
     mutation (
       $participantUid: ID,
       $taskId: ID,
@@ -44,7 +60,7 @@ export const ADDPARTICIPANT = gql`
       } 
     }
 `
-export const QUITPARTICIPANT = gql`
+export const QUIT_PARTICIPANT = gql`
     mutation (
       $participantUid: ID,
       $taskId: ID,
@@ -59,3 +75,35 @@ export const QUITPARTICIPANT = gql`
       } 
     }
 `
+
+//updateNotifications(userUid: String, notifications: [NotificationInput]): [NotificationType]
+export const UPDATE_PARTICIPA_NTNOTIFICATIONS = gql`
+    mutation (
+      $userUid: ID,
+      $notifications: [ParticipantNotificationInput],
+    ) {
+      updateNotifications(
+          userUid:$userUid,
+          notifications:$notifications,
+      ){
+         ${ParticipantNotificationObj}
+      } 
+    }
+`
+export const UPDATE_TASK_UPDATE_NTNOTIFICATIONS = gql`
+    mutation (
+      $userUid: ID,
+      $notifications: [TaskUpdateNotificationInput],
+    ) {
+      updateNotifications(
+          userUid:$userUid,
+          notifications:$notifications,
+      ){
+         ${TaskUpdateNotificationObj}
+      } 
+    }
+`
+
+
+// updateParticipantNotifications(userUid: String, notifications: [ParticipantNotificationInput]): [ParticipantNotificationType]
+// updateTaskUpdateNotifications(userUid: String, notifications: [TaskUpdateNotificationInput]): [TaskUpdateNotificationType]

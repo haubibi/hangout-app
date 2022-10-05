@@ -1,4 +1,4 @@
-import quitParticipant from "../../../operateDatabaseFunctions/quitParticipant";
+import quitParticipant from "../../../utils/quitParticipant";
 import {
   QuitTaskRequestEnum,
 } from "../../../interfaces/notifications.interface";

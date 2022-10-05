@@ -7,6 +7,18 @@ export interface IPaticipant{
     agreed: boolean;
     requestType: AddTaskRequestEnum | QuitTaskRequestEnum;
 }
+/**
+ * get the number of current participants
+ * @param paticipants  paticipants array of paticipant
+ * @returns number of attended paticipants
+ */
+
+export const getNumberofParticipants = (
+    paticipants: IPaticipant[] = []
+):number =>{
+    return paticipants.filter(paticipant => paticipant.isConfirmed && paticipant.agreed).length;
+}
+
 
 /**
  * 
@@ -16,15 +28,9 @@ export interface IPaticipant{
  */
 
 export const checkIfParticipantsMax = (
-    paticipants: IPaticipant[],
+    paticipants: IPaticipant[] = [],
     maxParticipantsNumber: number
 ): boolean =>{
-    let num:number = 0;
-    paticipants.forEach((paticipant)=>{
-        if(paticipant.isConfirmed && paticipant.isConfirmed) {
-            num ++;
-        }
-    });
-
+    const num = getNumberofParticipants(paticipants);
     return num >= maxParticipantsNumber;
 }

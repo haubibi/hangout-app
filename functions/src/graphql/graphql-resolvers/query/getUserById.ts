@@ -1,4 +1,4 @@
-import getUserById from "../../../operateDatabaseFunctions/getUserById";
+import getUserById from "../../../utils/getUserById";
 const queryGetUserById = async (
     _:any,
     {uid}:{uid:string}

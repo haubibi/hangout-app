@@ -4,9 +4,15 @@ import {
     Col,
     Row
  } from 'antd';
-import { cardWidth } from '../../../utils/layout-antdesign/layout';
-import { strangeFontFamily, normalFontFamily } from "../../../index.styles";
-
+import { cardWidth } from '../../../utils/default-settings/card.setting';
+import { 
+    strangeFontFamily, 
+    eventCardTitleFontSize,
+} from "../../../utils/default-settings/font.settings";
+import { 
+    textOverFlowElilipsis,
+    FlexDisplayRowCenter
+ } from "../../../App.styles";
 
 export const EventCardCon = styled(Card)`
     width: ${cardWidth}px;
@@ -16,19 +22,21 @@ export const EventCardCon = styled(Card)`
     &:hover {
         transform: scale(1.05);
     }
+    .ant-card-head>.ant-card-head-wrapper>.ant-card-head-title{
+        font-family: ${strangeFontFamily};
+        font-size: ${eventCardTitleFontSize}px;
+        font-weight: bolder;
+        padding: 10px 0;
+    }
     .ant-card-body{
         padding: 6px;
     }
-    .ant-card-head>.ant-card-head-wrapper>.ant-card-head-title{
-        font-size: 30px;
-        font-weight: bolder;
-        padding: 10px 0;
-        /* ${normalFontFamily} */
-        ${strangeFontFamily}
+    .ant-card-actions{
+        width: ${cardWidth}px;
     }
-    .ant-card-cover{
+    /* .ant-card-cover{
         cursor: pointer;
-    }
+    } */
 `;
 
 
@@ -42,27 +50,33 @@ export const MetaCon = styled(Meta)`
     flex-direction: row;
     justify-content: flex-start;
     & div {
-        line-height: 44px;
+        line-height: 40px;
     }
-    &>.ant-card-meta-detail{
+    .ant-card-meta-avatar{
+        ${FlexDisplayRowCenter}
+    }
+
+    &>.ant-card-meta-detail>div{
         width: 100%;
         text-align: left;
+        max-width: 240px;
+        height: 40px;
+        ${textOverFlowElilipsis}
     }
 `
 
 
 export const ContentRow = styled(Row)`
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 `;
 
 export const ContentCol = styled(Col)`
+    width: 100%;
+    padding: 0px 10px 0px 10px;
 `;
 export const CardTextSpan = styled.span`
     padding-left: 15px;
-    
+    ${textOverFlowElilipsis}
 `;
 export const LocationAndPatCol = styled(Col)`
     padding: 10px 0px 10px 20px;

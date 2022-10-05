@@ -11,7 +11,11 @@ import {
     validateStringLength
 } from './validate.utils';
 import { BaseTaskFormItemDetail } from '../interfaces/taskForm.interface';
-import { IPaticipant } from '../interfaces/participate.interface';
+import { cardTitleWidth } from '../utils/default-settings/card.setting';
+import { ifTextWidthValid } from './validate.utils';
+import { eventCardTitleFont } from '../utils/default-settings/font.settings';
+import { getNumberofParticipants } from '../interfaces/participate.interface';
+
 export enum TaskFormItemName {
     title = 'title',
     startDate = 'startDate',
@@ -28,17 +32,32 @@ export enum TaskFormItemName {
     keyWords = 'keyWords',
 }
 
-export const maxTitlelength = 10;
+export const maxTitlelength = 20;
 export const maxDescriptionLength = 500;
-export const maxTagLength = 5;
+export const maxTagLength = 10;
 
 
-
-const checkTitleCallback = (_: any, value: string) => {
+export const disabledDate = (currentDate: Moment): boolean => currentDate.isBefore(getCurrentMoment(),'day');
+/**
+ * title validator
+ * @param _ any
+ * @param value event title 
+ * @returns 
+ */
+const checkTitleValidator= (_: any, value: string) => {
     //check length
-    if(!validateStringLength(value,maxTitlelength)) return Promise.reject(new Error(`maximum characters is ${maxTitlelength}`)); 
+    const flag = ifTextWidthValid(value, cardTitleWidth, eventCardTitleFont);
+    if(!flag || value.length > maxTitlelength) return Promise.reject(new Error(`The title is too long!`));
     return Promise.resolve(); 
 }
+
+/**
+ *  description Validator
+ * @param _ any
+ * @param value event description
+ * @returns 
+ */
+
 const checkDescriptionCallback = (_: any, value: string) => {
     //check length
     if(!validateStringLength(value,maxDescriptionLength)) return Promise.reject(new Error(`maximum characters is ${maxDescriptionLength}`)); 
@@ -49,19 +68,13 @@ const checkDescriptionCallback = (_: any, value: string) => {
 export const taskFormRules = {
     [TaskFormItemName.title] :[{ 
         required: true, 
-        validator: checkTitleCallback
+        validator: checkTitleValidator
     }],
     [TaskFormItemName.description] :[{ 
         required: true, 
         validator: checkDescriptionCallback
     }],
     
-}
-
-const getCurrentNumerOfParticipaints = (
-    partipants: IPaticipant[]
-) => {
-    // return partipants.filter(())
 }
 
 export const validateFormValues = (values: BaseTaskFormItemDetail, task: ITask) => {
@@ -73,20 +86,22 @@ export const validateFormValues = (values: BaseTaskFormItemDetail, task: ITask) 
         participantsNumber,
         latLngAndAddress
     } = values;
-    const { participants } = task;
-    const currentParticipantsNumbe = participants.length;
+    const participants = task.participants || [];
     //title already checked
     //time validate
     const currentMoment =  getCurrentMoment();
     const startTimeMoment = getMomentByDateAndTimeString(getDateString(startDate as Moment), getDateTimeString(startTime as Moment));
     const endTimeMoment = getMomentByDateAndTimeString(getDateString(endDate as Moment), getDateTimeString(endTime as Moment));
+
+
     if(startTimeMoment.isBefore(currentMoment)) {message.error('Please selet correct start time!');return false;}
     if(
         endTimeMoment.isBefore(currentMoment) ||
         endTimeMoment.isBefore(startTimeMoment)
     ) {message.error('Please selet correct end time!');return false;};
     //paticipate numbers
-    if(participantsNumber < currentParticipantsNumbe) {message.error(`Can't set less than ${currentParticipantsNumbe}`);return false;};
+    const currentNumberOfParticipants = getNumberofParticipants(participants);
+    if(participantsNumber < currentNumberOfParticipants) {message.error(`Can't set less than ${currentNumberOfParticipants}`);return false;};
     //description already checked
     //latlng check
     if(!latLngAndAddress.address || latLngAndAddress.address.length === 0) {message.error(`Please select the address!}`);return false;};

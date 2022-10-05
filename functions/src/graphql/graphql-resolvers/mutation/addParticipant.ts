@@ -1,4 +1,4 @@
-import addParticipant from "../../../operateDatabaseFunctions/addParticipant";
+import addParticipant from "../../../utils/addParticipant";
 import {
   AddTaskRequestEnum,
 } from "../../../interfaces/notifications.interface";

@@ -4,17 +4,32 @@ import {
     IFilterTasks,
     DistanceRange,
     ParticipantsRange,
-  } from "../../interfaces/task.interface";
-  import {LatLngLiteral} from "../../interfaces/google.interface";
-  import {getDistanceBetweenPoints} from "../googleMap/getDistanceBetweenLatLng.utils";
-  
-  /**
-   * 
-   * @param currentLatLng curretn latlng
-   * @param distanceRange distance range
-   * @param tasks all the tasks
-   * @returns tasks in the distance range
-   */
+} from "../../interfaces/task.interface";
+import {LatLngLiteral} from "../../interfaces/google.interface";import {getDistanceBetweenPoints} from "../googleMap/getDistanceBetweenLatLng.utils";
+import { Moment } from 'moment';
+import { 
+  getMomentByDateAndTimeString,
+  getDateString,
+  getDateTimeString
+} from "../date/date.utils";
+
+// export const checkIfTaskExpired = (
+//   task: ITask
+// ):boolean => {
+//   const {startDate, startTime} = task;
+//   const startMoment = getMomentByDateAndTimeString(startDate, startTime);
+
+//   return startMoment.is
+// }
+
+
+/**
+ * 
+ * @param currentLatLng curretn latlng
+ * @param distanceRange distance range
+ * @param tasks all the tasks
+ * @returns tasks in the distance range
+ */
 
   const getFilteredTasksByDistance = (
       currentLatLng: LatLngLiteral,
@@ -60,9 +75,6 @@ import {
   ):ITask[] => {
   
     let filteredTasks: ITask[] = tasks;
-    // console.log("all tasks:", tasks);
-    // console.log("currentLatlng:" + currentLatLng);
-    // console.log("distanceRange:" + taskFilter.distanceRange);
     // filter by distance
     if (currentLatLng) {
       if (taskFilter.distanceRange) {
@@ -77,4 +89,8 @@ import {
   
     return [...filteredTasks];
   };
+
+  
+
+  
   

@@ -43,7 +43,7 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
   const [sizeIsValid, setSizeIsValid] = useState(true);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>(showImages);
+  const [fileList, setFileList] = useState<UploadFile[]>(showImages || []);
 
 
   // useEffect(()=>)
@@ -63,7 +63,7 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
       setIsJpgOrPng(false);
-    }
+  }
 
 
     

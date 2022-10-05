@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Fuse from 'fuse.js';
 import { ITask, ISearchTaskReturnType } from '../interfaces/task.interface';
-import getTasks from '../operateDatabaseFunctions/getTasks';
+import getTasks from '../utils/getTasks';
 import * as _ from "lodash";
 
 const options = {

@@ -26,7 +26,7 @@ interface IGoogleMapsProps{
 }) => {
     const options = useMemo<MapOptions>(
         () => (googleMapProps.options!),
-        []
+        [googleMapProps.options]
     );
     const onLoad = useCallback((map: any) => {
     }, []);

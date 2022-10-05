@@ -1,7 +1,5 @@
 import { 
-    FC, 
-    useMemo, 
-    useContext 
+    FC
 } from 'react';
 import { 
     EnvironmentFilled ,
@@ -24,32 +22,34 @@ import { ITask } from '../../../interfaces/task.interface';
 import { IImageObjWithUrl } from '../../../interfaces/images.interface';
 import { useNavigate } from 'react-router-dom';
 import { 
-    getCurrentFullTimeString,
+    getMomentFullTimeString,
     getCurrentTimeIsBeforeComparedTime,
-    getNumberOfDaysFromNow,
     getMomentByDateAndTimeString,
     cardDateFormat
 } from '../../../utils/date/date.utils';
 import { CardTags } from '../card-tags/card-tags.component';
-import { MenuKey, NavigationContext } from '../../../context/navigation.context';
-import { checkIsChinese } from '../../../utils/usefulFunctions/judgeString';
 import { useCallback } from 'react';
 
 export interface IEventCardProps {
     task: ITask;
 }
 
-
-const maxChineseLength = 5;
-const maxEnglishLength = 10;
-const maxDescription = 14;
 const defaultbodyStyle = {
     height: '150px'
 }
 
 const defaultSrc = require('../../../assets/avatar/wolf.png')
-const coverImg = (coverImg: IImageObjWithUrl | null) => {
-    return <img alt= {coverImg?coverImg.name:'wirewolf'} src= {coverImg?coverImg.url:defaultSrc} height = "200px"/>;
+const coverImg = (
+    coverImg: IImageObjWithUrl | null,
+    onClick: (e: any) => void
+) => {
+    return <img 
+                alt= {coverImg?coverImg.name:'wirewolf'} 
+                src= {coverImg?coverImg.url:defaultSrc} 
+                height = "200px"
+                onClick={ onClick }
+                style = {{cursor: "pointer"}}
+            />;
 }
 
 const getCityText = (address: string) => {
@@ -63,10 +63,7 @@ const getCityText = (address: string) => {
     } else {
         cityString = address;
     }
-    // console.log(cityString)
-
-    const maxAddressLength = checkIsChinese(cityString)? maxChineseLength: maxEnglishLength;
-    return cityString.length > maxAddressLength ? `${cityString.slice(0, maxAddressLength)}...`: cityString; 
+    return cityString;
 }
 
 
@@ -92,13 +89,11 @@ export const EventCard:FC<IEventCardProps> = ({
     const navigate = useNavigate();
     const { frontCoverImage, title, description, id, keyWords, startTime, startDate, endTime, endDate, latLngAndAddress, open} = task;
     const avartaSrc = getSrc(id);
-    const startTimeString = getCurrentFullTimeString(startDate!, startTime!);
-    const endimeString = getCurrentFullTimeString(endDate!, endTime!);
+    const startTimeString = getMomentFullTimeString(startDate!, startTime!);
+    const endimeString = getMomentFullTimeString(endDate!, endTime!);
     const cityText = getCityText(latLngAndAddress.address); 
-    const daysBetween = getNumberOfDaysFromNow(startDate!, startTime!);
     const startTimeText = getMomentByDateAndTimeString(startDate!, startTime!).format(cardDateFormat);
     // const deadline = getMomentByDateAndTimeString(startDate!, startTime!);
-    const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; 
 
     const TimeContent = (
         <PopoverContentDiv>
@@ -114,54 +109,47 @@ export const EventCard:FC<IEventCardProps> = ({
         </PopoverContentDiv>
     );
 
-    const cardDisabled = !open || !getCurrentTimeIsBeforeComparedTime(startTimeString);
    
 
-
-    const onTimeChange = (value: any) => {
-        console.log(value)
-    }
     const cardOnClick = useCallback((e: any)=> {
         console.log("taskId:", task.id)
         navigate(`/task_${id}`,{state: task.id});
     },[id, navigate, task]);
 
+    console.log("description:", description)
     return (
-            <EventCardCon
-            // onClick={}
-                cover={coverImg(frontCoverImage)}
-                hoverable
-                bodyStyle = {defaultbodyStyle}
-                onClick = {cardOnClick}
-                actions={ 
-                    [            
-                    <Popover content={ LocationContent }>
-                        <EnvironmentFilled key = "address"/>
-                        <CardTextSpan>{ cityText }</CardTextSpan>
-                    </Popover>,
-                    <Popover content={ TimeContent }>
-                        <ClockCircleFilled key="time"  />    
-                        <CardTextSpan>{ startTimeText }</CardTextSpan>
-                    </Popover>
-                ]
-            }
-                // onTabChange = { onTabChange }
-                title = {title}
-            >
-                <ContentRow>
-                    <ContentCol span={24}>
-                        <CardTags tags = {keyWords}/>
-                        {/* <Avatar src="https://joeschmoe.io/api/v1/random" /> */}
-                    </ContentCol>
-                </ContentRow>
-                <ContentRow>
-                    <ContentCol span={24}>
-                        <MetaCon
-                            avatar={<Avatar src= {avartaSrc} />}
-                            description= { description.length> maxDescription ?`${description.slice(0, maxDescription)}...`:description}
-                        />
-                    </ContentCol>
-                </ContentRow>    
-            </EventCardCon>
+        <EventCardCon
+            cover={coverImg(frontCoverImage, cardOnClick)}
+            bodyStyle = {defaultbodyStyle}
+            // onClick = {cardOnClick}
+            actions={ 
+                [            
+                <Popover content={ LocationContent }>
+                    <EnvironmentFilled key = "address"/>
+                    <CardTextSpan>{ cityText }</CardTextSpan>
+                </Popover>,
+                <Popover content={ TimeContent }>
+                    <ClockCircleFilled key="time"  />    
+                    <CardTextSpan>{ startTimeText }</CardTextSpan>
+                </Popover>
+            ]
+        }
+            // onTabChange = { onTabChange }
+            title = {title}
+        >
+            <ContentRow>
+                <ContentCol span={24}>
+                    <CardTags tags = {keyWords}/>
+                </ContentCol>
+            </ContentRow>
+            <ContentRow>
+                <ContentCol span={24}>
+                    <MetaCon
+                        avatar={<Avatar src= {avartaSrc} />}
+                        description = {description}
+                    />
+                </ContentCol>
+            </ContentRow>    
+        </EventCardCon>
     )
 }

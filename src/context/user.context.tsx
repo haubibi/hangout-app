@@ -2,7 +2,7 @@ import { createContext, FC , useState, useEffect} from "react";
 import { IUser } from "../interfaces/user.interface";
 import React, {Dispatch} from 'react';
 import { GETUSER } from "../utils/graphql/query.utils";
-import getUserById from '../../functions/src/operateDatabaseFunctions/getUserById';
+import getUserById from '../../functions/src/utils/getUserById';
 import { 
     useQuery,
     NetworkStatus,
@@ -50,7 +50,7 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     console.log('userUid:',userUid);
     console.log('currentUser:',currentUser);
     console.log('data:',data);
-    // const [addUser] = useMutation(ADDUSER);
+    // const [addUser] = useMutation(ADD_USER);
 
     useEffect(()=>{
         //when refetch

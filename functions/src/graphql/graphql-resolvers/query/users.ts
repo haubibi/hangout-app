@@ -1,4 +1,4 @@
-import getUsers from "../../../operateDatabaseFunctions/getUsers";
+import getUsers from "../../../utils/getUsers";
 
 const queryUsers = async () =>{
   return getUsers();

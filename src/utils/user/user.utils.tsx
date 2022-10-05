@@ -5,15 +5,12 @@ export const createBaseUser = (userInput: IUserInput): IUser => {
         ...userInput,
         friendsList: [],
         avatarImg: null,
-        notifications: []
+        notifications: {
+            taskUpdateNotification: [],
+            participantRequestNotification: [],
+            friendRequestNotification: [],
+        },
     }
 }
 
-
-export const getImageObjWithUrl = (
-    imageObjWithUrlAndRefPath:IImageObjWithUrlAndRefPath
-): IImageObjWithUrl => {
-    const {refPath, ...otherProps} = imageObjWithUrlAndRefPath;
-    return {...otherProps};
-}
 

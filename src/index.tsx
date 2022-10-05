@@ -20,9 +20,6 @@ const client = new ApolloClient({
 });
 
 
-
-
-
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_GEOCODE_KEY!);
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

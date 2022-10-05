@@ -1,11 +1,16 @@
-import React, { FC, 
+import { FC, 
     useEffect, 
     useState, 
-    useMemo 
+    useMemo,
+    useCallback,
+    useContext
 } from 'react';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { ADDTASK } from '../../../utils/graphql/mutation.utils';
+import { 
+    ADD_TASK,
+    DELETE_TASK
+ } from '../../../utils/graphql/mutation.utils';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import {
@@ -14,16 +19,21 @@ import {
     Button,
     Col, 
     Row,
-    Spin
+    Spin,
+    message
 } from 'antd';
 import { 
     TaskFormItemContainer,
     InputNumberCon,
     DatePickerCon,
     TimePickerCon,
-    InputCon
+    InputCon,
+    PopconfirmCon
 } from './task-form-item.styles';
-import { ITask } from '../../../interfaces/task.interface';
+import { 
+    ITask,
+    TaskRefetchType
+} from '../../../interfaces/task.interface';
 import { 
     IImageObjWithUrlAndRefPath,
     ImagesTypeName,
@@ -49,17 +59,19 @@ import { getImagesWithRefPath } from '../../../utils/images/images.utils';
 import { 
     TaskFormItemName,
     taskFormRules,
-    validateFormValues
+    validateFormValues,
+    disabledDate
  } from '../../../validators/taskForm.validate';
 
 import { getUpdatedTask } from '../../../utils/task/task.utils';
-
+import { TaskFormUserTypeEnum } from '../../../routers/taskFormPage/task-form-page.component';
 import './task.less';
+import { UserContext } from '../../../context/user.context';
+
+
 const { TextArea } = Input;
 
-interface TaskFormItemProps {
-    task: ITask
-}
+
 
 const titleFormProps = {
     label: "Event title",
@@ -139,8 +151,6 @@ const googleSearchFormProps = {
                             
 }
 
-
-
 const openFormitemProps = {
     name:TaskFormItemName.open,
     label:'Event open',
@@ -175,17 +185,32 @@ const subbmitButtonFormitemProps = {
 const maxKeyWords = 3;
 
 
+interface TaskFormItemProps {
+    task: ITask;
+    isNewTaskForm: boolean;
+    refetch: TaskRefetchType<{id:string}>;
+    currentUserType: TaskFormUserTypeEnum;
+    currentUserTypeCheck: () => void;
+}
+
 export const TaskFormItem:FC<TaskFormItemProps> = ({
-    task
+    task,
+    isNewTaskForm,
+    refetch,
+    currentUserType,
+    currentUserTypeCheck
 }) =>{
     const [ form ] = useForm();
-    
+    const [ submitButtonDisabled, setSubmitButtonDisabled] = useState<boolean>(false);
+    const [ deleteButtonDisabled, setDeleteButtonDisabled] = useState<boolean>(false);
     const [ detail, setDetail] = useState<Record<string, any>>();
     const [ currentTask, setCurrentTask ] = useState<ITask>(task);
-    const [ addTask ] = useMutation(ADDTASK);
+    const [ addTask ] = useMutation(ADD_TASK);
+    const [ deleteTask ] = useMutation(DELETE_TASK);
     const navigate = useNavigate();
     const taskId = currentTask.id;
-    console.log(currentTask)
+
+
     const FormItemsArr = useMemo(()=>{
         const showImages = currentTask.showImages;
         const frontCoverImage = currentTask.frontCoverImage? [currentTask.frontCoverImage]: [];
@@ -213,9 +238,9 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
         
         ]
     },[currentTask]);
-   
 
 
+    //set the detail of the form
     useEffect(()=>{
         const { 
             id, 
@@ -252,6 +277,30 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
         setDetail(newDetails);
     },[currentTask])
     // console.log(task,detail)
+    const deleteTaskHandle = useCallback(()=>{
+        //set the buttons disabled
+        setSubmitButtonDisabled(true);
+        setDeleteButtonDisabled(true);
+
+        //check current user type
+        currentUserTypeCheck();
+
+        if(currentUserType === TaskFormUserTypeEnum.USER_MATCH){
+            console.log("delete 1111111111111111")
+            deleteTask({
+                variables: {
+                    taskId: taskId
+                }
+            }).then(()=>{
+                message.success(`You have successfully deleted the event!`, 5);
+                navigate(`/`);
+            }).catch(error => {
+                message.error(error, 5);
+                navigate(`/`);
+            })
+        }
+    },[taskId, currentUserTypeCheck, deleteTask, navigate, currentUserType]);
+
 
 
     const onFinishFailed = ({ values, errorFields, outOfDate }: any) => {
@@ -259,15 +308,31 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
     }
    
     const onFinish = async (values: ITaskFormItemDetail) => {
-        console.log(values ,currentTask)
+       
+        //set the buttons disabled
+        setSubmitButtonDisabled(true);
+        setDeleteButtonDisabled(true);
+
+        //check current user type
+        currentUserTypeCheck();
+
+        // console.log(values ,currentTask)
+
+
         let showImages: IImageObjWithUrlAndRefPath[] = currentTask.showImages;
         let frontCoverImage: IImageObjWithUrlAndRefPath | null = currentTask.frontCoverImage;
         
+        //validate the values
         if(!validateFormValues(values, currentTask)){
+            setSubmitButtonDisabled(false);
+            setDeleteButtonDisabled(false);
             return;
         };
         // update show images
-        if(values.showImages.length > 0){
+        if(
+            values.showImages &&
+            values.showImages.length > 0
+        ){
             await updateImages(
                 ImagesTypeName.TASKS,
                 taskId,
@@ -279,11 +344,19 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 await getImagesWithUrlAndRefPath(imagesWithRef).then((showImagesWithRefAndUrl)=>{
                     showImages = showImagesWithRefAndUrl as IImageObjWithUrlAndRefPath[];
                 })
+            }).catch((error)=>{
+                message.error(error.toString(), 3);
+                setSubmitButtonDisabled(false);
+                setDeleteButtonDisabled(false);
+                return;
             });
         }
 
         // update front Image
-        if(values.frontCoverImage.length > 0){
+        if(
+            values.frontCoverImage &&
+            values.frontCoverImage.length > 0
+        ){
             await updateImages(
                 ImagesTypeName.TASKS,
                 taskId,
@@ -297,6 +370,11 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     // console.log( frontCoverImageArr )              
                    frontCoverImage = frontCoverImageArr[0] as IImageObjWithUrlAndRefPath;
                 });
+            }).catch((error)=>{
+                message.error(error.toString(), 3);
+                setSubmitButtonDisabled(false);
+                setDeleteButtonDisabled(false);
+                return;
             });
         }
 
@@ -309,9 +387,20 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
         const newTask = getUpdatedTask(currentTask, formInputDetailWithRefAndUrl);
         // console.log(newTask)
         await addTask({
-                variables:{taskObj: newTask} 
+            variables:{
+                taskObj: newTask,
+                isNewTaskForm
+            } 
         }).then(()=>{
-            navigate('/');
+            refetch({
+                id: taskId
+            }).then(()=>{
+                navigate(`/task_${taskId}`);
+            }).catch((error)=>{
+                message.error(error.toString(), 3);
+                setSubmitButtonDisabled(false);
+                setDeleteButtonDisabled(false);
+            })
         });
 
 
@@ -364,7 +453,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         <Form.Item
                             {...startDateFormProps}
                         >
-                            <DatePickerCon />
+                            <DatePickerCon  disabledDate = {disabledDate}/>
                         </Form.Item>
                         
                     </Col>
@@ -381,7 +470,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         <Form.Item
                            {...endDateFormProps}
                         >
-                            <DatePickerCon />
+                            <DatePickerCon  disabledDate = {disabledDate}/>
                         </Form.Item>
                         
                     </Col>
@@ -416,12 +505,31 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         </Form.Item>
                     </Col>
                 </Row>
+                <Row>
+                    <Col span={24}>
+                        <Form.Item 
+                            {...keyWordsFormProps}
+                        >
+                            <FormTag maxTagsNumber={maxKeyWords} />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
                 <Row>
                     <Col span={24} >                
                         <FormImagesUpload
+                            {...frontCoverFormProp}
+                            showImages = {
+                                currentTask.frontCoverImage? [currentTask.frontCoverImage]:[]
+                            }
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} >                
+                        <FormImagesUpload
                             {...showImagesFormProps}
-                            showImages = {task.showImages}
+                            showImages = {currentTask.showImages || []}
                         />
                     </Col>
                 </Row>
@@ -459,12 +567,37 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 
                 
                 <Row>
-                    <Col span={2} offset = {11}>
-                        <Form.Item >
-                            <Button type="primary" htmlType="submit">
+                    <Col span={12}>
+                        <Form.Item>
+                            <Button 
+                                type="primary" 
+                                htmlType="submit"
+                                disabled = {submitButtonDisabled}
+                            >
                                 Submit
                             </Button>
                         </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                            <PopconfirmCon 
+                                placement="right" 
+                                title={`Are you sure to delete this Event?`} 
+                                onConfirm={ deleteTaskHandle } 
+                                okText="Yes" 
+                                cancelText="No"
+                                disabled = {deleteButtonDisabled}
+                            >
+
+                                <Button 
+                                    type="primary" 
+                                    htmlType="button"
+                                    disabled = {deleteButtonDisabled}
+                                >
+                                    Delete
+                                </Button>
+                            </PopconfirmCon>
                     </Col>
                 </Row>
                 

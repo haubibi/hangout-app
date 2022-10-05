@@ -1,4 +1,4 @@
-import {getFilteredTasks} from "../../../operateDatabaseFunctions/filterTasks";
+import {getFilteredTasks} from "../../../utils/filterTasks";
 import {LatLngLiteral} from "../../../interfaces/google.interface";
 import {IFilterTasks, ITask} from "../../../interfaces/task.interface";
 const queryGetFilteredTasks = async (

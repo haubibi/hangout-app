@@ -4,7 +4,6 @@ import {
     ListContainer,
     ListItem,
     EventCardListCon, 
-    ColContainer 
 } from './event-card-list.styles';
 import { 
     ITask,
@@ -13,7 +12,7 @@ import {
 
 import { OperationVariables } from '@apollo/client';
 const gridStyle = {
-    gutter: 30,
+    gutter: 0,
     xs: 1,
     sm: 1,
     md: 2,

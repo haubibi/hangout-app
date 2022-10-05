@@ -1,44 +1,32 @@
 import {
-    Col,
     List
 } from 'antd';
 import styled from "styled-components";
-import { cardWidth } from '../../../utils/layout-antdesign/layout';
+import { 
+    cardWidth,
+    cardColGap,
+    cardRowGap
+ } from '../../../utils/default-settings/card.setting';
+import { FlexDisplayRowCenter } from '../../../App.styles';
 export const EventCardListCon = styled.div`
 `;
 
-export const ColContainer = styled(Col)`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    min-width: ${cardWidth}px;
-`
+
 export const ListContainer = styled(List)`
-   .ant-spin-container>.ant-row>div>.ant-col{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        padding-top:40px;
-    }
-    .ant-spin-container .ant-row{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+    .ant-spin-nested-loading .ant-spin-container .ant-row {
+        ${FlexDisplayRowCenter}
+        column-gap: ${cardColGap}px;
+        row-gap: ${cardRowGap}px;
         &>div{
-            min-width: ${cardWidth}px;
-            margin-left: 50px;
+            min-width: ${cardWidth}px !important;
         }
     }
-   .ant-list-pagination{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        padding:100px 0px 40px 0px;
-   }
-   max-width: 2000px;
+    max-width: 2000px;
 `
 
 export const ListItem= styled(List.Item)`
+    min-width: ${cardWidth}px;
+    ${FlexDisplayRowCenter}
 `
 
 

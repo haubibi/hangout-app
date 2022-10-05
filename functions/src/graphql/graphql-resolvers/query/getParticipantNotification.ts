@@ -1,7 +1,5 @@
-/* eslint-disable max-len */
-
 import {ParticipantNotification} from "../../../interfaces/notifications.interface";
-import getParticipantNotification from "../../../operateDatabaseFunctions/getParticipantNotification";
+import getParticipantNotification from "../../../utils/getParticipantNotification";
 const queryGetParticipantNotification = async (
     _:any,
     {

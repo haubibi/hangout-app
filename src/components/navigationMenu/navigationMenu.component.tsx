@@ -1,5 +1,4 @@
 import { 
-    FC,
     useState, 
     useContext,
     useEffect
@@ -7,36 +6,25 @@ import {
 import React from "react";
 import { 
     MenuProps,
-    message
  } from 'antd';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
-import { useNavigate } from 'react-router-dom';
+import { 
+    useNavigate,
+    useLocation
+ } from 'react-router-dom';
 import { getUid } from '../../utils/task/task.utils';
 import { PandaIcon } from '../../assets/svgIcon/custom.icon';
 import { UserContext } from '../../context/user.context';
 import { MenuCon } from './navigationMenu.styles';
-import { 
-    GithubFilled, 
-    BellFilled,
+import {
     EnvironmentOutlined,
     PlusSquareFilled,
     LoginOutlined,
     UserOutlined 
 } from '@ant-design/icons';
 import { MenuKey, NavigationContext } from '../../context/navigation.context';
-import Icon from '@ant-design/icons';
 import { UserAvatarBase } from '../user-avatar/user-avatar-base/user-avatar-base.component';
-import { IUser } from '../../interfaces/user.interface';
 import { IImageObjWithUrlAndRefPath } from '../../interfaces/images.interface';
-// export enum MenuKey {
-//     HOME = 'HOME',
-//     ADDEVENT = 'ADDEVENT',
-//     SIGNUP = 'SIGNUP',
-//     LOGIN = 'LOGIN',
-//     SIGNOUT = 'SIGNOUT',
-//     USER = 'USER',
-//     NOTIFICATION = 'NOTIFICATION'
-// }
 
 
 const signUpItem = {
@@ -96,6 +84,7 @@ const NavigationMenu= () => {
     const { currentMenuKey, setCurrentMenuKey } = useContext(NavigationContext)
     const [ items, setItems] = useState(defaultItems);
     const { currentUser } = useContext(UserContext);
+    const { pathname } = useLocation();
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -135,11 +124,11 @@ const NavigationMenu= () => {
                 setCurrentMenuKey(MenuKey.ADDEVENT);
                 break;
             case MenuKey.SIGNUP:
-                navigate(`./signUp`);
+                navigate(`./signUp`,{state: {pathname}});
                 setCurrentMenuKey(MenuKey.SIGNUP);
                 break;
             case MenuKey.LOGIN:
-                navigate(`./logIn`);
+                navigate(`./logIn`,{state: {pathname}});
                 setCurrentMenuKey(MenuKey.LOGIN);
                 break;
             case MenuKey.SEARCHONMAP:
@@ -148,7 +137,6 @@ const NavigationMenu= () => {
                 break;
             case MenuKey.SIGNOUT:
                 signOutUser().then(()=>{
-                    console.log(111)
                     navigate(`./`);
                     setCurrentMenuKey(MenuKey.HOME);
                 });
