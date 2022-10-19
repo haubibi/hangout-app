@@ -20,7 +20,12 @@ export enum UserChildren {
     notifications = "notifications",
     participants = "participants"
 }
-
+export enum NotificationEnum {
+    taskUpdateNotification = "taskUpdateNotification",
+    applicationNotification = "applicationNotification",
+    requestNotification = "requestNotification",
+    friendRequestNotification = "friendRequestNotification",
+}
 export const db = admin.database();
 
 // const graphql = require("./graphql");

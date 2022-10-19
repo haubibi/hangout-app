@@ -104,7 +104,7 @@ export const FormTag: FC<IFormTagprops> = ({
                 );
             }
     
-            const isLongTag = tag.length > 20;
+            const isLongTag = tag.length > 10;
     
             const tagElem = (
                 <TagItem
@@ -119,7 +119,7 @@ export const FormTag: FC<IFormTagprops> = ({
                         e.preventDefault();
                     }}
                 >
-                    {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                    {isLongTag ? `${tag.slice(0, 10)}...` : tag}
                 </span>
                 </TagItem>
             );

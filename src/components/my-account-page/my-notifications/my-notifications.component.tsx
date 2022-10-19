@@ -4,14 +4,8 @@ import { UserContext } from '../../../context/user.context';
 import { MyNotificationsCon } from './my-notifications.styles';
 import {
     FC, 
-    ReactElement
 } from 'react';
-import { NotificationParticipant } from '../../notification-component/notification-participant/notification-participant.component';
-import {
-    SpanCon,
-    ListCon,
-    ListItem,
-} from './my-notifications.styles';
+
 import {
     AddTaskRequestEnum,
     QuitTaskRequestEnum,
@@ -21,7 +15,7 @@ import {
 } from '../../../interfaces/notifications.interface';
 
 import { Spin } from 'antd';
-
+import { Outlet } from 'react-router-dom';
 
 /* eslint-disable max-len */
 // export enum AddTaskRequestEnum {
@@ -47,12 +41,6 @@ import { Spin } from 'antd';
 // }
 
 
-// // eslint-disable-next-line max-len
-// export type NotificationTypes = IPaticipantsNotification;
-
-
-
-
 interface IAccountNotificationProps {
     notifications: NotificationTypes[];
 }
@@ -65,17 +53,8 @@ const MyNotifications = () => {
     if(!currentUser) return <Spin />
     return (
         <MyNotificationsCon>
-            My Notifications
-            {/* {
-                (currentUser.notifications && currentUser.notifications.length > 0) ?
-                <ListCon
-                    dataSource = {currentUser.notifications}
-                    renderItem = {renderNotification}
-                />:
-                <h2>You don't have notifications</h2>
-            }
-             */}
-            {/* <EventCardList /> */}
+            <div>My Notifications</div>
+            <Outlet/>
         </MyNotificationsCon>
     )
 }

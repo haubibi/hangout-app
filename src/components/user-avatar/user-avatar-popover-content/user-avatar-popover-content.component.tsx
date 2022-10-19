@@ -14,7 +14,8 @@ export const UserAvatarPopoverContent:FC<IUserAvatarPopoverContentProps> = ({
 }) => {
     return(
         <PopoverContentCon>
-            <PopoverContentItem>{`Sex: ${partialUserProps.sex}`}</PopoverContentItem>
+            <PopoverContentItem>{`sex: ${partialUserProps.sex}`}</PopoverContentItem>
+            <PopoverContentItem>{`description: ${partialUserProps.description? partialUserProps.description: `no description`}`}</PopoverContentItem>
         </PopoverContentCon>
     )
 }

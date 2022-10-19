@@ -35,6 +35,8 @@ const typeDefs = gql`
         participantUid: ID
         organizerUid: ID
         read: Boolean
+        name: String
+        time: String
     }
     input TaskUpdateNotificationInput {
         type: String
@@ -43,27 +45,48 @@ const typeDefs = gql`
         participantUid: ID
         organizerUid: ID
         read: Boolean
-        sendUser: ID
-        receiveUser: ID
+        name: String
+        time: String
     }
 
 
-    type ParticipantNotificationType {
+    type ParticipantRequestNotificationType {
         type: String
         notificationType: String
         taskId: ID
         participantUid: ID
         organizerUid: ID
         read: Boolean
+        time: String
     }
-    input ParticipantNotificationInput {
+    input ParticipantRequestNotificationInput {
         type: String
         notificationType: String
         taskId: ID
         participantUid: ID
         organizerUid: ID
         read: Boolean
+        time: String
     }
+    type ParticipantApplicationNotificationType {
+        type: String
+        notificationType: String
+        taskId: ID
+        participantUid: ID
+        organizerUid: ID
+        read: Boolean
+        time: String
+    }
+    input ParticipantApplicationNotificationInput {
+        type: String
+        notificationType: String
+        taskId: ID
+        participantUid: ID
+        organizerUid: ID
+        read: Boolean
+        time: String
+    }
+ 
 
     type FriendNotificationType {
         type: String
@@ -71,6 +94,7 @@ const typeDefs = gql`
         read: Boolean
         senderUid: ID
         receiverUid: ID
+        time: String
     }
     input FriendNotificationInput {
         type: String
@@ -78,18 +102,21 @@ const typeDefs = gql`
         read: Boolean
         senderUid: ID
         receiverUid: ID
+        time: String
     }
 
 
     type NotificationType {
-        taskUpdateNotification: TaskUpdateNotificationType
-        participantRequestNotification: ParticipantNotificationType
-        friendRequestNotification: FriendNotificationType
+        taskUpdateNotification: [TaskUpdateNotificationType]
+        requestNotification: [ParticipantRequestNotificationType]
+        applicationNotification: [ParticipantApplicationNotificationType]
+        friendRequestNotification: [FriendNotificationType]
     }
     input NotificationInput {
-        taskUpdateNotification: TaskUpdateNotificationInput
-        participantRequestNotification: ParticipantNotificationInput
-        friendRequestNotification: FriendNotificationInput
+        taskUpdateNotification: [TaskUpdateNotificationInput]
+        requestNotification: [ParticipantRequestNotificationInput]
+        applicationNotification: [ParticipantApplicationNotificationInput]
+        friendRequestNotification: [FriendNotificationInput]
     }
 
     type User {
@@ -100,6 +127,7 @@ const typeDefs = gql`
         avatarImg: Image
         friendsList: [ID]
         notifications: NotificationType
+        description: String
     }
     input UserInput {
         uid: ID!
@@ -109,8 +137,18 @@ const typeDefs = gql`
         avatarImg: ImageInput
         friendsList: [ID]
         notifications: NotificationInput
+        description: String
     }
 
+    input UserUpdateInput {
+        displayName: String
+        email: String
+        sex: String
+        avatarImg: ImageInput
+        friendsList: [ID]
+        notifications: NotificationInput
+        description: String
+    }
 
     type Paticipant {
         participantUid: ID
@@ -188,6 +226,7 @@ const typeDefs = gql`
 
     type Task {
         id: ID
+        category: String
         title: String
         organizer: ID
         participantsNumber: Int
@@ -212,6 +251,7 @@ const typeDefs = gql`
     input TaskInput {
         id: ID
         title: String
+        category: String
         organizer: ID
         participantsNumber: Int
         description: String
@@ -249,7 +289,6 @@ const typeDefs = gql`
     type Query {
         users: [User]
         tasks: [Task]
-        getSearchTasks(input: String, taskStartIndex: Int, amout: Int): SearchTasksReturnType
         getTaskById(id: ID): Task
         getUserById(uid: ID): User
         getFilteredTasks(currentLatLng: LatLngLiteralInput, taskFilter: TaskFilterInput): [Task]
@@ -258,11 +297,15 @@ const typeDefs = gql`
     type Mutation {
         addTask(taskObj: TaskInput, isNewTaskForm: Boolean): Task
         addUser(userInput: UserInput): User
+        updateUserInfo(userUid: String, userInput: UserUpdateInput): User
         addParticipant(participantUid: ID, taskId: ID, addTaskRequestType: String): Paticipant
         quitParticipant(participantUid: ID, taskId: ID, quitTaskRequestType: String): Paticipant
         deleteTask(taskId: ID): Task
-        updateParticipantNotifications(userUid: String, notifications: [ParticipantNotificationInput]): [ParticipantNotificationType]
+        updateRequestNotifications(userUid: String, notifications: [ParticipantRequestNotificationInput]): [ParticipantRequestNotificationType]
+        updateApplicationtNotifications(userUid: String, notifications: [ParticipantApplicationNotificationInput]): [ParticipantApplicationNotificationType]
         updateTaskUpdateNotifications(userUid: String, notifications: [TaskUpdateNotificationInput]): [TaskUpdateNotificationType]
+        deleteApplicationNotification(participantUid: ID, taskId: ID, organizerUid: ID): [ParticipantApplicationNotificationType]
+        deleteEventUpdateNotification(participantUid: ID, taskId: ID, organizerUid: ID): [TaskUpdateNotificationType]
      }  
 `;
 

@@ -7,13 +7,14 @@ import {
   UpdateTaskEnum,
   TaskUpdateNotificationType
  } from '../interfaces/notifications.interface';
- import getParticipantsUids from "./getParticipantsUids";
+import getParticipantsUids from "./getParticipantsUids";
+const moment = require('moment');
 
 const addTask = async (
   taskObj:ITask,
   isNewTaskForm: boolean
 ):Promise<ITask> => {
-  // console.log("task:",taskObj,"111111111111111111")
+  console.log("isNewTaskForm:",isNewTaskForm,"111111111111111111")
   const task = {
     ...baseTask,
     ...taskObj,
@@ -21,12 +22,15 @@ const addTask = async (
   const taskRef = db.ref(`${Collection.tasks}/${taskObj.id}`);
   // const taskRef = tasksRef.child(taskObj.id);
   await taskRef.set(task).then(async()=>{
-    if(isNewTaskForm) {
+    if(!isNewTaskForm) {
       const participants = task.participants || [];
       const participantsUids = getParticipantsUids(participants);
 
+
+      console.log("participantsUids:", participantsUids)
       for(const participantsUid of participantsUids) {
         const taskUpdateNotification:TaskUpdateNotificationType = {
+          time: moment().format(),
           notificationType: NotificationTypeEnum.TASK,
           type: UpdateTaskEnum.TASK_UPDATE,
           taskId: taskObj.id,

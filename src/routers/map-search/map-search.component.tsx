@@ -3,11 +3,7 @@ import {
     MapSearchLayout,
     MapSearchContent,
     MapSearchSider,
-    // PlacesCon,
-    // SearchPageGoogleMapsCon,
     ContendDiv,
-    SearchButton,
-    RowMap,
     RowSearch,
     ColSearch,
     RowEventCard,
@@ -16,8 +12,8 @@ import {
  } from './map-search.styles';
 import { useLoadScript } from '@react-google-maps/api';
 import { googleMapLibWithPlaces } from '../../utils/googleMap/googleMap.utils'
-import { message, Spin } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+
 import Places from '../../components/places-auto-complete/places-auto-complete.component';
 import SearchPageGoogleMaps from '../../components/search-page-googlemaps/search-page-googlemaps.conponent';
 import { 
@@ -32,14 +28,12 @@ import { getCurrentCoords, markerCreator, markersCreator } from '../../utils/goo
 import { IComboboxContainer } from '../../components/places-auto-complete/places-auto-complete.component';
 import { FilterBar } from '../../components/filter-component/filter-bar/filter-bar.components';
 import { 
-    IFilterTasks,
-    ParticipantsRange,
-    DistanceRange
+    IFilterTasks
  } from '../../interfaces/task.interface';
 import { useQuery } from '@apollo/client'; 
-import { GETAllTASKS } from '../../utils/graphql/query.utils';
-import { searchFilterValidator } from '../../validators/search-filter.valitator';
-import { ITask } from '../../../functions/src/interfaces/task.interface';
+import { GET_All_TASKS } from '../../utils/graphql/query.utils';
+import { TasksContext } from '../../context/tasks.context';
+import { ITask } from '../../interfaces/task.interface';
 import { EventCard } from '../../components/event-card-component/event-card/event-card.component';
 import { NavigationContext, MenuKey } from '../../context/navigation.context';
 import { getFilteredTasks } from '../../utils/task/task.filter';
@@ -84,7 +78,9 @@ const googleMapSettings = {
 //filter bar
 const initFilterValue: IFilterTasks = {
     participantsRange: [1,50],
-    distanceRange: [0,1]
+    distanceRange: [0,1],
+    dateRange: [null, null],
+    category: 'any'
 }
 
 export const checkIfTaskExist = (id: string, tasks: ITask[]):boolean => {
@@ -100,24 +96,20 @@ const MapSearch = () => {
     const [ filteredTasks, setFilteredTasks ] = useState<ITask[]>([]);
     const [ clickedTask, setClickedTask ] = useState<ITask>(null);
     const [ submitClick, setSubmitClick ] = useState<boolean>(false);
-    const { data, loading, error} = useQuery(GETAllTASKS);
+    const { allTasks, refetchAllTasks, fetchAllTasksLoading, fetchAllTasksError } = useContext(TasksContext);
+    // const { data, loading, error} = useQuery(GET_All_TASKS);
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
         libraries: googleMapLibWithPlaces,
     });
-    // const {data, error, loading} = useQuery(GETFILTEREDTASKS,{
-    //     variables: {
-    //         currentLatLng: (currentLatLngAddress && currentLatLngAddress.latLng),
-    //         taskFilter: filterValue
-    //     }
-    // });
 
-    console.log(filterValue)
-    console.log("currentLatLngAddress: ", currentLatLngAddress && currentLatLngAddress.latLng)
-    console.log('data:',data)
-    console.log('error:',error)
-    console.log('loading:',loading)
+
+    // console.log(filterValue)
+    // console.log("currentLatLngAddress: ", currentLatLngAddress && currentLatLngAddress.latLng)
+    // console.log('allTasks:',allTasks)
+    // console.log('error:',fetchAllTasksError)
+    // console.log('loading:',fetchAllTasksLoading)
 
 
     //set the menu key
@@ -125,6 +117,13 @@ const MapSearch = () => {
         setCurrentMenuKey(MenuKey.SEARCHONMAP);
     },[setCurrentMenuKey])
    
+
+    //refetch all the tasks every time
+    useEffect(()=> {
+        refetchAllTasks();
+    },[refetchAllTasks]);
+
+
     //get current location
     useEffect(()=>{
         const getLatLng = async() => {
@@ -141,20 +140,21 @@ const MapSearch = () => {
 
     //get all the tasks
     useEffect(()=>{
-        if(data && data.tasks) {
-            setTasks(data.tasks);
+        if(allTasks) {
+            setTasks(allTasks);
         }
-    },[data])
+    },[allTasks])
 
     //get filtered tasks
     useEffect(()=>{
        if(tasks && currentLatLngAddress?.latLng && filterValue && submitClick) {
-            const filteredTasks = getFilteredTasks(
-                currentLatLngAddress.latLng,
-                filterValue,
-                tasks
-            );
-
+            const filteredTasks = getFilteredTasks({
+                tasks,
+                taskFilter: filterValue,
+                currentLatLng: currentLatLngAddress.latLng,
+                IfFilterOutOfDateTasks: true,
+                ifFilterHiddenTasks:true
+            });
             setFilteredTasks(filteredTasks);
        }
     },[tasks, currentLatLngAddress, filterValue, submitClick])
@@ -169,20 +169,6 @@ const MapSearch = () => {
         }
     },[clickedTask, filteredTasks])
 
-    // //get filtered tasks
-    // useEffect(() =>{
-    //     if(data && data.tasks && submitClick) {
-    //         if(clickedTask) {
-    //             const taskExist = checkIfTaskExist(clickedTask.id, data.getFilteredTasks);
-    //             if(!taskExist) setClickedTask(null);
-    //         }
-    //         setFilteredTasks(data.getFilteredTasks);
-    //         setSubmitClick(false);
-    //     }
-    //     console.log(data)
-    // },[data, setFilteredTasks, submitClick, setSubmitClick, clickedTask]);
-
-
 
 
 
@@ -196,6 +182,7 @@ const MapSearch = () => {
 
     //filter bar get the filter object   
     const filterBarOnChange = useCallback((value: IFilterTasks)=>{
+        // console.log(value)
         //viladate
         setFilterValue(value);
         setSubmitClick(true);
@@ -203,21 +190,15 @@ const MapSearch = () => {
 
  
     const handlePlaceInputChange = useCallback((e: ILatLngAndAddress):void => {
+        // console.log('place:' , e);
         setCurrentLatLngAddres(e);
         setSubmitClick(true);
-        console.log('place:' , e);
     },[setCurrentLatLngAddres]);
 
 
     const onMarkerChangeHandle = useCallback((task: ITask):void => {
         setClickedTask(task);
     },[setClickedTask]);
-
-    const searchOnClick = useCallback(():void => {
-        setSubmitClick(true);
-    },[]);
-
-
 
 
     if(!currentLatLngAddress || !isLoaded) return <Spin />;

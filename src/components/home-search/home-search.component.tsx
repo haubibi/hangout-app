@@ -1,31 +1,49 @@
 import { Input } from 'antd';
 import { 
     FC,
-    ChangeEvent
+} from 'react';
+// import { CategoryFilter } from '../filter-component/category-filter/category-filter.component';
+import { 
+    HomeSearchContainer,
+    CategoryFilterContainer
+ } from './home-search.styles';
+import { 
+    useCallback,
+    useState
  } from 'react';
-import { HomeSearchContainer } from './home-search.styles';
+import { EventCategory } from '../../interfaces/task.interface';
 const { Search } = Input;
 
 
 interface IHomeSearchProps {
-    onSearch: (value: string)=>void;
+    onSearch: (value: string, category: EventCategory)=>void;
     loading: boolean;
+    initialCategory:EventCategory;
 }
 
 export const HomeSearch:FC<IHomeSearchProps> = ({
     onSearch,
-    loading
+    loading,
+    initialCategory
 }) =>{
+    const [category, setCategory] = useState<EventCategory>(initialCategory);
+
+    const onCategoryChangeHandle = useCallback((value: EventCategory)=>{
+        setCategory(value);
+    },[]);
+    const onInputChangeHandle = useCallback((value: string)=>{
+        onSearch(value, category);
+    },[onSearch, category]);
+
     return(
         <HomeSearchContainer>
-            <Search 
-                placeholder="input search text" 
+            <Search
+                addonBefore = {<CategoryFilterContainer title = {false} value = {category} onChange={onCategoryChangeHandle}/>}
+                placeholder="Search for keywords" 
                 enterButton="Search" 
                 size="large"
-                onSearch={onSearch}
+                onSearch={onInputChangeHandle}
                 loading = {loading}
-                // onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
-                // onSubmit = {(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
             />
             {/* ChangeEventHandler<HTMLInputElement></HTMLInputElement> */}
         </HomeSearchContainer>

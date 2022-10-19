@@ -7,26 +7,15 @@ const baseUser:IUser = {
   sex: UserSexEnum.MALE,
   avatarImg: null,
   friendsList: [],
+  description: '',
   notifications: {
     taskUpdateNotification: [],
-    participantRequestNotification: [],
+    applicationNotification: [],
+    requestNotification: [],
     friendRequestNotification: [],
-  },
+},
 };
 
 
 
 export default baseUser;
-
-// uid: string;
-//     displayName: string;
-//     email: string;
-//     sex: 'male' | 'female';
-//     avatarImg: IImageObjWithUrlAndRefPath | null;
-//     friendsList: IUser[];
-//     notifications: NotificationTypes;
-// export interface NotificationTypes {
-//     taskUpdateNotification: TaskUpdateNotificationType[],
-//     participantRequestNotification: PaticipantRequestNotificationType[],
-//     friendRequestNotification: frendRequestNotificationType[]
-// };

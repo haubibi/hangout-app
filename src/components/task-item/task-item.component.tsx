@@ -18,7 +18,6 @@ import {
 } from "../../utils/graphql/mutation.utils";
 import { 
     Button,
-    Spin
  } from "antd";
 
 import { 
@@ -26,7 +25,6 @@ import {
     TitleCon,
     DescriptionCon,
     RowCon,
-    BaseCol,
     CenterAlignCol,
  } from './task-item.styles';
 import { UserContext } from "../../context/user.context";
@@ -35,7 +33,7 @@ import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { 
     IPaticipant,
-    checkIfParticipantsMax,
+    // checkIfParticipantsMax,
 } from '../../interfaces/participate.interface';
 
 interface ITaskItemProps{
@@ -63,14 +61,37 @@ const getCurretUserType = (
     //current user is orgnizer
     if(orginizerUid === currentUserUid) return CurrentTaskUserTypeEnum.ORGNIZER;
    
+     //current user is not confirmed
+     const inConsiderationParticipantsIndex = taskParticipants.findIndex(participant => 
+        participant.participantUid === currentUserUid && 
+        !participant.isConfirmed &&
+        !participant.agreed &&
+        participant.requestType === AddTaskRequestEnum.PARTICIPANT_APPLY_REQUEST
 
-    //current user is the agreed participants
-    const agreedParticipantIndex = taskParticipants.findIndex(participant => participant.participantUid === currentUserUid && participant.agreed && participant.isConfirmed);
+    );
+    if(inConsiderationParticipantsIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_NOT_CONFIRMED;
+
+
+    //current user is the attendee
+    const agreedParticipantIndex = taskParticipants.findIndex(participant => 
+        participant.participantUid === currentUserUid && 
+        participant.agreed && 
+        participant.isConfirmed &&
+        participant.requestType === AddTaskRequestEnum.ORGANIZER_ARGEE_REQUEST
+    );
     if(agreedParticipantIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_AGREED;
 
-    //current user is not confirmed
-    const inConsiderationParticipantsIndex = taskParticipants.findIndex(participant => participant.participantUid === currentUserUid && !participant.isConfirmed);
-    if(inConsiderationParticipantsIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_NOT_CONFIRMED;
+
+    //current user is rejected
+    const rejectParticipantIndex = taskParticipants.findIndex(participant => 
+        participant.participantUid === currentUserUid && 
+        !participant.agreed && 
+        participant.isConfirmed &&
+        participant.requestType === AddTaskRequestEnum.ORGANIZER_REFUSE_REQUEST
+    );
+    if(rejectParticipantIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_REJECT;
+
+
 
     return CurrentTaskUserTypeEnum.GUEST_LOGIN;
 };
@@ -183,75 +204,79 @@ export const TaskItem:FC<ITaskItemProps> = ({
             </RowCon>:
             undefined
         }
-        
+
+
+
+
         {
-            userType === CurrentTaskUserTypeEnum.GUEST_LOGIN?
-            <RowCon>
-                <CenterAlignCol span={24}>
-                    <Button 
-                        type="primary" 
-                        htmlType="button"
-                        disabled = {userApplyIsLoading}
-                        onClick={ (e: any) => {applyOnClick();} }
-                    >
-                        Attend
-                    </Button>
-                </CenterAlignCol>
-            </RowCon>:
-            undefined
+            (()=>{
+                switch(userType){
+                    case CurrentTaskUserTypeEnum.GUEST_LOGIN:
+                    case CurrentTaskUserTypeEnum.PARTICIPANT_REJECT:
+                        return(
+                            <RowCon>
+                                <CenterAlignCol span={24}>
+                                    <Button 
+                                        type="primary" 
+                                        htmlType="button"
+                                        disabled = {userApplyIsLoading}
+                                        onClick={ (e: any) => {applyOnClick();} }
+                                    >
+                                        Attend
+                                    </Button>
+                                </CenterAlignCol>
+                            </RowCon>
+                        );
+                    case CurrentTaskUserTypeEnum.PARTICIPANT_NOT_CONFIRMED:
+                        return(
+                            <RowCon>
+                                <CenterAlignCol span={24}>
+                                    <h2>You have submitted the application!</h2>
+                                </CenterAlignCol>
+                            </RowCon>
+                        );
+                    case CurrentTaskUserTypeEnum.GUEST_WITHOUT_LOGIN:
+                        return(
+                            <RowCon>
+                                <CenterAlignCol span={24}>
+                                    <h2>Please log in first!</h2>
+                                </CenterAlignCol>
+                            </RowCon>
+                        );
+                    case CurrentTaskUserTypeEnum.PARTICIPANT_AGREED:
+                        return(
+                            <RowCon>
+                                <CenterAlignCol span={24}>
+                                    <Button 
+                                        type="primary" 
+                                        htmlType="button"
+                                        disabled = {userQuitIsLoading}
+                                        onClick={ (e: any) => {quitOnClick();} }
+                                    >
+                                        Quit
+                                    </Button>
+                                </CenterAlignCol>
+                            </RowCon>
+                        );
+                    case CurrentTaskUserTypeEnum.ORGNIZER:
+                        return(
+                            <RowCon>
+                                <CenterAlignCol span={24}>
+                                    <Button 
+                                        type="primary" 
+                                        htmlType="button"
+                                        disabled = {userQuitIsLoading}
+                                        onClick={ (e: any) => {modifyFormOnClick();} }
+                                    >
+                                        Modify
+                                    </Button>
+                                </CenterAlignCol>
+                            </RowCon>
+                        );
+                }
+
+            })()
         }
-        {
-            userType === CurrentTaskUserTypeEnum.PARTICIPANT_NOT_CONFIRMED?
-            <RowCon>
-                <CenterAlignCol span={24}>
-                    <h2>You have submitted the application!</h2>
-                </CenterAlignCol>
-            </RowCon>:
-            undefined
-        }
-        {
-            userType === CurrentTaskUserTypeEnum.GUEST_WITHOUT_LOGIN?
-            <RowCon>
-                <CenterAlignCol span={24}>
-                    <h2>Please log in first!</h2>
-                </CenterAlignCol>
-            </RowCon>:
-            undefined
-        }
-        {
-            userType === CurrentTaskUserTypeEnum.PARTICIPANT_AGREED?
-            <RowCon>
-                <CenterAlignCol span={24}>
-                    <Button 
-                        type="primary" 
-                        htmlType="button"
-                        disabled = {userQuitIsLoading}
-                        onClick={ (e: any) => {quitOnClick();} }
-                    >
-                        Quit
-                    </Button>
-                </CenterAlignCol>
-            </RowCon>:
-            undefined
-        }
-        {
-            userType === CurrentTaskUserTypeEnum.ORGNIZER?
-            <RowCon>
-                <CenterAlignCol span={24}>
-                    <Button 
-                        type="primary" 
-                        htmlType="button"
-                        disabled = {userQuitIsLoading}
-                        onClick={ (e: any) => {modifyFormOnClick();} }
-                    >
-                        Modify
-                    </Button>
-                </CenterAlignCol>
-            </RowCon>:
-            undefined
-        }
-        
-        
     </TaskitemContainer>
    )
 }

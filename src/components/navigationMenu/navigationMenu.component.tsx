@@ -22,7 +22,11 @@ import {
     LoginOutlined,
     UserOutlined 
 } from '@ant-design/icons';
-import { MenuKey, NavigationContext } from '../../context/navigation.context';
+import { 
+    MenuKey, 
+    NavigationContext,
+    MyAccountMenuKey
+ } from '../../context/navigation.context';
 import { UserAvatarBase } from '../user-avatar/user-avatar-base/user-avatar-base.component';
 import { IImageObjWithUrlAndRefPath } from '../../interfaces/images.interface';
 
@@ -63,8 +67,8 @@ const userItem = (disabledKeys: MenuKey[], userAvatarImg: IImageObjWithUrlAndRef
     }
 }
 
-const getSelectedkey = (currentKey: MenuKey | ''):(MenuKey| '')[] => {
-    return currentKey === MenuKey.ADDEVENT? ['']: [currentKey];
+const getSelectedkey = (currentKey: MenuKey | MyAccountMenuKey | undefined):(MenuKey | MyAccountMenuKey | undefined)[] => {
+    return currentKey === MenuKey.ADDEVENT? [undefined]: [currentKey];
 }
 
 
@@ -93,7 +97,6 @@ const NavigationMenu= () => {
         if(!currentUser){
             setItems([...defaultItems, signUpItem, logInItem]);
         } else {
-            console.log(currentMenuKey ===  MenuKey.MYACCOUNT)
             if(
                 (currentMenuKey === MenuKey.ADDEVENT) ||
                 (currentMenuKey === MenuKey.MYACCOUNT)

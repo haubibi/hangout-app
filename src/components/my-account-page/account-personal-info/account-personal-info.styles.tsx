@@ -9,6 +9,7 @@ import {
 } from 'antd';
 
 
+const {TextArea} = Input;
 
 export const AccountPersonalInfoCon = styled.div`
     width: 100%;
@@ -42,5 +43,11 @@ export const FormSubmitButtonItem = styled(Form.Item)`
     
 `
 export const FormSubmitButton = styled(Button)`
+    
+`
+export const FormDescriptionTextArea = styled(Form.Item)`
+    
+`
+export const DescriptionTextItem = styled(TextArea)`
     
 `

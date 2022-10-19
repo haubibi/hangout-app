@@ -5,7 +5,8 @@ import {
     InputNumber,
     DatePicker,
     TimePicker,
-    Popconfirm
+    Popconfirm,
+    Select
 } from 'antd';
 // $ruler: 16px;
 // $color-red: #AE1100;
@@ -17,6 +18,8 @@ export const ruler = 16;
 export const colorShadow = '#BABECC';
 export const colorWhite = '#FFF';
 
+
+const {Option} = Select;
 
 
 
@@ -33,7 +36,6 @@ export const TaskFormItemContainer = styled.div`
     width:100%;
     max-width: 800px;
     min-width: 400px;
-    /* background-color: aliceblue; */
     display: flex;
     flex-direction: column;
 `;
@@ -60,4 +62,8 @@ export const TimePickerCon = styled(TimePicker)`
     ${FlexStart}
 `;
 export const PopconfirmCon = styled(Popconfirm)`
+`;
+export const CategorySelect = styled(Select)`
+`;
+export const CategoryOption = styled(Option)`
 `;

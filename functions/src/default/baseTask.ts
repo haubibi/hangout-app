@@ -25,6 +25,7 @@ const baseTask: ITask = {
   frontCoverImage: null,
   keyWords: [],
   rate: [],
+  category: 'any'
 };
 export default baseTask;
 

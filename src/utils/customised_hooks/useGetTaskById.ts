@@ -10,7 +10,7 @@ import {
     useQuery,
     ApolloError
  } from '@apollo/client';
-import { GETTASKBYID } from "../graphql/query.utils";
+import { GET_TASK_BY_ID } from "../graphql/query.utils";
 import { baseTaskCreator } from "../task/task.utils";
 
 
@@ -36,7 +36,7 @@ export const useGetTaskFormById = (
     const [ newTaskForm, setNewTaskForm] = useState<ITask | null>(null);
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
     const [ taskFormError, setTaskFormError ] = useState<ApolloError | TaskFormErrorEnum>();
-    const { data, loading, error, refetch} = useQuery(GETTASKBYID,{
+    const { data, loading, error, refetch} = useQuery(GET_TASK_BY_ID,{
         variables: {
             id: taskId
         }

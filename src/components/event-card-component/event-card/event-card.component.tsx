@@ -1,5 +1,9 @@
 import { 
-    FC
+    FC,
+    useCallback,
+    useEffect,
+    useState,
+    useMemo
 } from 'react';
 import { 
     EnvironmentFilled ,
@@ -7,7 +11,8 @@ import {
 } from '@ant-design/icons';
 import { 
     Avatar,
-    Popover
+    Popover,
+    Tooltip
  } from 'antd';
 import { 
     EventCardCon,
@@ -15,20 +20,29 @@ import {
     ContentCol,
     PopoverContentDiv,
     MetaCon,
-    CardTextSpan
+    CardTextSpan,
+    AttendeesSpan,
+    AttendeeDateRow,
+    AttendeeCol,
+    DateStatusCol
 } from "./event-card.styles";
 
 import { ITask } from '../../../interfaces/task.interface';
-import { IImageObjWithUrl } from '../../../interfaces/images.interface';
 import { useNavigate } from 'react-router-dom';
 import { 
     getMomentFullTimeString,
-    getCurrentTimeIsBeforeComparedTime,
     getMomentByDateAndTimeString,
-    cardDateFormat
+    cardDateFormat,
+    getCurrentMoment
 } from '../../../utils/date/date.utils';
+import { useQuery } from '@apollo/client'
 import { CardTags } from '../card-tags/card-tags.component';
-import { useCallback } from 'react';
+import { CardFrontCover } from '../card-cover-img/card-cover-img.component';
+import { UserAvatarBase } from '../../user-avatar/user-avatar-base/user-avatar-base.component';
+import { IUser } from '../../../interfaces/user.interface';
+import { GET_USER } from '../../../utils/graphql/query.utils';
+import { getNumberofParticipants } from '../../../interfaces/participate.interface';
+import { ExpiredDateIcon } from '../../../assets/svgIcon/custom.icon';
 
 export interface IEventCardProps {
     task: ITask;
@@ -38,19 +52,6 @@ const defaultbodyStyle = {
     height: '150px'
 }
 
-const defaultSrc = require('../../../assets/avatar/wolf.png')
-const coverImg = (
-    coverImg: IImageObjWithUrl | null,
-    onClick: (e: any) => void
-) => {
-    return <img 
-                alt= {coverImg?coverImg.name:'wirewolf'} 
-                src= {coverImg?coverImg.url:defaultSrc} 
-                height = "200px"
-                onClick={ onClick }
-                style = {{cursor: "pointer"}}
-            />;
-}
 
 const getCityText = (address: string) => {
     let cityString:string;  
@@ -68,32 +69,28 @@ const getCityText = (address: string) => {
 
 
 
-const getSrc = (taskId: string) => {
-    switch(taskId) {
-        case 'ZvdHBdjwPNTKAQOa5S2Mo65bzU73_003874030697579145':
-            return require('../../../assets/avatar/wcy.jpg');
-        case 'ZvdHBdjwPNTKAQOa5S2Mo65bzU73_06192617512878347':
-            return require('../../../assets/avatar/zuo.png');
-            default:
-                return "https://joeschmoe.io/api/v1/random"; 
-    }
-}
-
-
-
-
-
 export const EventCard:FC<IEventCardProps> = ({
     task
 }) =>{
     const navigate = useNavigate();
-    const { frontCoverImage, title, description, id, keyWords, startTime, startDate, endTime, endDate, latLngAndAddress, open} = task;
-    const avartaSrc = getSrc(id);
-    const startTimeString = getMomentFullTimeString(startDate!, startTime!);
-    const endimeString = getMomentFullTimeString(endDate!, endTime!);
-    const cityText = getCityText(latLngAndAddress.address); 
-    const startTimeText = getMomentByDateAndTimeString(startDate!, startTime!).format(cardDateFormat);
-    // const deadline = getMomentByDateAndTimeString(startDate!, startTime!);
+    const [organizerUser, setOrganizerUser] = useState<IUser>();
+    const { data } = useQuery(GET_USER,{
+        variables: {
+            uid: task.organizer
+        }
+    });
+
+    const { frontCoverImage, title, description, id, keyWords, startTime, startDate, endTime, endDate, latLngAndAddress, open, participants, participantsNumber} = task;
+    
+    const startTimeString = useMemo(()=> getMomentFullTimeString(startDate!, startTime!), [startDate,startTime]);
+    const startTimeMoment = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!), [startDate,startTime]);
+    const endimeString = useMemo(()=> getMomentFullTimeString(endDate!, endTime!), [endDate,endTime]);
+    const endTimeMoment = useMemo(()=> getMomentByDateAndTimeString(endDate!, endTime!), [endDate,endTime]);
+    const cityText = useMemo(()=> getCityText(latLngAndAddress.address), [latLngAndAddress.address]);
+    const currentMoment = getCurrentMoment();
+    const startTimeText = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!).format(cardDateFormat), [startDate, startTime]);
+    const currentAttendees = useMemo(()=> getNumberofParticipants(participants), [participants]);
+
 
     const TimeContent = (
         <PopoverContentDiv>
@@ -110,27 +107,46 @@ export const EventCard:FC<IEventCardProps> = ({
     );
 
    
+    //get the organizer
+    useEffect(()=>{
+        if(data && data.getUserById) {
+            setOrganizerUser(data.getUserById);
+        }
+    },[data])
 
-    const cardOnClick = useCallback((e: any)=> {
-        console.log("taskId:", task.id)
-        navigate(`/task_${id}`,{state: task.id});
-    },[id, navigate, task]);
+
+    const cardOnClick = useCallback(()=> {
+        navigate(`/task_${id}`,{state: id});
+    },[id, navigate]);
+
 
     console.log("description:", description)
     return (
         <EventCardCon
-            cover={coverImg(frontCoverImage, cardOnClick)}
+            cover={
+                <CardFrontCover 
+                    imageUrlObj={frontCoverImage}  
+                    onClick = {cardOnClick}
+                    height = {200}
+                    cursorPointer = {true}
+                />
+            }
             bodyStyle = {defaultbodyStyle}
-            // onClick = {cardOnClick}
             actions={ 
                 [            
-                <Popover content={ LocationContent }>
+                <Popover content={ LocationContent } trigger = {['click', 'hover']} >
                     <EnvironmentFilled key = "address"/>
                     <CardTextSpan>{ cityText }</CardTextSpan>
                 </Popover>,
-                <Popover content={ TimeContent }>
-                    <ClockCircleFilled key="time"  />    
-                    <CardTextSpan>{ startTimeText }</CardTextSpan>
+                    startTimeMoment.isBefore(currentMoment) ?
+                    <Tooltip title="out of date" trigger={['click','hover']}>
+                            <ExpiredDateIcon />
+                            <CardTextSpan>{ startTimeText }</CardTextSpan>
+                    </Tooltip>
+                    :
+                    <Popover content={ TimeContent } trigger = {['click', 'hover']} >
+                        <ClockCircleFilled key="time"  />    
+                        <CardTextSpan>{ startTimeText }</CardTextSpan>
                 </Popover>
             ]
         }
@@ -145,11 +161,16 @@ export const EventCard:FC<IEventCardProps> = ({
             <ContentRow>
                 <ContentCol span={24}>
                     <MetaCon
-                        avatar={<Avatar src= {avartaSrc} />}
+                        avatar={<UserAvatarBase userAvatarImg = {organizerUser? organizerUser.avatarImg: null} />}
                         description = {description}
                     />
                 </ContentCol>
-            </ContentRow>    
+            </ContentRow>
+            <AttendeeDateRow>
+                <AttendeeCol span={12}>
+                    <AttendeesSpan>Attendees {`${currentAttendees}/${participantsNumber}`}</AttendeesSpan>
+                </AttendeeCol>
+            </AttendeeDateRow>
         </EventCardCon>
     )
 }

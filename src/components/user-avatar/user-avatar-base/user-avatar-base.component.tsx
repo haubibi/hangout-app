@@ -9,16 +9,25 @@ import { UserOutlined } from '@ant-design/icons';
 
 interface UserAvatarProps {
     userAvatarImg: IImageObjWithUrlAndRefPath;
+    onClick?:() => void;
 }
 
 
 export const UserAvatarBase:FC<UserAvatarProps> = ({
-    userAvatarImg
+    userAvatarImg,
+    onClick
 }) => {
+
+    const avatarOnClick = () => {
+        if(onClick) {
+            onClick();
+        }
+    }
     return (
         <UserAvatarCon
             src =  {userAvatarImg? userAvatarImg.url: undefined}
-            icon = {userAvatarImg? undefined: <UserOutlined style = {{transform:'scale(2)'}}/>}
+            icon = {userAvatarImg? undefined: <UserOutlined style = {{transform:'scale(1.6)'}}/>}
+            onClick = {avatarOnClick}
         />
     )
 }

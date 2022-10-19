@@ -12,13 +12,23 @@ export const UserSignUpInput = `
     displayName
 `
 
-export const ParticipantNotificationObj = `
+export const RequestNotificationObj = `
     type
     taskId
     participantUid
     organizerUid
     read
     notificationType
+    time
+`
+export const ApplicationNotificationObj = `
+    type
+    taskId
+    participantUid
+    organizerUid
+    read
+    notificationType
+    time
 `
 export const TaskUpdateNotificationObj = `
     type
@@ -27,6 +37,7 @@ export const TaskUpdateNotificationObj = `
     organizerUid
     read
     notificationType
+    time
 `
 export const FriendNotificationObj = `
     type
@@ -34,13 +45,17 @@ export const FriendNotificationObj = `
     read
     senderUid
     receiverUid
+    time
 `
 export const NotificationObj = `
     taskUpdateNotification {
         ${TaskUpdateNotificationObj}
     }
-    participantRequestNotification {
-        ${ParticipantNotificationObj}
+    requestNotification {
+        ${RequestNotificationObj}
+    }
+    applicationNotification {
+        ${ApplicationNotificationObj}
     }
     friendRequestNotification {
         ${FriendNotificationObj}
@@ -63,6 +78,7 @@ export const userFullObj = `
     notifications {
         ${NotificationObj}
     }
+    description
 `
 
 export const latLngObj = `
@@ -102,6 +118,7 @@ export const taskFullObj = `
     startTime
     endDate
     endTime
+    category
     rate {
         ${rateObj}
     }

@@ -19,13 +19,22 @@ export enum MenuKey {
     RESETPASSWORD = 'RESETPASSWORD',
     FORGETPASSWORD = 'FORGETPASSWORD',
 }
-
+export enum MyAccountMenuKey {
+    PERSONNALINFO = 'person',
+    EVENTS = 'events',
+    EVENTS_I_ORGANIZE = 'event_organize',
+    EVENTS_I_ATTEND = 'event_attend',
+    NOTIFICATIONS = 'notifications',
+    NOTIFICATIONS_APPLICATION = 'notifications_application',
+    NOTIFICATIONS_REQUEST = 'notifications_request',
+    NOTIFICATIONS_EVENT_UPDATE = "event_update"
+}
 
 const defaulKey = MenuKey.HOME;
 
 export interface INavigationContext {
-    currentMenuKey: MenuKey
-    setCurrentMenuKey: Dispatch<React.SetStateAction<MenuKey>>;
+    currentMenuKey: MenuKey | MyAccountMenuKey
+    setCurrentMenuKey: Dispatch<React.SetStateAction<MenuKey | MyAccountMenuKey>>;
 }
 const initUserContext: INavigationContext = {
     currentMenuKey: defaulKey,

@@ -1,8 +1,7 @@
 import { createContext, FC , useState, useEffect} from "react";
 import { IUser } from "../interfaces/user.interface";
 import React, {Dispatch} from 'react';
-import { GETUSER } from "../utils/graphql/query.utils";
-import getUserById from '../../functions/src/utils/getUserById';
+import { GET_USER } from "../utils/graphql/query.utils";
 import { 
     useQuery,
     NetworkStatus,
@@ -17,7 +16,7 @@ export interface IUserContext {
     setCurrentUser: Dispatch<React.SetStateAction<IUser| null>>;
     userUid: string;
     setUserUid: Dispatch<React.SetStateAction<string>>;
-    refetch: (variables?: Partial<{
+    refetchUser: (variables?: Partial<{
         uid: string;
     }>) => Promise<ApolloQueryResult<any>>
 }
@@ -26,7 +25,7 @@ const initUserContext:IUserContext = {
     setCurrentUser: ()=>{},
     userUid: '',
     setUserUid: ()=>{},
-    refetch: (variables:{uid: null})=> { return null}
+    refetchUser: (variables:{uid: null})=> null
 }
 
 // export const UserContext = createContext<IUserContext>({
@@ -41,7 +40,7 @@ export interface IProviderChildrenProps {
 export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [ currentUser, setCurrentUser ] = useState<IUser | null>(defaultUser);
     const [ userUid, setUserUid ] = useState<string>(defaultUserId);
-    const { data, refetch, networkStatus } = useQuery(GETUSER,{
+    const { data, refetch, networkStatus } = useQuery(GET_USER,{
         variables: {
             uid: userUid
         },
@@ -82,7 +81,7 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
         setCurrentUser,
         userUid,
         setUserUid,
-        refetch,
+        refetchUser: refetch,
     };
     return <UserContext.Provider value = {value}>{children}</UserContext.Provider>
 }

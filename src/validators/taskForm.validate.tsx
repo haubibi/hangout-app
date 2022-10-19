@@ -16,6 +16,7 @@ import { ifTextWidthValid } from './validate.utils';
 import { eventCardTitleFont } from '../utils/default-settings/font.settings';
 import { getNumberofParticipants } from '../interfaces/participate.interface';
 
+
 export enum TaskFormItemName {
     title = 'title',
     startDate = 'startDate',

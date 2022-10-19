@@ -3,7 +3,6 @@ import {
     useState,
     useEffect,
     useContext,
-    useMemo,
     useCallback,
 } from 'react';
 import {
@@ -15,9 +14,13 @@ import {
 } from './home.styles';
 import { HomeSearch } from '../../components/home-search/home-search.component';
 import { EventCardList } from '../../components/event-card-component/event-card-list/event-card-list.component';
-import { GETAllTASKS } from '../../utils/graphql/query.utils';
+import { GET_All_TASKS } from '../../utils/graphql/query.utils';
 import { PaginationBar } from '../../components/pagination/pagination.component'
-import { ITask } from '../../interfaces/task.interface';
+import { 
+    EventCategory,
+    ITask,
+    ITasksFilterInput
+ } from '../../interfaces/task.interface';
 import { 
     Col,
     Row,
@@ -28,62 +31,70 @@ import { NavigationContext } from '../../context/navigation.context';
 import { useQuery } from '@apollo/client';
 import { 
     tasksColMiddleLayout,
-    searchColSideLayout,
 } from '../../utils/layout-antdesign/layout';
 import { MenuKey } from '../../context/navigation.context';
 import getSearchTasks from '../../utils/task/task.fuse';
+import { getFilteredTasks } from '../../utils/task/task.filter';
 import { message } from 'antd';
-
+import { TasksContext } from '../../context/tasks.context';
 const pageTasksAmout = 12;
-
+const initialCategory:EventCategory = 'any';
 
 const Home: FC = () =>{
+    const { allTasks, refetchAllTasks, fetchAllTasksLoading, fetchAllTasksError } = useContext(TasksContext);
     const [ tasks, setTasks ] = useState<ITask[]>();
     const [ tasksTotalLength, setTasksTotalLength ] = useState<number>(0);
     const [ searchInputValue, setSearchInputValue ] = useState<string>('');
+    const [ category, setCategory ] = useState<EventCategory>(initialCategory);
     const [ currentPage, setCurrentPage ] = useState<number>(1);
-    const { data, loading, error, refetch} = useQuery(GETAllTASKS);
+    // const { data, loading, error, refetch} = useQuery(GET_All_TASKS);
     const { setCurrentMenuKey } = useContext(NavigationContext);
 
-    console.log("data:", data)
-    console.log("loading:" , loading)
-    console.log("error:" , error)
+    // console.log("data:", data)
+    // console.log("loading:" , loading)
+    // console.log("error:" , error)
 
     //set the menu key
     useEffect(()=> {
         setCurrentMenuKey(MenuKey.HOME);
     },[setCurrentMenuKey]);
 
-    //refetch every time
+    //refetch all the tasks every time
     useEffect(()=> {
-        refetch();
-    },[refetch]);
+        refetchAllTasks();
+    },[refetchAllTasks]);
 
     useEffect(()=>{
-        // console.log('taskError:',error);
-        // console.log('taskLoading:',loading);
-        // console.log('tasksData:',data);
-        if(data && data.tasks) {
+        if(allTasks) {
             // const {tasks} = data;
             const tasksAndTotalLength = getSearchTasks(
-                data.tasks,
+                allTasks,
                 searchInputValue,
                 (currentPage - 1) * pageTasksAmout,
                 pageTasksAmout,
-            ); 
+            );
             const {totalLength, tasks} = tasksAndTotalLength;
+            const filteredTasks = getFilteredTasks({
+                tasks,
+                taskFilter: {
+                    category
+                },
+                IfFilterOutOfDateTasks: true,
+                ifFilterHiddenTasks: true
+            })
+            // console.log("allTasks:", allTasks)
+            // console.log("searchInputValue:", searchInputValue)
+            // console.log("tasksAndTotalLength:", tasksAndTotalLength)
 
-            console.log("data:", data)
-            console.log("searchInputValue:", searchInputValue)
-            console.log("tasksAndTotalLength:", tasksAndTotalLength)
+            setTasksTotalLength(totalLength); 
 
-            setTasksTotalLength(totalLength);   
-            setTasks(tasks.concat(tasks));    
+            setTasks(filteredTasks.concat(filteredTasks));    
         }
-    },[data, currentPage, setTasksTotalLength, setTasks, searchInputValue]);
+    },[allTasks, currentPage, setTasksTotalLength, setTasks, searchInputValue, category]);
 
-    const searchOnSearchHandle = useCallback((value: string)=>{
+    const searchOnSearchHandle = useCallback((value: string, category: EventCategory)=>{
         setSearchInputValue(value);
+        setCategory(category);
     },[]);
     
     const onPageChangeHandle = useCallback((page: number)=>{
@@ -95,17 +106,18 @@ const Home: FC = () =>{
         <HomeContainer>
             <SearchRow>
                 <SearchCol {...tasksColMiddleLayout}>
-                    <HomeSearch 
+                    <HomeSearch
+                        initialCategory = {initialCategory}
                         onSearch={searchOnSearchHandle}
-                        loading = {loading}
+                        loading = {fetchAllTasksLoading}
                     />
                 </SearchCol>
             </SearchRow>
             <>
             {
-                loading? <Spin /> :
-                    error? 
-                    message.error(error.toString(), 5)
+                fetchAllTasksLoading? <Spin /> :
+                fetchAllTasksError? 
+                    message.error(fetchAllTasksError.toString(), 5)
                     .then(()=> message.info(`Please try again!`)):
                         tasks && tasks.length === 0?
                         <ErrorH2>No matched event, please try again!</ErrorH2>:
@@ -114,7 +126,7 @@ const Home: FC = () =>{
                                 <ListCol span={24}>
                                     <EventCardList 
                                         tasks={tasks}
-                                        tasksRefetch = {refetch}
+                                        tasksRefetch = {refetchAllTasks}
                                     />
                                 </ListCol>
                             </Row>

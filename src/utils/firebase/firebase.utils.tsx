@@ -14,7 +14,9 @@ import {
     sendEmailVerification,
     sendPasswordResetEmail,
     confirmPasswordReset,
-    checkActionCode
+    checkActionCode,
+    UserCredential,
+    AuthError
 } from 'firebase/auth';
 import { 
   getStorage,
@@ -22,12 +24,15 @@ import {
   uploadBytes,
   getDownloadURL,
   deleteObject,
-  UploadResult
+  UploadResult,
+  connectStorageEmulator 
  } from "firebase/storage";
-import { stringify } from 'querystring';
-import { ISignUpAdditionsInfo, IUserInput, IUser } from '../../interfaces/user.interface';
+import { ISignUpAdditionsInfo, IUser } from '../../interfaces/user.interface';
+import { localDomin, appDomin } from '../domin';
 
-import { createBaseUser } from '../user/user.utils';
+import { useContext, useState } from 'react';
+import { UserContext} from '../../context/user.context';
+import { ApolloQueryResult } from '@apollo/client';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCeT3ANdqXNbquxmYay1gm9O-8NgqlpakA",
@@ -41,8 +46,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+// const storage = getStorage(app,'http://localhost:4001/storage/hang-out-213d4.appspot.com');
 const storage = getStorage(app,'gs://hang-out-213d4.appspot.com/');
-
+// if(process.env.NODE_ENV === 'development') {
+//   connectStorageEmulator(storage, "localhost", 4001);
+// }
 
 
 
@@ -92,7 +100,11 @@ export const signInWithGoogleRedirect = async() => signInWithRedirect(auth, goog
 
 
 
-export const createAuthUserWithEmailAndPassword = async (email: string, password: string, additionalInfo: ISignUpAdditionsInfo):Promise<IUser> =>{
+export const createAuthUserWithEmailAndPassword = async (
+  email: string, 
+  password: string, 
+  additionalInfo: ISignUpAdditionsInfo
+):Promise<IUser | Error> =>{
   return new Promise(async (resolve,reject)=> {
       if(!email || !password){
           reject(new Error('email or password is invaild!'))
@@ -107,20 +119,31 @@ export const createAuthUserWithEmailAndPassword = async (email: string, password
               console.log('additionalInfo:',additionalInfo);
               console.log('newUser:', newUser)
               resolve(newUser);
-        }).catch((error) => {
-            reject(error.code);
-            // ..
-          });;
         })
         .catch((error) => {
-          reject(error.code);
-        // ..
+          console.log("error:", error)
+            reject(error.code);
+            // ..
+        });;
+      })
+      .catch((error) => {
+        reject(error.code);
       });
   })
 }
 
+
+
+let resetPasswordActionUrl:string; 
+if(process.env.NODE_ENV === 'development') {
+  resetPasswordActionUrl = `${localDomin}/logIn`;
+} else {
+  resetPasswordActionUrl = `${appDomin}/logIn`;
+}
+
+
 const actionCodeSettings = {
-  url: 'http://localhost:3000/logIn',
+  url: resetPasswordActionUrl,
 }; 
 
 export const forgetPassword = (email: string) => {
@@ -142,22 +165,14 @@ export const resetPassword = (oobCode: string, newPassword: string): Promise<str
     })
     .catch(error => reject(error));
   }); 
-  // return confirmPasswordReset(auth, oobCode, newPassword);
-  // return new Promise( async (resolve, reject)=>{
-  //   try {
-  //     console.log(oobCode, newPassword)
-  //     await confirmPasswordReset(auth, oobCode, newPassword);
-  //     resolve(newPassword);
-  //   } catch(error) {
-  //     reject(error);
-  //   }
-  //   // return confirmPasswordReset(auth, oobCode, newPassword);
-  // });
 }
 
-export const signInWithWithEmailAndPasswordMethod = async (email:string,password:string) =>{
+export const signInWithWithEmailAndPasswordMethod = (
+    email:string,
+    password:string
+):Promise<UserCredential> =>{
     if(!email || !password) return;
-    return await signInWithEmailAndPassword(auth, email,password);
+    return signInWithEmailAndPassword(auth, email,password);
 }
 
 export const signOutUser = async () => await signOut(auth);
@@ -166,6 +181,10 @@ export const signOutUser = async () => await signOut(auth);
 export const onUserAuthStateChanged = (callback: NextOrObserver<User>) =>{
     onAuthStateChanged(auth,callback);
 }
+
+
+
+
 
 
 

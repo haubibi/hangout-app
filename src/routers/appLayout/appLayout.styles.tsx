@@ -42,12 +42,12 @@ export const ContentConBase = styled(Content)`
 `;
 
 export const ContentStartCon = styled(ContentConBase)`
-      justify-content: flex-start;
-      height: 100%;
-      `;
+   justify-content: flex-start;
+   height: 100%;
+`;
 export const ContentCenterCon = styled(ContentConBase)`
-      justify-content: center;
-      height: 100%;
+   justify-content: center;
+   height: 100%;
 `;
 
 

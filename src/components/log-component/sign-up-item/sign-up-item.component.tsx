@@ -1,7 +1,8 @@
 import React, {
     useContext,
     useState,
-    useEffect
+    useEffect,
+    useCallback
 } from 'react';
 import { 
     Button, 
@@ -10,8 +11,7 @@ import {
     message
 } from 'antd';
 import { 
-    useNavigate,
-    useLocation
+    useNavigate
  } from 'react-router-dom';
 import { SignupItemContainer } from './sign-up-item.styles';
 import { createAuthUserWithEmailAndPassword } from '../../../utils/firebase/firebase.utils';
@@ -26,6 +26,7 @@ import {
     SignUpNamesEnum
  } from '../../../validators/signup.validate';
 import { IStateWithPathname } from '../sign-in-item/sign-in-item.component';
+
 
 
 const formitems = [
@@ -43,7 +44,6 @@ const SignUpItem = () => {
     const [ detail, setDetail] = useState<Record<string, any>>();
     const [ formDisabled, setFormDisabled] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { state } = useLocation();
     //set initial values when component mounted
     useEffect(()=> {
         setDetail(initialValues);
@@ -56,8 +56,8 @@ const SignUpItem = () => {
 
 
 
-
-    const onFinish = async(values: any)=>{
+    const onFinish = useCallback(async(values: any)=>{
+        setFormDisabled(true);
         console.log('Success:', values);
         const { email,password, displayName} = values;
         const additionalInfo: ISignUpAdditionsInfo = {
@@ -78,28 +78,17 @@ const SignUpItem = () => {
                     const {uid} = userInfo;
                     setUserUid(uid);
                 } else {
-                    setDetail(initialValues);
-                    setFormDisabled(true);
-                    message
-                    .success('Please verify it in you e-mail!', 3);
+                    message.info(`Please check the virification in your e-mail!`, 2);
                 }
-
-                if(
-                    Object.prototype.toString.call(state) === '[object Object]' &&
-                    Object.prototype.hasOwnProperty.call(state, 'pathname')
-                ) {
-                    navigate(`${(state as IStateWithPathname).pathname}`,{replace: true});
-                } else {
-                    navigate(`/`);
-                }
+                setDetail(initialValues);
+                navigate(`/`);
             });
-            
+            setFormDisabled(false);
         }).catch((error)=>{
-            message.error(error);
+            message.error(`111111111`);
         });
-
-        // }
-    };
+        setFormDisabled(false);
+    },[addUser, navigate, setUserUid]);
     
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);

@@ -15,3 +15,5 @@ export interface ITaskInputTimeString {
     endDate:string| undefined;
     endTime:string| undefined;
 }
+
+export type DateRangeValueType = [Moment | null, Moment | null] | null;

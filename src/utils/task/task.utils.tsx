@@ -1,8 +1,10 @@
+/* eslint-disable array-callback-return */
 import { ITask } from "../../interfaces/task.interface"
 import { getDateString, getDateTimeString } from '../date/date.utils'
 import { getCurrentCoords } from "../googleMap/googleMap.utils";
 import { defaultLatLng } from "../googleMap/googleMap.utils";
 import { ITaskFormItemDetailWithImageRefAndUrl } from '../../interfaces/taskForm.interface';
+import { getNumberofParticipants } from "../../interfaces/participate.interface";
 
 
 
@@ -37,7 +39,8 @@ export const baseTaskCreator =  async(
         showImages:[],
         frontCoverImage: null,
         keyWords: [],
-        rate: []
+        rate: [],
+        category:'any'
     };
     return new Promise(async (resolve, reject)=>{
         await getCurrentCoords().then((location)=>{
@@ -79,7 +82,8 @@ export const getUpdatedTask = (currentTask: ITask, formValues: ITaskFormItemDeta
         latLngAndAddress,
         showImages,
         frontCoverImage,
-        keyWords
+        keyWords,
+        category
     } = formValues;
     const startDateString = getDateString(startDate!)
     const startTimeString = getDateTimeString(startTime!)
@@ -100,9 +104,21 @@ export const getUpdatedTask = (currentTask: ITask, formValues: ITaskFormItemDeta
         latLngAndAddress,
         showImages,
         frontCoverImage,
-        keyWords
+        keyWords,
+        category
     }
 
 }
 
+/**
+ * check if the current attendees reachcthe maxmum
+ * @param task checked task
+ * @returns 
+ */
 
+export const checkIfTaskAttendeesReachMax = (task: ITask):boolean => {
+    const {participantsNumber} = task;
+    const participants = task.participants || [];
+    const currentNumberOfParticipants = getNumberofParticipants(participants);
+    return currentNumberOfParticipants >= participantsNumber;
+}

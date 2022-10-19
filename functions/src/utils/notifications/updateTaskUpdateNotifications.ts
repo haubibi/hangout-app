@@ -1,6 +1,7 @@
 import { db, Collection, UserChildren } from "../../db";
 import { TaskUpdateNotificationType } from "../../interfaces/notifications.interface";
 import getUserById from "../getUserById";
+import getTaskUpdateNotifications from "./getTaskUpdateNotifications";
 
 const updateTaskUpdateNotifications = async (
     userUid: string,
@@ -8,10 +9,10 @@ const updateTaskUpdateNotifications = async (
 ):Promise<void> => {
   const user = await getUserById(userUid);
   if(!user) return;
-  const currentNotifications = user.notifications?.taskUpdateNotification || [];
   const userNotificationsRef = db.ref(`${Collection.users}/${userUid}/${UserChildren.notifications}`);
+  const currentUpdateNotifications = await getTaskUpdateNotifications(userUid) || [];
   await userNotificationsRef.update({
-    taskUpdateNotification: [...currentNotifications, ...notifications]
+    taskUpdateNotification: [...currentUpdateNotifications, ...notifications]
   });
 };
 

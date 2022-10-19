@@ -6,6 +6,12 @@ import {ILatLngAndAddress} from "./google.interface";
 import {TaskImagesWithUrlAndRefPath} from "./images.interface";
 import {IPaticipant} from "./participate.interface";
 import { ApolloQueryResult } from "@apollo/client";
+import { DateRangeValueType } from '../interfaces/time.interface';
+import { LatLngLiteral } from "./google.interface";
+
+export type EventCategory =  'any' | 'art' | 'games' | 'music' | 'travel' | 'outdoor' | 'food' | 'party' | 'animals' | 'others';
+
+export const taskCategories:EventCategory[] = [ 'any' , 'art' , 'games' , 'music' , 'travel' , 'outdoor' , 'food' , 'party' , 'animals', 'others'];
 
 export interface ITaskBase {
     id: string;
@@ -13,6 +19,7 @@ export interface ITaskBase {
     organizer: string;
     participantsNumber: number;
     description: string;
+    category: EventCategory;
 }
 
 
@@ -46,6 +53,8 @@ export type TaskSearchInputType= ITask & TaskSearchExtraPropersType;
 export interface IFilterTasks {
     distanceRange?: DistanceRange;
     participantsRange?: ParticipantsRange;
+    dateRange?: DateRangeValueType;
+    category?: EventCategory;
 }
 
 
@@ -58,18 +67,8 @@ export enum CurrentTaskUserTypeEnum {
 };
 
 
-export interface ITaskSearchInput {
-    input: string;
-    taskStartIndex: number;
-    amout: number;
-}
-
-
-export interface ITaskRefetchFC {
-    (variables: Partial<{id: string;}>): Promise<ApolloQueryResult<any>>;
-}
-export interface ITaskSearchInputRefetchFC {
-    (variables: Partial<ITaskSearchInput>): Promise<ApolloQueryResult<any>>;
+export interface TaskRefetchType <T> {
+    (variables: Partial<T>): Promise<ApolloQueryResult<any>>;
 }
 
 
@@ -77,6 +76,18 @@ export type ISearchTaskReturnType = {
     tasks: ITask[];
     totalLength: number;
 };
+
+
+export interface ITasksFilterInput {
+    tasks: ITask[];
+    taskFilter?: IFilterTasks;
+    currentLatLng?: LatLngLiteral;
+    IfFilterOutOfDateTasks?: boolean;
+    ifFilterHiddenTasks?:boolean;
+}
+
+
+
 
 
 // (variables?: Partial<{

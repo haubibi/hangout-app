@@ -15,17 +15,18 @@ interface UserAvatarProps {
 
 
 export const UserAvatarPopover:FC<UserAvatarProps> = ({
-    user
+    user,
 }) => {
+    console.log('cursor')
     if (!user) return <SpinCon />
     return (
         <PopoverCon
-            trigger= "hover"
+            trigger= "click"
             arrowPointAtCenter
             title = {user.displayName}
             content = {<UserAvatarPopoverContent partialUserProps = {user}/>}
         >
-           <UserAvatarBase userAvatarImg={user.avatarImg}/>
+           <UserAvatarBase userAvatarImg={user.avatarImg} />
         </PopoverCon>
     )
 }

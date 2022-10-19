@@ -68,6 +68,9 @@ export const MetaCon = styled(Meta)`
 
 export const ContentRow = styled(Row)`
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 `;
 
 export const ContentCol = styled(Col)`
@@ -95,4 +98,31 @@ export const TitleDiv = styled.div`
 
 export const PopoverContentDiv = styled.div`
     text-align: left;
+`
+
+export const AttendeeDateRow = styled(Row)`
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`;
+export const AttendeeCol = styled(Col)`
+    min-width: 250px;
+    padding: 5px 40px 0px 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 10px;
+    span {
+        font-weight: 700;
+    }
+`;
+export const DateStatusCol = styled(Col)`
+`;
+export const AttendeesSpan = styled.span`
+    min-width: 250px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `

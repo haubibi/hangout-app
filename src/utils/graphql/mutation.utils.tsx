@@ -6,9 +6,9 @@ import {
   taskFullObj,
   ParticipantsObj,
   UserSignUpInput,
-  ParticipantNotificationObj,
   TaskUpdateNotificationObj,
-  FriendNotificationObj
+  RequestNotificationObj,
+  ApplicationNotificationObj,
  } from './typeObject';
 
 //  # ${userFullObj}
@@ -19,6 +19,20 @@ export const ADD_USER = gql`
         addUser(userInput: $userInput){
             ${UserSignUpInput}
         }
+    }
+`
+// updateUserInfo(userUid: String, userInput: UserUpdateInput): User
+export const UPDATE_USER_INFO = gql`
+    mutation(
+        $userUid: String
+        $userInput: UserUpdateInput
+    ) {
+      updateUserInfo(
+        userUid:$userUid,
+        userInput: $userInput
+      ){
+          ${userFullObj}
+      }
     }
 `
 export const ADD_TASK = gql`
@@ -77,16 +91,29 @@ export const QUIT_PARTICIPANT = gql`
 `
 
 //updateNotifications(userUid: String, notifications: [NotificationInput]): [NotificationType]
-export const UPDATE_PARTICIPA_NTNOTIFICATIONS = gql`
+export const UPDATE_APPLICATION_NTNOTIFICATIONS = gql`
     mutation (
       $userUid: ID,
-      $notifications: [ParticipantNotificationInput],
+      $notifications: [ParticipantApplicationNotificationInput],
     ) {
-      updateNotifications(
+      updateApplicationtNotifications(
           userUid:$userUid,
           notifications:$notifications,
       ){
-         ${ParticipantNotificationObj}
+         ${ApplicationNotificationObj}
+      } 
+    }
+`
+export const UPDATE_REQUEST_NTNOTIFICATIONS = gql`
+    mutation (
+      $userUid: ID,
+      $notifications: [ParticipantRequestNotificationInput],
+    ) {
+      updateRequestNotifications(
+          userUid:$userUid,
+          notifications:$notifications,
+      ){
+         ${RequestNotificationObj}
       } 
     }
 `
@@ -95,7 +122,7 @@ export const UPDATE_TASK_UPDATE_NTNOTIFICATIONS = gql`
       $userUid: ID,
       $notifications: [TaskUpdateNotificationInput],
     ) {
-      updateNotifications(
+      updateTaskUpdateNotifications(
           userUid:$userUid,
           notifications:$notifications,
       ){
@@ -104,6 +131,37 @@ export const UPDATE_TASK_UPDATE_NTNOTIFICATIONS = gql`
     }
 `
 
+// deleteApplicationNotification(participantUid: ID, taskId: ID, organizerUid: ID): [ParticipantApplicationNotificationType]
 
-// updateParticipantNotifications(userUid: String, notifications: [ParticipantNotificationInput]): [ParticipantNotificationType]
-// updateTaskUpdateNotifications(userUid: String, notifications: [TaskUpdateNotificationInput]): [TaskUpdateNotificationType]
+export const DELETE_APPLICATION_NTNOTIFICATION = gql`
+    mutation (
+      $participantUid: ID,
+      $taskId: ID,
+      $organizerUid: ID,
+    ) {
+      deleteApplicationNotification(
+          participantUid:$participantUid,
+          taskId:$taskId,
+          organizerUid:$organizerUid
+      ){
+         ${ApplicationNotificationObj}
+      } 
+    }
+`
+// deleteEventUpdateNotification(participantUid: ID, taskId: ID, organizerUid: ID): [TaskUpdateNotificationType]
+
+export const DELETE_EVENT_UPDATE_NTNOTIFICATION = gql`
+    mutation (
+      $participantUid: ID,
+      $taskId: ID,
+      $organizerUid: ID,
+    ) {
+      deleteEventUpdateNotification(
+          participantUid:$participantUid,
+          taskId:$taskId,
+          organizerUid:$organizerUid
+      ){
+         ${TaskUpdateNotificationObj}
+      } 
+    }
+`

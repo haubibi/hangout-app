@@ -18,19 +18,3 @@ export const getNumberofParticipants = (
 ):number =>{
     return paticipants.filter(paticipant => paticipant.isConfirmed && paticipant.agreed).length;
 }
-
-
-/**
- * 
- * @param paticipants The participants
- * @param maxParticipantsNumber max number of participants
- * @returns if participants reach the max
- */
-
-export const checkIfParticipantsMax = (
-    paticipants: IPaticipant[] = [],
-    maxParticipantsNumber: number
-): boolean =>{
-    const num = getNumberofParticipants(paticipants);
-    return num >= maxParticipantsNumber;
-}

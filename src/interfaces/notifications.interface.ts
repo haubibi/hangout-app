@@ -22,6 +22,7 @@ export enum QuitTaskRequestEnum {
 }
 export enum UpdateTaskEnum {
     TASK_UPDATE = "TASK_UPDATE",
+    TASK_DELETE = "TASK_DELETE",
 }
 export enum FRIENDEnum {
     FRIEND_REQUEST = "FRIEND_REQUEST",
@@ -33,6 +34,7 @@ export interface INotificationBase<T, U> {
     notificationType: T;
     type: U;
     read: boolean;
+    time: string;
 }
 
 export interface ITaskNotification<T, U> extends INotificationBase <T, U>{
@@ -44,8 +46,20 @@ export interface ITaskNotification<T, U> extends INotificationBase <T, U>{
 
 
 
-export type PaticipantRequestNotificationType = ITaskNotification<NotificationTypeEnum.PARTICIPANT, AddTaskRequestEnum | QuitTaskRequestEnum>;
-export type TaskUpdateNotificationType = ITaskNotification<NotificationTypeEnum.TASK, UpdateTaskEnum.TASK_UPDATE>;
+export type ApplicationNotificationType = ITaskNotification<
+                NotificationTypeEnum.PARTICIPANT, 
+                AddTaskRequestEnum.ORGANIZER_APPLY_REQUEST | 
+                AddTaskRequestEnum.ORGANIZER_ARGEE_REQUEST |
+                AddTaskRequestEnum.ORGANIZER_REFUSE_REQUEST
+            >;
+export type RequestNotificationType = ITaskNotification<
+                NotificationTypeEnum.PARTICIPANT, 
+                AddTaskRequestEnum.PARTICIPANT_APPLY_REQUEST | 
+                AddTaskRequestEnum.PARTICIPANT_ARGEE_REQUEST | 
+                AddTaskRequestEnum.PARTICIPANT_REFUSE_REQUEST |
+                QuitTaskRequestEnum.PARTICIPANT_QUIT_REQUEST
+            >;
+export type TaskUpdateNotificationType = ITaskNotification<NotificationTypeEnum.TASK, UpdateTaskEnum> & {taskTitle?: string};
 export type frendRequestNotificationType = INotificationBase<NotificationTypeEnum.FRIEND, FRIENDEnum> & {
     senderUid:string;
     receiverUid:string;
@@ -53,7 +67,8 @@ export type frendRequestNotificationType = INotificationBase<NotificationTypeEnu
 
 export interface NotificationTypes {
     taskUpdateNotification: TaskUpdateNotificationType[],
-    participantRequestNotification: PaticipantRequestNotificationType[],
+    applicationNotification: ApplicationNotificationType[],
+    requestNotification: RequestNotificationType[],
     friendRequestNotification: frendRequestNotificationType[]
 };
 

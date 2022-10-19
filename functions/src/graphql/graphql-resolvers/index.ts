@@ -7,15 +7,18 @@ import queryGetTaskById from "./query/getTaskById";
 import queryGetUserById from "./query/getUserById";
 import queryGetFilteredTasks from "./query/getFilteredTasks";
 import queryGetParticipantNotification from "./query/getParticipantNotification";
-import queryGetSearchTasks from "./query/getSearchTasks";
 
 import mutationAddTask from "./mutation/addTask";
 import mutationDeleteTask from "./mutation/deleteTask";
 import mutationAddUser from "./mutation/addUser";
+import mutationUpdateUserInfo from "./mutation/updateUserInfo";
 import mutationAddParticipant from "./mutation/addParticipant";
 import mutationQuitParticipant from "./mutation/quitParticipant";
 import mutationUpdateTaskUpdateNotifications from "./mutation/updateTaskUpdateNotifications";
-import mutationUpdateParticipantNotifications from "./mutation/updateParticipantNotifications";
+import mutationUpdateRequestNotifications from "./mutation/updateRequestNotifications";
+import mutationUpdateApplicationNotifications from "./mutation/updateApplicationNotifications";
+import mutationDeleteApplicationNotification from "./mutation/deleteApplicationNotification";
+import mutationDeleteEventUpdateNotification from "./mutation/deleteEventUpdateNotification";
 
 const resolvers = {
   // ScalarName: ScalarNameResolver,
@@ -26,16 +29,20 @@ const resolvers = {
     getUserById: queryGetUserById,
     getFilteredTasks: queryGetFilteredTasks,
     getParticipantNotification: queryGetParticipantNotification,
-    getSearchTasks: queryGetSearchTasks,
   },
   Mutation: {
     addTask: mutationAddTask,
     deleteTask: mutationDeleteTask,
     addUser: mutationAddUser,
+    updateUserInfo: mutationUpdateUserInfo,
     addParticipant: mutationAddParticipant,
     quitParticipant: mutationQuitParticipant,
     updateTaskUpdateNotifications: mutationUpdateTaskUpdateNotifications,
-    updateParticipantNotifications: mutationUpdateParticipantNotifications,
+    updateRequestNotifications: mutationUpdateRequestNotifications,
+    updateApplicationtNotifications: mutationUpdateApplicationNotifications,
+    deleteApplicationNotification: mutationDeleteApplicationNotification,
+    deleteEventUpdateNotification: mutationDeleteEventUpdateNotification,
+
   },
 };
 

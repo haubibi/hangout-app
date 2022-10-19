@@ -4,6 +4,7 @@ import {NotificationTypes} from "./notifications.interface";
 export enum UserSexEnum {
     MALE = "male",
     FEMALE = "female",
+    OTHERS = "others"
 }
 
 export interface IUserBase {
@@ -25,15 +26,17 @@ export interface IUserExtraInfo {
     avatarImg: IImageObjWithUrlAndRefPath | null;
     friendsList: string[];
     notifications: NotificationTypes;
+    description: string;
 }
 
-export type IUser = IUserBase & ISignUpAdditionsInfo & Partial<IUserExtraInfo>;
+export type IUser = IUserBase & Partial<IUserExtraInfo>;
 
 
 export interface IPersonalInfoInput {
     displayName: string;
     avatarImg: IImageObjWithUrlAndRefPath[];
     sex: UserSexEnum;
+    description: string;
 }
 
 // export interface NotificationTypes {

@@ -4,6 +4,7 @@ import {
     TaskImagesUploadAntd,
     TaskImagesWithUrlAndRefPath
  } from './images.interface';
+import { EventCategory } from './task.interface';
 
 export interface BaseTaskFormItemDetail extends ITaskInputTimeMoment {
     title: string;
@@ -13,6 +14,7 @@ export interface BaseTaskFormItemDetail extends ITaskInputTimeMoment {
     hide: boolean;
     open: boolean;
     keyWords: string[];
+    category: EventCategory;
 }
 
 export type ITaskFormItemDetail = BaseTaskFormItemDetail & TaskImagesUploadAntd;

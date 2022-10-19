@@ -18,5 +18,3 @@ const mutationUpdateTaskUpdateNotifications = async (
 export default mutationUpdateTaskUpdateNotifications;
 
 
-// updateParticipantNotifications(userUid: String, notifications: [ParticipantNotificationInput]): [ParticipantNotificationType]
-  // updateTaskUpdateNotifications(userUid: String, notifications: [TaskUpdateNotificationInput]): [TaskUpdateNotificationType]

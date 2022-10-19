@@ -47,7 +47,7 @@ export const ParticipantsFilter:FC<ParticipantsFilterProps> = ({
    
     return(
         <ParticipantsFilterContainer>
-            <TitleContainer>Participants Number</TitleContainer>
+            <TitleContainer>Attendees Number</TitleContainer>
             <Row>
                 <Col span={11}>
                     <InputNumberContainer 

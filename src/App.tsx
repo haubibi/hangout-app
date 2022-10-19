@@ -1,9 +1,6 @@
 
 import React, { FC, useEffect, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
-// import { useQuery } from '@apollo/client';
-// import { GETUSER } from './utils/graphql/query.utils';
-// import { useLoadScript } from '@react-google-maps/api';
 import AppLayout from './routers/appLayout/appLayout.component';
 import MyAccountPage from './routers/my-account-page/my-account-page.component';
 import Home from './routers/home/home.component';
@@ -13,9 +10,14 @@ import SignInForm from './routers/sign-in-form/sign-in-form.component';
 import ResetPassWordForm from './routers/reset-password-form/reset-password-form.component';
 import ForgetPassWordForm from './routers/forget-password-form/forget-password-form.component';
 import Task from './routers/task/task.component';
-import MyEventCardList from './components/my-account-page/my-event-card-list/my-event-card-list.component';
+import MyEventPage from './components/my-account-page/my-event-page/my-event-page.component';
+import MyEventOrganizePage from './components/my-account-page/my-event-organize-page/my-event-organize-page.component';
+import MyEventAttendPage from './components/my-account-page/my-event-attend-page/my-event-attend-page.component';
 import MyNotifications from './components/my-account-page/my-notifications/my-notifications.component';
 import MapSearch from './routers/map-search/map-search.component';
+import NotificationApplicationPage from './components/my-account-page/notifications-application-page/notifications-application-page.components';
+import NotificationRequestPage from './components/my-account-page/notifications-request-page/notifications-request-page.components';
+import NotificationEventPage from './components/my-account-page/notifications-event-page/notifications-event-page.components';
 import { AccountPersonalInfo } from './components/my-account-page/account-personal-info/account-personal-info.components';
 import { onUserAuthStateChanged} from './utils/firebase/firebase.utils';
 import { UserContext } from './context/user.context';
@@ -35,11 +37,18 @@ import "antd/dist/antd.css";
 
 
 const  App: FC = () => {
-  const {setUserUid} = useContext(UserContext);
+  const { setUserUid } = useContext(UserContext);
   useEffect(()=>{
     onUserAuthStateChanged(async(user) =>{
+      console.log(user)
       if(!user){
         setUserUid('');
+      } else {
+        if(user.emailVerified){
+            setUserUid(user.uid);
+          } else {
+            setUserUid('');
+        }
       }
     });
   },[setUserUid]);
@@ -52,8 +61,15 @@ const  App: FC = () => {
         <Route path = 'signUp' element = { <SignUpForm />} />
         <Route path = 'myAccount' element = { <MyAccountPage />}>
           <Route index element = {<AccountPersonalInfo />} />
-          <Route path = "events" element = {<MyEventCardList />} />
-          <Route path = "notifications" element = {<MyNotifications />} />
+          <Route path = "events" element = {<MyEventPage />} >
+            <Route index element = {<MyEventOrganizePage />}></Route>
+            <Route path = "attend" element = {<MyEventAttendPage />}></Route>
+          </Route>
+          <Route path = "notifications" element = {<MyNotifications />} >
+            <Route index element = {<NotificationApplicationPage />}></Route>
+            <Route path = "requests" element = {<NotificationRequestPage />}></Route>
+            <Route path = "event" element = {<NotificationEventPage />}></Route>
+          </Route>
         </Route>
 
         <Route path = 'mapSearch' element = { <MapSearch />} />

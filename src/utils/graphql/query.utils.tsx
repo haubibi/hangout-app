@@ -2,47 +2,31 @@ import { gql } from '@apollo/client';
 import { 
   userFullObj,
   taskFullObj,
-  participantNotificationObj,
 } from './typeObject';
 // ${userFullObj}
-export const GETUSER = gql`
+export const GET_USER = gql`
     query($uid:ID){
       getUserById (uid:$uid) {
           ${userFullObj}
       }      
     }
 `
-export const GETAllTASKS = gql`
+export const GET_All_TASKS = gql`
     query{
       tasks {
           ${taskFullObj}
       }
     }
 `;
-export const GETTASKBYID = gql`
+export const GET_TASK_BY_ID = gql`
     query($id:ID){
       getTaskById (id:$id) {
           ${taskFullObj}
       }
     }
 `;
-export const GETPARTICIPANTNOTIFICATION = gql`
-    query(
-      $participantUid:ID,
-      $taskId:ID,
-      $organizerUid:ID,
-    ){
-      getParticipantNotification (
-        taskId:$taskId
-        participantUid:$participantUid
-        organizerUid:$organizerUid
-      ) {
-          ${participantNotificationObj}
-      }
-    }
-`;
-// getFilteredTasks(currentLatLng: LatLngLiteralInput, taskFilter: TaskFilterInput): [Task]
-export const GETFILTEREDTASKS = gql`
+// didn't use
+export const GET_FILTERED_TASKS = gql`
     query(
       $currentLatLng:LatLngLiteralInput,
       $taskFilter: TaskFilterInput
@@ -55,7 +39,7 @@ export const GETFILTEREDTASKS = gql`
       }
     }
 `
-
+// didn't use
 export const GETSEARCHTASKS = gql`
     query(
       $input: String,

@@ -11,7 +11,7 @@ import {
     TaskRefetchType
  } from '../../interfaces/task.interface';
 import { useQuery } from "@apollo/client";
-import { GETTASKBYID } from "../../utils/graphql/query.utils";
+import { GET_TASK_BY_ID } from "../../utils/graphql/query.utils";
 import { 
     NavigationContext,
     MenuKey,
@@ -33,7 +33,7 @@ const Task = () =>{
     const [ taskId, setTaskId ] = useState<string>('');
     const [ task, setTask ] = useState<ITask>();
     const { setCurrentMenuKey } = useContext(NavigationContext);
-    const { data, loading, error, refetch } = useQuery(GETTASKBYID,{
+    const { data, loading, error, refetch } = useQuery(GET_TASK_BY_ID,{
         variables: {
             id: taskId
         }

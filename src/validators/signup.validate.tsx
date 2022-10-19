@@ -17,6 +17,7 @@ export enum SignUpNamesEnum {
     password = 'password',
     confirm = 'confirm',
     sex = 'sex',
+    description = "description"
 }
 export const initialValues = {
     [SignUpNamesEnum.displayname]: '',
@@ -28,6 +29,7 @@ export const initialValues = {
 
 export const checkDisplayNameCallBack = (_: any, value: string) => {
     console.log(value)
+    if(value.length === 0) return Promise.reject(new Error("display name can't be empty"));
     //check name valid
     if(!validateInputString(value)) return Promise.reject(new Error('name format is invalid'));
     //check length

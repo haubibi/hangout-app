@@ -3,6 +3,7 @@ import updateParticipant from "./updateParticipant";
 import {AddTaskRequestEnum} from "../interfaces/notifications.interface";
 import {IPaticipant} from "../interfaces/participate.interface";
 import getUserById from "./getUserById";
+import deleteRequestNotification from "./notifications/deleteRequestNotification";
 /**
  * 
  * @param paticipants The participant array
@@ -38,7 +39,7 @@ const addParticipant = async (
   participantUid: string, 
   taskId: string, 
   addTaskRequestType: AddTaskRequestEnum
-  ):Promise<Error | IPaticipant> => {
+):Promise<Error | IPaticipant> => {
   // eslint-disable-next-line no-async-promise-executor
 
   return new Promise( async (resolve, reject)=>{
@@ -65,7 +66,8 @@ const addParticipant = async (
     const participantDisplayName = participantUser.displayName;
     const organizerDisplayName = organizerUser.displayName;
 
-
+    console.log("participants:", participants)
+    console.log("currentParticipant:", currentParticipant)
     // if the participant apply exist, check all the types
     if (currentParticipant) {
       // let message: string;
@@ -94,12 +96,23 @@ const addParticipant = async (
         case AddTaskRequestEnum.ORGANIZER_ARGEE_REQUEST:
           currentParticipant.agreed = true;
           currentParticipant.isConfirmed = true;
+          console.log("delete request notification:")
+          deleteRequestNotification({
+            participantUid,
+            taskId,
+            organizerUid: task.organizer
+          });
           // message = `You have agreed the event application!`;
           break;
           // 组织者拒绝请求
         case AddTaskRequestEnum.ORGANIZER_REFUSE_REQUEST:
           currentParticipant.agreed = false;
           currentParticipant.isConfirmed = true;
+          deleteRequestNotification({
+            participantUid,
+            taskId,
+            organizerUid: task.organizer
+          });
           // message = `You have rejected the event application!`;
           break;
       }

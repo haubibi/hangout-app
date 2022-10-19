@@ -28,11 +28,14 @@ import {
     DatePickerCon,
     TimePickerCon,
     InputCon,
-    PopconfirmCon
+    PopconfirmCon,
+    CategorySelect,
+    CategoryOption
 } from './task-form-item.styles';
 import { 
     ITask,
-    TaskRefetchType
+    TaskRefetchType,
+    taskCategories
 } from '../../../interfaces/task.interface';
 import { 
     IImageObjWithUrlAndRefPath,
@@ -66,7 +69,6 @@ import {
 import { getUpdatedTask } from '../../../utils/task/task.utils';
 import { TaskFormUserTypeEnum } from '../../../routers/taskFormPage/task-form-page.component';
 import './task.less';
-import { UserContext } from '../../../context/user.context';
 
 
 const { TextArea } = Input;
@@ -119,7 +121,7 @@ const descriptionFormProps = {
     rules: [{ required: true, message: '' }]
 }
 const keyWordsFormProps = {
-    label: "keywords",
+    label: "tags",
     name: TaskFormItemName.keyWords,
     labelCol: {span: 4},
     wrapperCol: {span: 20}
@@ -182,7 +184,7 @@ const subbmitButtonFormitemProps = {
 
 }
 
-const maxKeyWords = 3;
+export const maxKeyWords = 8;
 
 
 interface TaskFormItemProps {
@@ -248,7 +250,8 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             // description,
             // hide,
             // open,
-            // participantsNumber, 
+            // participantsNumber,
+            //category
             startDate, //modified
             startTime, //modified
             endDate, //modified
@@ -286,7 +289,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
         currentUserTypeCheck();
 
         if(currentUserType === TaskFormUserTypeEnum.USER_MATCH){
-            console.log("delete 1111111111111111")
+            console.log("delete")
             deleteTask({
                 variables: {
                     taskId: taskId
@@ -418,7 +421,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 onFinishFailed = {onFinishFailed}
                 initialValues = {detail}
                 colon = {false}
-                
+                disabled = {submitButtonDisabled || deleteButtonDisabled}
             >   
 
                 {/* {
@@ -502,6 +505,23 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                             rules={[{ required: true, message: '' }]}
                         >
                             <InputNumberCon />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <Form.Item 
+                            label="category"
+                            name = "category"
+                            labelCol={{ span: 5 }}
+                            wrapperCol={{ span: 3 }}
+                            rules={[{ required: true, message: '' }]}
+                        >
+                            <CategorySelect>
+                                {
+                                    taskCategories.map((c, index) => <CategoryOption key = {index} value={c}>{c}</CategoryOption>)
+                                }
+                            </CategorySelect>
                         </Form.Item>
                     </Col>
                 </Row>
