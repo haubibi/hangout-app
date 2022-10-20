@@ -35,7 +35,8 @@ export const NotificationRequestEventListCon = styled.div`
 `;
 
 export const EmptyCon = styled(Empty)`
-    height: ${notification_request_Task_list_number*notification_request_Task_height}px;
+    min-height: ${notification_request_Task_list_number*notification_request_Task_height}px;
+    height: 100%;
     width: ${notification_request_Task_width}px;
     display: flex;
     flex-direction: column;

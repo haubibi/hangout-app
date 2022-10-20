@@ -14,6 +14,9 @@ const {TextArea} = Input;
 export const AccountPersonalInfoCon = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 
@@ -21,7 +24,9 @@ export const ColInfoCon = styled(Col)`
     
 `;
 export const RowInfoCon = styled(Row)`
-    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 `;
 export const FormCon = styled(Form)`
     

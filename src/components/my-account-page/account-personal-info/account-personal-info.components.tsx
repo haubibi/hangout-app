@@ -160,7 +160,6 @@ export const AccountPersonalInfo = () => {
 
     return(
         <AccountPersonalInfoCon>
-                Personal Info page
             <RowInfoCon >
                 <ColInfoCon>
                 <FormCon
@@ -175,7 +174,7 @@ export const AccountPersonalInfo = () => {
                     <FormImagesUpload 
                          maxImageLength = {1}
                          name = 'avatarImg'
-                         label = ''
+                         label = 'Avatar'
                          showImages = {avartImageWithUrl?[avartImageWithUrl]:[]}
                          type = 'avatar'
                     />

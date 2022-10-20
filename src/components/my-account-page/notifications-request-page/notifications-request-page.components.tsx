@@ -23,7 +23,7 @@ import { ITask } from '../../../interfaces/task.interface';
 import { getMyTasks } from '../../../utils/task/task.filter';
 import { NotificationRequestEventList } from '../notification-request-event-list/notification-request-event-list.component';
 import { useCallback } from 'react';
-import { getRequestNotificationsByTask } from '../../../utils/notification/notifications.utils';
+import { getRequestNotificationsByTask,sortNotificationsByTime } from '../../../utils/notification/notifications.utils';
 import { checkIfTaskAttendeesReachMax } from '../../../utils/task/task.utils';
 import { NotifiCationRequestNtfList } from '../notification-request-ntf-list/notification-request-ntf-list.component';
 
@@ -43,30 +43,37 @@ const NotificationRequestPage = () => {
         setCurrentMenuKey(MyAccountMenuKey.NOTIFICATIONS_REQUEST);
     },[setCurrentMenuKey]);
 
-    //check the current user
-    useEffect(()=> {
-        if (!currentUser) {
-            message.info(`Please log in first!`);
-            navigate(`/logIn`,{state:{pathname}});
-        } else {
-            message.destroy();
-        }
-    },[currentUser, navigate, pathname]);
+    // //check the current user
+    // useEffect(()=> {
+    //     if (!currentUser) {
+    //         message.info(`Please log in first!`);
+    //         navigate(`/logIn`,{state:{pathname}});
+    //     } else {
+    //         message.destroy();
+    //     }
+    // },[currentUser, navigate, pathname]);
 
-    //refetchUser
+    //refetch tasks
     useEffect(()=> {
-        if (currentUser) {
-            refetchUser({
-                uid: currentUser.uid
-            });
-        }
-    },[currentUser, refetchUser]);
+        refetchAllTasks();
+    },[refetchAllTasks]);
+
+
+    //refetch users
+    // useEffect(()=> {
+    //     if (currentUser) {
+    //         refetchUser({
+    //             uid: currentUser.uid
+    //         });
+    //     }
+    // },[currentUser, refetchUser]);
 
 
      //get All my tasks
      useEffect(()=>{
         if(allTasks && currentUser) {
             const myTasks = getMyTasks({
+                type: "organize",
                 userUid: currentUser.uid,
                 tasks : allTasks,
                 taskStatus: 'withinDate',
@@ -83,7 +90,7 @@ const NotificationRequestPage = () => {
             console.log(`currentUser:`, currentUser)
             console.log(`notifications:`, notifications)
             const requestNotificationOfTheTask = getRequestNotificationsByTask(activeTaskId, notifications);
-            setNotifications(requestNotificationOfTheTask);
+            setNotifications(sortNotificationsByTime(requestNotificationOfTheTask));
         }
     },[currentUser, setNotifications, activeTaskId]);
 

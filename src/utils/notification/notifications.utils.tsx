@@ -1,6 +1,13 @@
-import { ITask } from '../../interfaces/task.interface';
-import { RequestNotificationType } from '../../interfaces/notifications.interface';
-import { getMomentByDateAndTimeString } from '../date/date.utils';
+import { 
+    TaskUpdateNotificationType,
+    ApplicationNotificationType, 
+    RequestNotificationType,
+    frendRequestNotificationType,
+    UnioNotificationType
+} from '../../interfaces/notifications.interface';
+
+const moment = require('moment');
+
 export const notificationListHeight = 700;
 export const notificationListWidth = 1000;
 export const notificationListWidth_bgColor = `#f1f1f1`;
@@ -29,7 +36,20 @@ export const notification_request_Task_InActive_BgColor = `#ffffff`
  */
 export const getRequestNotificationsByTask = (
     taskId: string,
-    notifications:RequestNotificationType[]
+    notifications:RequestNotificationType[],
 ):RequestNotificationType[] =>{
     return notifications.filter(notification => notification.taskId === taskId);
 }
+
+/**
+ * sort the notifications with time property
+ * @param notifications 
+ * @returns 
+ */
+export function sortNotificationsByTime (notifications: TaskUpdateNotificationType[]):TaskUpdateNotificationType[];
+export function sortNotificationsByTime (notifications: ApplicationNotificationType[]):ApplicationNotificationType[];
+export function sortNotificationsByTime (notifications: RequestNotificationType[]):RequestNotificationType[];
+export function sortNotificationsByTime (notifications: frendRequestNotificationType[]):frendRequestNotificationType[];
+export function sortNotificationsByTime (notifications: UnioNotificationType[]):UnioNotificationType[]{
+    return notifications.sort((o1, o2)=> moment(o1.time).valueOf() - moment(o2.time).valueOf());
+} 

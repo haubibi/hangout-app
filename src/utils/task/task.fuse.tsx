@@ -46,8 +46,10 @@ const getSearchTasks = (
     let newTasks:ITask[] = [];
     let totalLength:number;
     if(input === "") {
-        newTasks = [...tasks];
-        totalLength = newTasks.length;
+        const startIndex = taskStartIndex < tasks.length? taskStartIndex: tasks.length-1;
+        const endIndex = (startIndex + amout) < tasks.length? (startIndex + amout): tasks.length;
+        newTasks = _.slice(tasks, startIndex, endIndex);
+        totalLength = tasks.length;
     } else {
         const result = fuse.search(input);
         console.log("result:", result)

@@ -91,6 +91,7 @@ export type TaskStatusType = 'withinDate' | 'outOfDate' | 'all';
 
 
 export interface IMyTaskFilterInput {
+    type: 'organize' | 'attend',
     userUid: string;
     tasks: ITask[];
     taskStatus: TaskStatusType;

@@ -25,7 +25,9 @@ export const ListItemMeta = styled(List.Item.Meta)`
    }
    & .ant-list-item-meta-content {
       max-width: 100px;
-      .h4,div{
+      h4,div{
+         width:130px;
+         line-height:22px;
          ${textOverFlowElilipsis}
       }
    }

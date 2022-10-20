@@ -73,7 +73,7 @@ const Home: FC = () =>{
                 (currentPage - 1) * pageTasksAmout,
                 pageTasksAmout,
             );
-            const {totalLength, tasks} = tasksAndTotalLength;
+            const {tasks, totalLength} = tasksAndTotalLength;
             const filteredTasks = getFilteredTasks({
                 tasks,
                 taskFilter: {
@@ -82,13 +82,8 @@ const Home: FC = () =>{
                 IfFilterOutOfDateTasks: true,
                 ifFilterHiddenTasks: true
             })
-            // console.log("allTasks:", allTasks)
-            // console.log("searchInputValue:", searchInputValue)
-            // console.log("tasksAndTotalLength:", tasksAndTotalLength)
-
-            setTasksTotalLength(totalLength); 
-
-            setTasks(filteredTasks.concat(filteredTasks));    
+            setTasks(filteredTasks.concat(filteredTasks));
+            setTasksTotalLength(totalLength);
         }
     },[allTasks, currentPage, setTasksTotalLength, setTasks, searchInputValue, category]);
 

@@ -7,10 +7,10 @@ import {
 import { 
     ListCon,
     EmptyCon,
+    InfiniteScrollCon
  } from './notification-request-ntf-list.styles'
 import { RequestNotificationType } from '../../../interfaces/notifications.interface';
 import { NotifiCationRequestNtfItem } from '../notification-request-ntf-item/notification-request-ntf-item.component';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { Divider } from 'antd';
 
 interface INotifiCationRequestNtfListProps {
@@ -38,10 +38,9 @@ export const NotifiCationRequestNtfList:FC<INotifiCationRequestNtfListProps> = (
     },[setScollCount, scollCount]);
 
     return (
-        
             Array.isArray(notifications) && notifications.length === 0 ?
             <EmptyCon  description={<span> No Notification</span>} />:
-            <InfiniteScroll
+            <InfiniteScrollCon
                 dataLength={ startCount * addStep }
                 loader={ null }
                 endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
@@ -52,6 +51,6 @@ export const NotifiCationRequestNtfList:FC<INotifiCationRequestNtfListProps> = (
                     dataSource={notifications}
                     renderItem = {(item: RequestNotificationType) => <NotifiCationRequestNtfItem notification={ item } argeeDisabled = {isAttendeesMax}/>}
                 />
-            </InfiniteScroll>
+            </InfiniteScrollCon>
     )
 }

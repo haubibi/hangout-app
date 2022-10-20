@@ -205,42 +205,13 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
     const [ form ] = useForm();
     const [ submitButtonDisabled, setSubmitButtonDisabled] = useState<boolean>(false);
     const [ deleteButtonDisabled, setDeleteButtonDisabled] = useState<boolean>(false);
+    const [ formDisabled, setFormDisabled] = useState<boolean>(false);
     const [ detail, setDetail] = useState<Record<string, any>>();
     const [ currentTask, setCurrentTask ] = useState<ITask>(task);
     const [ addTask ] = useMutation(ADD_TASK);
     const [ deleteTask ] = useMutation(DELETE_TASK);
     const navigate = useNavigate();
     const taskId = currentTask.id;
-
-
-    const FormItemsArr = useMemo(()=>{
-        const showImages = currentTask.showImages;
-        const frontCoverImage = currentTask.frontCoverImage? [currentTask.frontCoverImage]: [];
-        return [
-            [{formItemProps: titleFormProps, wrappedElement: <InputCon allowClear = {true}/>}],
-            [
-                {formItemProps: startDateFormProps, wrappedElement: <DatePickerCon />},
-                {formItemProps: startTimeFormProps, wrappedElement: <TimePickerCon />}
-            ],
-            [
-                {formItemProps: endDateFormProps, wrappedElement: <DatePickerCon />},
-                {formItemProps: endTimeFormProps, wrappedElement: <TimePickerCon />}
-            ],  
-            [{formItemProps: participantsNumberFormProps, wrappedElement: <InputNumberCon />}],
-            [{formItemProps: descriptionFormProps, wrappedElement: <TextArea rows={4} allowClear = {true} />}],
-            [{formItemProps: keyWordsFormProps, wrappedElement: <FormTag maxTagsNumber={maxKeyWords} />}],
-            [{formItemProps: {}, wrappedElement:<FormImagesUpload {...frontCoverFormProp} showImages = {frontCoverImage}/>}], //
-            [{formItemProps: {}, wrappedElement:<FormImagesUpload {...showImagesFormProps} showImages = {showImages}/>}], //
-            [{formItemProps: googleSearchFormProps, wrappedElement: <GoogleSearchInForm />}],
-            [
-                {formItemProps: {}, wrappedElement:<FormSwitch {...formSwitchOpenProps}/>},
-                {formItemProps: {}, wrappedElement:<FormSwitch {...formSwitchShowProps}/>},
-            ], 
-            [{formItemProps: subbmitButtonFormitemProps, wrappedElement: <Button type="primary" htmlType="submit">Submit</Button>,encapsulated: false}],
-        
-        ]
-    },[currentTask]);
-
 
     //set the detail of the form
     useEffect(()=>{
@@ -282,14 +253,11 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
     // console.log(task,detail)
     const deleteTaskHandle = useCallback(()=>{
         //set the buttons disabled
-        setSubmitButtonDisabled(true);
-        setDeleteButtonDisabled(true);
-
+        setFormAndButtonsDisabled(true);
         //check current user type
         currentUserTypeCheck();
 
         if(currentUserType === TaskFormUserTypeEnum.USER_MATCH){
-            console.log("delete")
             deleteTask({
                 variables: {
                     taskId: taskId
@@ -298,12 +266,19 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 message.success(`You have successfully deleted the event!`, 5);
                 navigate(`/`);
             }).catch(error => {
-                message.error(error, 5);
-                navigate(`/`);
+                message.destroy();
+                message.error(error, 3);
+                setFormAndButtonsDisabled(false);
             })
         }
     },[taskId, currentUserTypeCheck, deleteTask, navigate, currentUserType]);
 
+
+    const setFormAndButtonsDisabled = (flag: boolean): void =>{
+        setSubmitButtonDisabled(flag);
+        setDeleteButtonDisabled(flag);
+        setFormDisabled(flag);
+    };
 
 
     const onFinishFailed = ({ values, errorFields, outOfDate }: any) => {
@@ -313,22 +288,16 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
     const onFinish = async (values: ITaskFormItemDetail) => {
        
         //set the buttons disabled
-        setSubmitButtonDisabled(true);
-        setDeleteButtonDisabled(true);
-
+        setFormAndButtonsDisabled(true);
         //check current user type
         currentUserTypeCheck();
-
-        // console.log(values ,currentTask)
-
 
         let showImages: IImageObjWithUrlAndRefPath[] = currentTask.showImages;
         let frontCoverImage: IImageObjWithUrlAndRefPath | null = currentTask.frontCoverImage;
         
         //validate the values
         if(!validateFormValues(values, currentTask)){
-            setSubmitButtonDisabled(false);
-            setDeleteButtonDisabled(false);
+            setFormAndButtonsDisabled(false);
             return;
         };
         // update show images
@@ -348,9 +317,9 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     showImages = showImagesWithRefAndUrl as IImageObjWithUrlAndRefPath[];
                 })
             }).catch((error)=>{
+                message.destroy();
                 message.error(error.toString(), 3);
-                setSubmitButtonDisabled(false);
-                setDeleteButtonDisabled(false);
+                setFormAndButtonsDisabled(false);
                 return;
             });
         }
@@ -374,9 +343,9 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                    frontCoverImage = frontCoverImageArr[0] as IImageObjWithUrlAndRefPath;
                 });
             }).catch((error)=>{
+                message.destroy();
                 message.error(error.toString(), 3);
-                setSubmitButtonDisabled(false);
-                setDeleteButtonDisabled(false);
+                setFormAndButtonsDisabled(false);
                 return;
             });
         }
@@ -400,9 +369,9 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             }).then(()=>{
                 navigate(`/task_${taskId}`);
             }).catch((error)=>{
+                message.destroy();
                 message.error(error.toString(), 3);
-                setSubmitButtonDisabled(false);
-                setDeleteButtonDisabled(false);
+                setFormAndButtonsDisabled(false);
             })
         });
 
@@ -421,26 +390,8 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 onFinishFailed = {onFinishFailed}
                 initialValues = {detail}
                 colon = {false}
-                disabled = {submitButtonDisabled || deleteButtonDisabled}
+                disabled = {formDisabled}
             >   
-
-                {/* {
-                    FormItemsArr.map((rowArr,index)=>{
-                        const elementsNum = rowArr.length;
-                        return(
-                            <Row key={index} align = "middle" justify = "start" gutter={16}>
-                                {
-                                    rowArr.map((formitem, index) => {
-                                        const { formItemProps, wrappedElement} = formitem;
-                                        return wrappedElement.type === 'function'?
-                                        <Col key={index} span={Math.round(24/elementsNum)}>{wrappedElement}</Col>:    
-                                        <Col key={index} span={Math.round(24/elementsNum)}><Form.Item {...formItemProps}>{wrappedElement}</Form.Item></Col>;    
-                                    })
-                                }
-                             </Row>
-                        )
-                    })
-                } */}
                 <Row>
                     <Col span={24}>
                         <Form.Item 
@@ -599,27 +550,33 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={12}>
-                            <PopconfirmCon 
-                                placement="right" 
-                                title={`Are you sure to delete this Event?`} 
-                                onConfirm={ deleteTaskHandle } 
-                                okText="Yes" 
-                                cancelText="No"
-                                disabled = {deleteButtonDisabled}
-                            >
 
-                                <Button 
-                                    type="primary" 
-                                    htmlType="button"
+                {
+                    isNewTaskForm?
+                    null:
+                    <Row>
+                        <Col span={12}>
+                                <PopconfirmCon 
+                                    placement="right" 
+                                    title={`Are you sure to delete this Event?`} 
+                                    onConfirm={ deleteTaskHandle } 
+                                    okText="Yes" 
+                                    cancelText="No"
                                     disabled = {deleteButtonDisabled}
                                 >
-                                    Delete
-                                </Button>
-                            </PopconfirmCon>
-                    </Col>
-                </Row>
+
+                                    <Button 
+                                        type="primary" 
+                                        htmlType="button"
+                                        disabled = {deleteButtonDisabled}
+                                    >
+                                        Delete
+                                    </Button>
+                                </PopconfirmCon>
+                        </Col>
+                    </Row>
+                }
+                
                 
 
             </Form>

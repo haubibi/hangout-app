@@ -72,6 +72,7 @@ export interface NotificationTypes {
     friendRequestNotification: frendRequestNotificationType[]
 };
 
+export type UnioNotificationType = TaskUpdateNotificationType | ApplicationNotificationType | RequestNotificationType | frendRequestNotificationType;
 
 export interface ParticipantNotification{
     task: ITask;

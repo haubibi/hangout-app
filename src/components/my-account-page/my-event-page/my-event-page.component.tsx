@@ -5,7 +5,6 @@ import { Outlet } from 'react-router-dom';
 const MyEventPage =  () => {
     return (
         <MyEventCon>
-            My event list
             <Outlet />
         </MyEventCon>
     )

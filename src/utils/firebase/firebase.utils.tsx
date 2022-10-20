@@ -153,8 +153,7 @@ export const forgetPassword = (email: string) => {
 }
 
 export const resetPassword = (oobCode: string, newPassword: string): Promise<string | Error> => {
-  console.log('oobCode:',oobCode)
-  console.log('newPassword:',newPassword)
+
   if (!oobCode || !newPassword) return;
   return new Promise((resolve, reject)=>{
     checkActionCode(auth, oobCode).then(()=>{

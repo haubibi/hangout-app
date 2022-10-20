@@ -81,7 +81,13 @@ const SignInItem = () => {
                 Object.prototype.toString.call(state) === '[object Object]' &&
                 Object.prototype.hasOwnProperty.call(state, 'pathname')
             ) {
-                navigate(`${(state as IStateWithPathname).pathname}`,{replace: true});
+                const pathName = (state as IStateWithPathname).pathname;
+                console.log("pathName:", pathName)
+                if(pathName === `/signUp`){
+                    navigate(`/`);
+                } else {
+                    navigate(`${pathName}`,{replace: true});
+                }
             } else {
                 navigate(`/`);
             }

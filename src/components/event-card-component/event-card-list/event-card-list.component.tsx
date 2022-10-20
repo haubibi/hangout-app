@@ -21,7 +21,7 @@ const gridStyle = {
     xxl: 4,
 };
 
-const renderEventCard = (task: ITask) => (
+export const renderEventCard = (task: ITask) => (
     <ListItem>
         <EventCard task = {task}/>
     </ListItem>
@@ -45,14 +45,5 @@ export const EventCardList:FC<EventCardListProps> = ({
             dataSource={tasks}
             renderItem= {renderEventCard}
         />
-        // <EventCardListCon>
-        //     <Row align = 'middle' justify = 'center' gutter= {gutter as [Gutter, Gutter]}>
-        //             {
-        //                 tasks.map((task, index)=>{
-        //                     return <ColContainer key = {index} {...spanObj}><EventCard task = {task}/></ColContainer>
-        //                 })
-        //             }
-        //     </Row>
-        // </EventCardListCon>
     )
 }

@@ -31,6 +31,7 @@ import { DateRangeValueType } from "../../interfaces/time.interface";
 /**
  * get my Events
  * 
+ * @param type organize or attend
  * @param userUid user uid
  * @param tasks all the tasks
  * @param taskStatus status of the task 
@@ -38,12 +39,26 @@ import { DateRangeValueType } from "../../interfaces/time.interface";
  */
 
 export const getMyTasks= ({
+  type,
   userUid,
   tasks,
   taskStatus,
   sortByDate
 }: IMyTaskFilterInput):ITask[] =>{
-  const myTasks = tasks.filter(task => task.organizer === userUid);
+  let myTasks:ITask[] = [];
+  if(type === 'organize'){
+      myTasks = tasks.filter(task => task.organizer === userUid);
+    } else {
+      myTasks = tasks.filter(task => {
+          const index = task.participants.findIndex(participant => {
+              const {isConfirmed, agreed, participantUid} = participant;
+              return participantUid === userUid &&
+                    isConfirmed &&
+                    agreed
+          });
+          return index === -1? false: true;
+      });
+  }
 
   if(sortByDate) {
     myTasks.sort((task1, task2) => {

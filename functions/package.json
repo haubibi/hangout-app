@@ -24,6 +24,7 @@
     "graphql": "^16.6.0",
     "load-module": "^4.2.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "typescript": "^4.8.4"
   },
   "devDependencies": {

@@ -5,36 +5,45 @@ import {
  } from './my-account-page.styles';
 import React, { 
     useContext,
+    useEffect
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { 
+    useNavigate,
+    useLocation
+ } from 'react-router-dom';
 import { UserContext } from '../../context/user.context';
 import {
     message,
-    Layout
  } from 'antd';
 import { MyAccountMenu } from '../../components/my-account-page/my-account-menu/my-account-menu.component';
 import { Outlet } from 'react-router-dom';
 
 
 
-const menuColSpan = {
-    xs: 3,
-    sm: 5,
-    md: 6,
-    lg: 7,
-    xl: 8
-};
-
 
 const MyAccountPage = () => {
-    const { currentUser }= useContext(UserContext);
+    const { currentUser, refetchUser }= useContext(UserContext);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+     //check the current user
+     useEffect(()=> {
+        if (!currentUser) {
+            message.info(`Please log in first!`);
+            navigate(`/logIn`,{state:{pathname}});
+        } else {
+            message.destroy();
+        }
+    },[currentUser, navigate, pathname]);
 
-    //if current user doesn't exist, back to home page
-    // if(!currentUser) {
-    //     message.error('Please log in / sign up first!');
-    //     navigate('/'); 
-    // }
+     //refetchUser
+     useEffect(()=> {
+        if (currentUser) {
+            refetchUser({
+                uid: currentUser.uid
+            });
+        }
+    },[currentUser, refetchUser]);
+
     return (
 
         <MyAccountPageCon>

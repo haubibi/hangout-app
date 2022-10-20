@@ -20,7 +20,10 @@ export const Rowpage = styled(Row)`
     `;
 export const ColEventList = styled(Col)`
     width: ${notification_request_Task_width}px;
+
 `;
 export const ColNotificationList = styled(Col)`
     width: ${notification_request_notifications_width}px;
+
+
 `;

@@ -16,7 +16,7 @@ import { message } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TaskUpdateNotificationType } from '../../../interfaces/notifications.interface';
 import { NotifiCationEventUpdateNtfList } from '../notification-event-update-ntf-list/notification-event-update-ntf-list.component'; 
-
+import { sortNotificationsByTime } from '../../../utils/notification/notifications.utils';
 
 const NotificationApplicationPage = () => {
     const { setCurrentMenuKey } = useContext(NavigationContext);
@@ -30,30 +30,30 @@ const NotificationApplicationPage = () => {
         setCurrentMenuKey(MyAccountMenuKey.NOTIFICATIONS_EVENT_UPDATE);
     },[setCurrentMenuKey]);
 
-    //check the current user
-    useEffect(()=> {
-        if (!currentUser) {
-            message.info(`Please log in first!`);
-            navigate(`/logIn`,{state:{pathname}});
-        } else {
-            message.destroy();
-        }
-    },[currentUser, navigate, pathname]);
+    // //check the current user
+    // useEffect(()=> {
+    //     if (!currentUser) {
+    //         message.info(`Please log in first!`);
+    //         navigate(`/logIn`,{state:{pathname}});
+    //     } else {
+    //         message.destroy();
+    //     }
+    // },[currentUser, navigate, pathname]);
 
-     //refetchUser
-     useEffect(()=> {
-        if (currentUser) {
-            refetchUser({
-                uid: currentUser.uid
-            });
-        }
-    },[currentUser, refetchUser]);
+    //  //refetchUser
+    //  useEffect(()=> {
+    //     if (currentUser) {
+    //         refetchUser({
+    //             uid: currentUser.uid
+    //         });
+    //     }
+    // },[currentUser, refetchUser]);
     //set the application notifications
     useEffect(()=> {
         if (currentUser) {
             console.log(`current user`, currentUser)
             const notifications = currentUser?.notifications?.taskUpdateNotification || [];
-            setNotifications(notifications);
+            setNotifications(sortNotificationsByTime(notifications));
         }
     },[currentUser, setNotifications]);
 
