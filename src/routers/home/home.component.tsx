@@ -82,7 +82,8 @@ const Home: FC = () =>{
                 IfFilterOutOfDateTasks: true,
                 ifFilterHiddenTasks: true
             })
-            setTasks(filteredTasks.concat(filteredTasks));
+            // setTasks(filteredTasks.concat(filteredTasks));
+            setTasks(filteredTasks);
             setTasksTotalLength(totalLength);
         }
     },[allTasks, currentPage, setTasksTotalLength, setTasks, searchInputValue, category]);
