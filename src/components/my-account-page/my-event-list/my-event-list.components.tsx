@@ -35,7 +35,7 @@ export const MyEventList = ({
         if(tasks) {
             // const {tasks} = data;
             const tasksAndTotalLength = getSearchTasks(
-                tasks,
+                [...tasks],
                 "",
                 (currentPage - 1) * pageTasksAmout,
                 pageTasksAmout,
@@ -58,7 +58,7 @@ export const MyEventList = ({
         <ContainerDiv>
             <ListCon
                 // grid = {gridStyle}
-                grid = {{column: 3}}     
+                grid = {{column: 4}}     
                 dataSource={events}
                 renderItem = {renderEventCard}
             >
