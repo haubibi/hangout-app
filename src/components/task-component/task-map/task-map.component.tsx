@@ -9,7 +9,9 @@ import {
 import GoogleMaps from '../../googleMaps-map/googleMap-map.component';
 import { ILatLngAndAddress } from '../../../interfaces/google.interface';
 import { markerCreator } from '../../../utils/googleMap/googleMap.utils';
-
+import { useLoadScript } from '@react-google-maps/api';
+import { googleMapLibWithPlaces } from '../../../utils/googleMap/googleMap.utils';
+import { Spin } from 'antd';
 const mapContainerStyle = {
     width: '100%',
     height: '100%',
@@ -39,6 +41,12 @@ export const TaskMap: FC<ITaskMapConProps> = ({
     address
 }) =>{
     const markerLocation = [markerCreator({position: address.latLng})];
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
+        libraries: googleMapLibWithPlaces,
+    });
+
+    if(!isLoaded || loadError) return <Spin />
     return (
         <TaskMapCon>
             <DividerCon orientation="left">Check on map</DividerCon>

@@ -44,12 +44,12 @@ import {
     IPaticipant,
     getNumberofParticipants
 } from '../../../interfaces/participate.interface';
-import { useLoadScript } from '@react-google-maps/api';
+
 import {
     carouselImgWidth,
     carouselImgHeight
 } from '../../../utils/default-settings/event.settings';
-import { googleMapLibWithPlaces } from '../../../utils/googleMap/googleMap.utils'
+
 interface ITaskItemProps{
     task: ITask;
     taskRefetch: TaskRefetchType<{id: string}>;
@@ -133,10 +133,6 @@ export const TaskItem:FC<ITaskItemProps> = ({
         participantsNumber,
         participants
     } = task;
-    const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PUBLISH_API_KEY!,
-        libraries: googleMapLibWithPlaces,
-    });
     const showImages = task.showImages || []
     const startTimeMoment = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!), [startDate,startTime]);
     const currentAttendees = useMemo(()=> getNumberofParticipants(participants),[participants]);
@@ -212,9 +208,9 @@ export const TaskItem:FC<ITaskItemProps> = ({
         navigate(`/taskForm_${task.id}`)
     },[navigate, task]);
 
+    if(!task) return <Spin />
    return (
     <TaskitemContainer>
-
         <RowCon>
             <CenterAlignCol span={24}>
                 <TitleCon> {title}</TitleCon>
@@ -260,11 +256,11 @@ export const TaskItem:FC<ITaskItemProps> = ({
         <RowCon>
             <TaskMapCol span={24}>
                 {
-                    latLngAndAddress?
+                    !latLngAndAddress?
+                    <Spin />:
                     <TaskMap
                         address = {latLngAndAddress}
-                    />:
-                    <Spin />
+                    />
                 }
             </TaskMapCol>
         </RowCon>

@@ -21,7 +21,7 @@ const comboboxSettings = {
 };
 
 const mapContainerStyle = {
-    width: '90%',
+    width: '100%',
     height: '100%',
 };
 
