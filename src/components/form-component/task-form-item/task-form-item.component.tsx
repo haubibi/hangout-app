@@ -24,6 +24,7 @@ import {
 } from 'antd';
 import { 
     TaskFormItemContainer,
+    EventTitleRow,
     InputNumberCon,
     DatePickerCon,
     TimePickerCon,
@@ -79,7 +80,7 @@ const titleFormProps = {
     label: "Event title",
     name: TaskFormItemName.title,
     labelCol: {span: 4},
-    wrapperCol: {span: 20},
+    wrapperCol: {span: 24},
     rules: taskFormRules[TaskFormItemName.title]
 }
 
@@ -87,14 +88,14 @@ const startDateFormProps = {
     label: "Start date",
     name: TaskFormItemName.startDate,
     labelCol: {span: 8},
-    wrapperCol: {span: 12},
+    wrapperCol: {span: 24},
     rules: [{ required: true, message: '' }]
 }
 const startTimeFormProps = {
     label: "Start time",
     name: TaskFormItemName.startTime,
     labelCol: {span: 8},
-    wrapperCol: {span: 12},
+    wrapperCol: {span: 24},
     rules: [{ required: true, message: '' }]
 }
 
@@ -103,21 +104,21 @@ const endDateFormProps = {
     label: "End date",
     name: TaskFormItemName.endDate,
     labelCol: {span: 8},
-    wrapperCol: {span: 12},
+    wrapperCol: {span: 24},
     rules: [{ required: true, message: '' }]
 }
 const endTimeFormProps = {
     label: "End time",
     name: TaskFormItemName.endTime,
     labelCol: {span: 8},
-    wrapperCol: {span: 12},
+    wrapperCol: {span: 24},
     rules: [{ required: true, message: '' }]
 }
 const descriptionFormProps = {
     label: "Description",
     name: TaskFormItemName.description,
     labelCol: {span: 4},
-    wrapperCol: {span: 20},
+    wrapperCol: {span: 24},
     rules: [{ required: true, message: '' }]
 }
 const keyWordsFormProps = {
@@ -392,7 +393,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 colon = {false}
                 disabled = {formDisabled}
             >   
-                <Row>
+                <EventTitleRow>
                     <Col span={24}>
                         <Form.Item 
                             {...titleFormProps}
@@ -400,10 +401,10 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                             <InputCon allowClear = {true}/>
                         </Form.Item>
                     </Col>
-                </Row>
+                </EventTitleRow>
 
                 <Row gutter={16 + 8}>
-                    <Col span={12}>
+                    <Col span={10}>
                         <Form.Item
                             {...startDateFormProps}
                         >
@@ -411,7 +412,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         </Form.Item>
                         
                     </Col>
-                    <Col span={12}>
+                    <Col span={10}>
                         <Form.Item 
                             {...startTimeFormProps}
                         >
@@ -420,7 +421,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                 </Row>
                 <Row gutter={16 + 8}>
-                    <Col span={12}>
+                    <Col span={10}>
                         <Form.Item
                            {...endDateFormProps}
                         >
@@ -428,7 +429,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                         </Form.Item>
                         
                     </Col>
-                    <Col span={12}>
+                    <Col span={10}>
                         <Form.Item 
                            {...endTimeFormProps}
                         >

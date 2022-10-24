@@ -1,10 +1,16 @@
 import styled from "styled-components";
-
+import {
+    carouselImgWidth,
+    carouselImgHeight
+} from '../../../utils/default-settings/event.settings';
 export const TaskCarouselCon = styled.div`
-    width: 250px;
-    height: 200px;
+    width: ${carouselImgWidth}px;
+    height: ${carouselImgHeight}px;
 `
 export const ImageCon = styled.div`
-    width: 250px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 `

@@ -85,7 +85,6 @@ export const EventCard:FC<IEventCardProps> = ({
     const startTimeString = useMemo(()=> getMomentFullTimeString(startDate!, startTime!), [startDate,startTime]);
     const startTimeMoment = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!), [startDate,startTime]);
     const endimeString = useMemo(()=> getMomentFullTimeString(endDate!, endTime!), [endDate,endTime]);
-    const endTimeMoment = useMemo(()=> getMomentByDateAndTimeString(endDate!, endTime!), [endDate,endTime]);
     const cityText = useMemo(()=> getCityText(latLngAndAddress.address), [latLngAndAddress.address]);
     const currentMoment = getCurrentMoment();
     const startTimeText = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!).format(cardDateFormat), [startDate, startTime]);

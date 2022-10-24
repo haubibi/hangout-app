@@ -22,7 +22,6 @@ import {
  } from "../../utils/customised_hooks/useGetTaskById";
  import { ITask } from "../../interfaces/task.interface";
 
- import { ApolloError } from "@apollo/client";
 import { TaskFormItem } from '../../components/form-component/task-form-item/task-form-item.component';
 
 

@@ -6,7 +6,9 @@ import {
     DatePicker,
     TimePicker,
     Popconfirm,
-    Select
+    Select,
+    Row,
+    Col
 } from 'antd';
 // $ruler: 16px;
 // $color-red: #AE1100;
@@ -29,16 +31,25 @@ export const FlexStart = css`
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
+
 `;
 
 
 export const TaskFormItemContainer = styled.div`
+
     width:100%;
-    max-width: 800px;
-    min-width: 400px;
-    display: flex;
-    flex-direction: column;
+    width: 800px;
+    /* max-width: 800px; */
+    /* min-width: 400px; */
+    .ant-form-item-control{
+        width: 100% !important;
+    }
 `;
+
+
+export const EventTitleRow = styled(Row) `
+    
+`
 
 
 export const InputCon = styled(Input)`

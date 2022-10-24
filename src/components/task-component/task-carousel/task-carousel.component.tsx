@@ -1,5 +1,7 @@
-import { FC } from 'react';
-import { IImageObjWithUrl, IImageObjWithUrlAndRefPath } from '../../../interfaces/images.interface';
+import { 
+    FC,
+ } from 'react';
+import { IImageObjWithUrlAndRefPath } from '../../../interfaces/images.interface';
 import {
     TaskCarouselCon,
     ImageCon
@@ -8,45 +10,38 @@ import { Carousel } from 'antd';
 
 interface TaskCarouselProps {
     images: IImageObjWithUrlAndRefPath[];
+    imgWidth: number;
+    imgHeight: number;
 }
+const defaultSrc = require('../../../assets/eventc-card-front-cover/frontCover_default.jpg');
 
 export const TaskCarousel:FC<TaskCarouselProps> = ({
-    images
+    images,
+    imgWidth,
+    imgHeight
 }) => {
 
-    const onAfterChange = (current: number) => {
+    const currentImages = images.length === 0? [{
+        url: defaultSrc,
+        name: 'img'
+    }]: images;
 
-    }
 
     return (
         <TaskCarouselCon>
-            <Carousel 
-                afterChange={onAfterChange}
+            <Carousel
                 autoplay
             >
                 {
-                    images.map((image,index)=>{
+                    currentImages.map((image,index)=>{
                         const { url, name} = image;
                         return (
                             <ImageCon key = {index}>
-                                <img src = {url} alt = {name} width = {250} height = {150}/>
+                                <img src = {url} alt = {name} width = {imgWidth} height = {imgHeight}/>
                             </ImageCon>
                         )
                     })
                 }
-                 {/* <Carousel afterChange={onChange}>
-      <div>
-        <h3 style={contentStyle}>1</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>2</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>3</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>4</h3>
-      </div> */}
     </Carousel>
         </TaskCarouselCon>
     )

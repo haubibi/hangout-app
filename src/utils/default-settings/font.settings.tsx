@@ -2,8 +2,14 @@
 //font size
 export const normaltextFontSize = 14;
 export const eventCardTitleFontSize = 30;
+
+
 export const eventTaskTitleFontSize = 50;
-export const eventTaskDescriptionFontSize = 30;
+export const eventTaskDateTimeH3FontSize = 24;
+export const eventTaskDateTimeFontSize = 16;
+export const eventTaskDescriptionFontSize = 18;
+
+
 
 
 //font family

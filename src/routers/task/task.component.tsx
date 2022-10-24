@@ -4,7 +4,7 @@ import {
     useContext
 } from "react";
 import { TaskContainer } from './task.styles';
-import { TaskItem } from "../../components/task-item/task-item.component";
+import { TaskItem } from "../../components/task-component/task-item/task-item.component";
 import { useLocation } from 'react-router-dom';
 import { 
     ITask,

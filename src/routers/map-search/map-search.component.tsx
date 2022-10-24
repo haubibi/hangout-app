@@ -23,9 +23,8 @@ import {
     useMemo,
     useContext
 } from 'react';
-import { ILatLngAndAddress, LatLngLiteral } from '../../interfaces/google.interface';
-import { getCurrentCoords, markerCreator, markersCreator } from '../../utils/googleMap/googleMap.utils';
-import { IComboboxContainer } from '../../components/places-auto-complete/places-auto-complete.component';
+import { ILatLngAndAddress } from '../../interfaces/google.interface';
+import { getCurrentCoords, markersCreator } from '../../utils/googleMap/googleMap.utils';
 import { FilterBar } from '../../components/filter-component/filter-bar/filter-bar.components';
 import { 
     IFilterTasks
@@ -233,9 +232,6 @@ const MapSearch = () => {
                                 defaultV = { currentLatLngAddress}
                                 onChange = {handlePlaceInputChange}
                             />
-                            {/* <SearchButton type="primary" icon={<SearchOutlined />} onClick = {searchOnClick}>
-                                
-                            </SearchButton> */}
 
                         </ColSearch>
                         <ColSearchButton>
