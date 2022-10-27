@@ -11,7 +11,7 @@ import {
     CurrentTaskUserTypeEnum,
     TaskRefetchType
  } from '../../../interfaces/task.interface';
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { TaskCarousel } from '../task-carousel/task-carousel.component';
 import { 
     ADD_PARTICIPANT, 
@@ -31,6 +31,8 @@ import {
     TaskTimeLocationAttendeeCol,
     TaskDescriptionCol,
     TaskMapCol,
+    TaskAttendeeAvatarCol,
+    TaskTagsCol
  } from './task-item.styles';
 import { UserContext } from "../../../context/user.context";
 import { AddTaskRequestEnum, QuitTaskRequestEnum } from '../../../interfaces/notifications.interface';
@@ -40,8 +42,13 @@ import { getMomentByDateAndTimeString, getCurrentMoment } from '../../../utils/d
 import { TaskTimeLocationAttendee } from '../task-time-location-attendee/task-time-location-attendee.component';
 import { TaskDescription } from '../task-description/task-description.component';
 import { TaskMap } from '../task-map/task-map.component';
+import { TaskAttendeeAvatar } from '../task-attendee-avatar/task-attendee-avatar.component';
+import { IUser } from '../../../interfaces/user.interface';
+import { GET_ALL_USERS } from '../../../utils/graphql/query.utils';
+import { getAllAttendeesByTask } from '../../../utils/task/task.utils';
+import { TaskTags } from '../task-tags/task-tags.component';
+
 import { 
-    IPaticipant,
     getNumberofParticipants
 } from '../../../interfaces/participate.interface';
 
@@ -50,9 +57,12 @@ import {
     carouselImgHeight
 } from '../../../utils/default-settings/event.settings';
 
+
 interface ITaskItemProps{
     task: ITask;
+    userType:CurrentTaskUserTypeEnum;
     taskRefetch: TaskRefetchType<{id: string}>;
+    ifTaskExpired:boolean;
 }
 
 
@@ -64,97 +74,53 @@ export enum TaskButtonTypeEnum {
 }
 
 
-
-
-const getCurretUserType = (
-    taskParticipants: IPaticipant[],
-    orginizerUid: string,
-    currentUserUid: string,
-):CurrentTaskUserTypeEnum => {
-    taskParticipants = taskParticipants? taskParticipants: [];
-    //current user is orgnizer
-    if(orginizerUid === currentUserUid) return CurrentTaskUserTypeEnum.ORGNIZER;
-     //current user is not confirmed
-     const inConsiderationParticipantsIndex = taskParticipants.findIndex(participant => 
-        participant.participantUid === currentUserUid && 
-        !participant.isConfirmed &&
-        !participant.agreed &&
-        participant.requestType === AddTaskRequestEnum.PARTICIPANT_APPLY_REQUEST
-
-    );
-    if(inConsiderationParticipantsIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_NOT_CONFIRMED;
-
-
-    //current user is the attendee
-    const agreedParticipantIndex = taskParticipants.findIndex(participant => 
-        participant.participantUid === currentUserUid && 
-        participant.agreed && 
-        participant.isConfirmed &&
-        participant.requestType === AddTaskRequestEnum.ORGANIZER_ARGEE_REQUEST
-    );
-    if(agreedParticipantIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_AGREED;
-
-
-    //current user is rejected
-    const rejectParticipantIndex = taskParticipants.findIndex(participant => 
-        participant.participantUid === currentUserUid && 
-        !participant.agreed && 
-        participant.isConfirmed &&
-        participant.requestType === AddTaskRequestEnum.ORGANIZER_REFUSE_REQUEST
-    );
-    if(rejectParticipantIndex !== -1) return CurrentTaskUserTypeEnum.PARTICIPANT_REJECT;
-
-
-
-    return CurrentTaskUserTypeEnum.GUEST_LOGIN;
-};
-
-
 export const TaskItem:FC<ITaskItemProps> = ({
     task,
-    taskRefetch
+    taskRefetch,
+    userType,
+    ifTaskExpired
 }) => {
     const navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
-    const [ userType, setUserType ] = useState<CurrentTaskUserTypeEnum>();
+    const { data, loading , error } = useQuery(GET_ALL_USERS)
     const [ userApplyIsLoading, setUserApplyIsLoading ] = useState<boolean>(false);
     const [ userQuitIsLoading, setUserQuitIsLoading ] = useState<boolean>(false);
     const [ isReachMax, setIsReachMax ] = useState<boolean>();
     const [ addParticipant ] = useMutation(ADD_PARTICIPANT);
     const [ quitParticipant ] = useMutation(QUIT_PARTICIPANT);
+    const [ attendees, setAttendees ] = useState<IUser[]>([]);
+
     const { 
         title, 
-        description, 
+        description,
+        keyWords,
         organizer, 
         startDate,
         startTime, 
         endTime, endDate, 
         latLngAndAddress, 
         participantsNumber,
-        participants
+        participants,
     } = task;
     const showImages = task.showImages || []
     const startTimeMoment = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!), [startDate,startTime]);
     const currentAttendees = useMemo(()=> getNumberofParticipants(participants),[participants]);
 
-    //set current user type
-    useEffect(()=>{
-        //haven't logged in
-        if(!currentUser){
-            setUserType(CurrentTaskUserTypeEnum.GUEST_WITHOUT_LOGIN);
-        } else {
-            const { participants, organizer} = task;
-            const { uid } = currentUser;
-            const userType = getCurretUserType(
-                participants,
-                organizer,
-                uid
-            );
-            setUserType(userType);
-        }
-        console.log(userType)
-    },[currentUser, task, userType])
+    
 
+    //get attendees
+    useEffect(()=>{
+        if(data && data.users){
+           const attendees = getAllAttendeesByTask(task, data.users);  
+           setAttendees(attendees);
+        }
+    },[data,task]);
+
+    //if attendees reach max
+    useEffect(()=>{
+        const reachMax = currentAttendees < participantsNumber? false:true;
+        setIsReachMax(reachMax);
+    },[participantsNumber,currentAttendees]);
 
 
 
@@ -253,6 +219,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
                 />
             </TaskDescriptionCol>
         </RowCon>
+        
         <RowCon>
             <TaskMapCol span={24}>
                 {
@@ -264,11 +231,20 @@ export const TaskItem:FC<ITaskItemProps> = ({
                 }
             </TaskMapCol>
         </RowCon>
-
+        <RowCon>
+            <TaskAttendeeAvatarCol>
+                <TaskAttendeeAvatar attendees={attendees}/>
+            </TaskAttendeeAvatarCol>
+        </RowCon>
+        <RowCon>
+            <TaskTagsCol>
+                <TaskTags tags={keyWords}/>
+            </TaskTagsCol>
+        </RowCon>
 
 
         {
-            startTimeMoment.isBefore(getCurrentMoment())? null:
+            ifTaskExpired? null:
             (()=>{
                 switch(userType){
                     case CurrentTaskUserTypeEnum.GUEST_LOGIN:
@@ -282,7 +258,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
                                         disabled = {userApplyIsLoading}
                                         onClick={ (e: any) => {applyOnClick();} }
                                     >
-                                        Attend
+                                        Apply
                                     </Button>
                                 </CenterAlignCol>
                             </RowCon>

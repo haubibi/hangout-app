@@ -83,7 +83,8 @@ const Home: FC = () =>{
                 ifFilterHiddenTasks: true
             })
             // setTasks(filteredTasks.concat(filteredTasks));
-            setTasks(filteredTasks);
+            setTasks([...filteredTasks, ...filteredTasks, ...filteredTasks, ...filteredTasks]);
+            // setTasks(filteredTasks);
             setTasksTotalLength(totalLength);
         }
     },[allTasks, currentPage, setTasksTotalLength, setTasks, searchInputValue, category]);

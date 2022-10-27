@@ -21,7 +21,7 @@ export const UserAvatarPopover:FC<UserAvatarProps> = ({
     if (!user) return <SpinCon />
     return (
         <PopoverCon
-            trigger= "click"
+            trigger= {["click", "hover"]}
             arrowPointAtCenter
             title = {user.displayName}
             content = {<UserAvatarPopoverContent partialUserProps = {user}/>}

@@ -138,7 +138,7 @@ export const EventCard:FC<IEventCardProps> = ({
                     <CardTextSpan>{ cityText }</CardTextSpan>
                 </Popover>,
                     startTimeMoment.isBefore(currentMoment) ?
-                    <Tooltip title="out of date" trigger={['click','hover']}>
+                    <Tooltip title="expired" trigger={['click','hover']}>
                             <ExpiredDateIcon />
                             <CardTextSpan>{ startTimeText }</CardTextSpan>
                     </Tooltip>

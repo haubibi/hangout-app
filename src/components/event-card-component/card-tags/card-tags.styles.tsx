@@ -19,6 +19,9 @@ export const CardTagsCon = styled.div`
         margin: 0px;
         padding: 0px ${tagSpanPadding}px 0px ${tagSpanPadding}px;
     }
+    &:last-child{
+        cursor: pointer;
+    }
 `
 
 export const TagsPopover = styled.div`

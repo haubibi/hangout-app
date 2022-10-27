@@ -14,7 +14,8 @@ export interface IPaticipant{
  */
 
 export const getNumberofParticipants = (
-    paticipants: IPaticipant[] = []
+    paticipants: IPaticipant[]
 ):number =>{
-    return paticipants.filter(paticipant => paticipant.isConfirmed && paticipant.agreed).length;
+    const p = paticipants || [];
+    return p.filter(paticipant => paticipant.isConfirmed && paticipant.agreed).length;
 }

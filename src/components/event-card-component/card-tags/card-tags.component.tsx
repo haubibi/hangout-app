@@ -12,13 +12,13 @@ import {
 } from '../../../utils/default-settings/card.setting';
 import {maxKeyWords} from '../../form-component/task-form-item/task-form-item.component';
 
-const TagColors = [
+export const TagColors = [
     "#f50","#2db7f5","#87d068", "#108ee9", "#4bdde1", "#c22197","#ff0000",
     "#115000"
 ];
 
 
-const getRandomColors = (n:number):string[] =>{
+export const getRandomColors = (n:number):string[] =>{
     return TagColors.sort(() => 0.5 - Math.random()).slice(0,n);
 }
 
@@ -79,7 +79,7 @@ export const CardTags:FC<ITagsProps> = ({
     const tagDivRef = useRef();
     const [currentTags, setCurrentTags] = useState<string[]>(tags.length > 0? tags: defaultTag);
     const randomColors = getRandomColors(maxKeyWords);
-    const numberOfTags = useNumberOfTagsInDiv(tagDivRef,tagConPadding,spanColumnGap,tagSpanPadding, maxTagsDivWidth);
+    const numberOfTags = useNumberOfTagsInDiv(tagDivRef,tagConPadding,spanColumnGap,tagSpanPadding, maxTagsDivWidth - 50);
 
     console.log("numberOfTags:", numberOfTags)
   

@@ -208,7 +208,7 @@ export const filterOutOfDateTasks = (
   return tasks.filter(task => {
       const {startDate, startTime} = task;
       const startMoment =  getMomentByDateAndTimeString(startDate, startTime);
-      return startMoment.isSameOrAfter(currentMoment, 'day');
+      return startMoment.isSameOrAfter(currentMoment);
   });
 }
 

@@ -11,7 +11,7 @@ export const notificationDateFormat = "YYYY-MM-DD h:mm:s a";
 export const taskFormat = "YYYY-MM-DD h:mm:s a";
 export const FullFormat = "dddd, MMMM Do YYYY, h:mm:ss a";
 export const dateRex = new RegExp('(\\d{4})[-/](1[0,1,2]|0?\\d)[-/](3[0,1]|[1,2]\\d|0?\\d)');
-
+export const eventCountdownFormat ="D days H hours m m s s"
 /**
  * convert Moment to format 'YYYY-MM-DD' eg. "2014-09-08T08:02:17-05:00" 
  * @param m Moment

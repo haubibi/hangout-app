@@ -1,11 +1,10 @@
 import { FC } from "react";
 import {
-    Switch,
     SwitchProps,
     Form,
     FormItemProps
 } from "antd";
-
+import { SwitchCon, FormItemCon } from './form-switch.styles';
 
 export interface IFormSwitchProps {
     switchProps: SwitchProps;
@@ -18,15 +17,15 @@ export const FormSwitch:FC<IFormSwitchProps> =({
 }) =>{
     // console.log(switchProps,formItemprops)
     return (
-            <Form.Item
-                labelCol = {{span: 10}}
-                wrapperCol = {{span: 14}}
+            <FormItemCon
+                labelCol = {{span: 24}}
+                wrapperCol = {{span: 24}}
                 valuePropName = 'checked'
                 {...formItemprops}
             >
-                <Switch
+                <SwitchCon
                     {...switchProps}
                 />
-            </Form.Item>
+            </FormItemCon>
     )
 }

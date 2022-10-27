@@ -5,8 +5,8 @@ import { getCurrentCoords } from "../googleMap/googleMap.utils";
 import { defaultLatLng } from "../googleMap/googleMap.utils";
 import { ITaskFormItemDetailWithImageRefAndUrl } from '../../interfaces/taskForm.interface';
 import { getNumberofParticipants } from "../../interfaces/participate.interface";
-
-
+import { IUser } from "../../interfaces/user.interface";
+import * as _ from "lodash";
 
 export const getUid = (uid: string) => {
     return uid+ '_' + Math.random().toString().replace(/\./,'');
@@ -121,4 +121,20 @@ export const checkIfTaskAttendeesReachMax = (task: ITask):boolean => {
     const participants = task.participants || [];
     const currentNumberOfParticipants = getNumberofParticipants(participants);
     return currentNumberOfParticipants >= participantsNumber;
+}
+
+/**
+ * 
+ * @param taskId the id of the task
+ * @param users all the users
+ */
+
+export const getAllAttendeesByTask = (
+    task: ITask,
+    users: IUser[]
+):IUser[] => {
+    const participants = task.participants || [];
+    const attendees = participants.filter(paticipant => paticipant.isConfirmed && paticipant.agreed);
+    const attendeesUid = attendees.map(attendee => attendee.participantUid);
+    return users.filter(user => attendeesUid.findIndex(uid => uid === user.uid) !== -1);
 }

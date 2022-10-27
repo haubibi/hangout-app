@@ -51,5 +51,5 @@ export function sortNotificationsByTime (notifications: ApplicationNotificationT
 export function sortNotificationsByTime (notifications: RequestNotificationType[]):RequestNotificationType[];
 export function sortNotificationsByTime (notifications: frendRequestNotificationType[]):frendRequestNotificationType[];
 export function sortNotificationsByTime (notifications: UnioNotificationType[]):UnioNotificationType[]{
-    return notifications.sort((o1, o2)=> moment(o1.time).valueOf() - moment(o2.time).valueOf());
+    return [...notifications].sort((o1, o2)=> moment(o1.time).format('YYYYMMDD')- (moment(o2.time)).format('YYYYMMDD') );
 } 

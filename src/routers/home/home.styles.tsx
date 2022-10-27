@@ -16,6 +16,7 @@ export const ListCol = styled(Col)`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 50px;
     /* height: 100%; */
 `
 export const SearchCol = styled(Col)`

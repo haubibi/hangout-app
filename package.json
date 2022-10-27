@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@types/firebase": "^3.2.1",
+    "@types/lodash": "^4.14.186",
     "@types/react-geocode": "^0.2.1"
   },
   "resolutions": {

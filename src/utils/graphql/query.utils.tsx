@@ -4,6 +4,13 @@ import {
   taskFullObj,
 } from './typeObject';
 // ${userFullObj}
+export const GET_ALL_USERS = gql`
+    query{
+      users {
+          ${userFullObj}
+      }  
+    }
+`
 export const GET_USER = gql`
     query($uid:ID){
       getUserById (uid:$uid) {

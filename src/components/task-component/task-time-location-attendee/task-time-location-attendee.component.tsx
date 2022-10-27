@@ -8,6 +8,8 @@ import { TaskTime, ITaskTimeProps } from '../task-time/task-time.component';
 import { TaskLocation  } from '../task-location/task-location.component';
 import { ILatLngAndAddress } from '../../../interfaces/google.interface';
 import { TaskAttendee, ITaskAttendeeProps } from '../task-attendee/task-attendee.component';
+import { TaskTimeCountdown } from '../task-time-countdown/task-time-countdown.component';
+
 
 export interface ITaskTimeLocationAttendeeProps {
     dateAndTime: ITaskTimeProps;
@@ -25,6 +27,10 @@ export const TaskTimeLocationAttendee:FC<ITaskTimeLocationAttendeeProps> = ({
 
     return (
         <TaskTimeLocationAttendeeCon>
+            {/* <TaskTimeCountdown
+                startDate = {startDate}
+                startTime = {startTime}
+            /> */}
             <TaskTime 
                 startDate = {startDate}
                 startTime = {startTime}
@@ -34,6 +40,7 @@ export const TaskTimeLocationAttendee:FC<ITaskTimeLocationAttendeeProps> = ({
             <TaskLocation
                 location = {location}
             />
+            
             <TaskAttendee
                 currentAttendees = {attendee.currentAttendees}
                 maxAttendees = {attendee.maxAttendees}

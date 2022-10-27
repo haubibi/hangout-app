@@ -35,8 +35,8 @@ export const FormImagesUpload: FC<IFormImagesUploadProps> = ({
     label = 'Display images',
     showImages,
     type = 'image',
-    labelCol={ span: 4 },
-    wapperCol={ span: 20},
+    labelCol={ span: 24 },
+    wapperCol={ span: 24},
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isJpgOrPng, setIsJpgOrPng] = useState(true);

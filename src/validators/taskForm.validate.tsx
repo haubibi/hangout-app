@@ -102,7 +102,7 @@ export const validateFormValues = (values: BaseTaskFormItemDetail, task: ITask) 
     ) {message.error('Please selet correct end time!');return false;};
     //paticipate numbers
     const currentNumberOfParticipants = getNumberofParticipants(participants);
-    if(participantsNumber < currentNumberOfParticipants) {message.error(`Can't set less than ${currentNumberOfParticipants}`);return false;};
+    if(participantsNumber < currentNumberOfParticipants) {message.error(`Numbers of attendees can't be less than ${currentNumberOfParticipants}`);return false;};
     //description already checked
     //latlng check
     if(!latLngAndAddress.address || latLngAndAddress.address.length === 0) {message.error(`Please select the address!}`);return false;};

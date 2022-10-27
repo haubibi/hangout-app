@@ -1,9 +1,7 @@
 import { FC, 
     useEffect, 
     useState, 
-    useMemo,
     useCallback,
-    useContext
 } from 'react';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +18,8 @@ import {
     Col, 
     Row,
     Spin,
-    message
+    message,
+    Modal
 } from 'antd';
 import { 
     TaskFormItemContainer,
@@ -31,7 +30,8 @@ import {
     InputCon,
     PopconfirmCon,
     CategorySelect,
-    CategoryOption
+    CategoryOption,
+    DividerCon
 } from './task-form-item.styles';
 import { 
     ITask,
@@ -69,7 +69,6 @@ import {
 
 import { getUpdatedTask } from '../../../utils/task/task.utils';
 import { TaskFormUserTypeEnum } from '../../../routers/taskFormPage/task-form-page.component';
-import './task.less';
 
 
 const { TextArea } = Input;
@@ -125,16 +124,20 @@ const keyWordsFormProps = {
     label: "tags",
     name: TaskFormItemName.keyWords,
     labelCol: {span: 4},
-    wrapperCol: {span: 20}
+    wrapperCol: {span: 24}
 }
 const frontCoverFormProp = {
     label: "FrontCover",
     name: TaskFormItemName.frontCoverImage,
+    labelCol: {span: 24},
+    wrapperCol: {span: 24},
     maxImageLength: 1,
 }
 const showImagesFormProps = {
     label: "Display Images",
     name: TaskFormItemName.showImages,
+    labelCol: {span: 24},
+    wrapperCol: {span: 24},
     maxImageLength: 3,
 }
 const participantsNumberFormProps = {
@@ -156,33 +159,20 @@ const googleSearchFormProps = {
 
 const openFormitemProps = {
     name:TaskFormItemName.open,
-    label:'Event open',
-    labelCol: {span: 10},
-    wrapperCol: {span: 10}                      
+    label:'Allow to apply',
+    labelCol: {span: 24},
+    wrapperCol: {span: 24}                      
 }
 const showFormitemProps = {
     name:TaskFormItemName.hide,
-    label:'Hide event',
-    labelCol: {span: 10},
-    wrapperCol: {span: 10}                      
+    label:'Display to public',
+    labelCol: {span: 24},
+    wrapperCol: {span: 24}                      
 }
 const switchProps = {
     checkedChildren: <CheckOutlined />,
     unCheckedChildren: <CloseOutlined />,
     defaultChecked: true
-}
-const formSwitchOpenProps = {
-    switchProps,
-    formItemprops: openFormitemProps  
-}
-const formSwitchShowProps = {
-    switchProps,
-    formItemprops: showFormitemProps  
-}
-
-
-const subbmitButtonFormitemProps = {
-
 }
 
 export const maxKeyWords = 8;
@@ -192,16 +182,12 @@ interface TaskFormItemProps {
     task: ITask;
     isNewTaskForm: boolean;
     refetch: TaskRefetchType<{id:string}>;
-    currentUserType: TaskFormUserTypeEnum;
-    currentUserTypeCheck: () => void;
 }
 
 export const TaskFormItem:FC<TaskFormItemProps> = ({
     task,
     isNewTaskForm,
     refetch,
-    currentUserType,
-    currentUserTypeCheck
 }) =>{
     const [ form ] = useForm();
     const [ submitButtonDisabled, setSubmitButtonDisabled] = useState<boolean>(false);
@@ -255,10 +241,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
     const deleteTaskHandle = useCallback(()=>{
         //set the buttons disabled
         setFormAndButtonsDisabled(true);
-        //check current user type
-        currentUserTypeCheck();
-
-        if(currentUserType === TaskFormUserTypeEnum.USER_MATCH){
+        try {
             deleteTask({
                 variables: {
                     taskId: taskId
@@ -266,13 +249,13 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
             }).then(()=>{
                 message.success(`You have successfully deleted the event!`, 5);
                 navigate(`/`);
-            }).catch(error => {
-                message.destroy();
-                message.error(error, 3);
-                setFormAndButtonsDisabled(false);
-            })
+            });
+        } catch (error){
+            message.destroy();
+            message.error(error, 3);
+            setFormAndButtonsDisabled(false);
         }
-    },[taskId, currentUserTypeCheck, deleteTask, navigate, currentUserType]);
+    },[taskId, deleteTask, navigate]);
 
 
     const setFormAndButtonsDisabled = (flag: boolean): void =>{
@@ -283,15 +266,13 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
 
 
     const onFinishFailed = ({ values, errorFields, outOfDate }: any) => {
-        console.log(values, errorFields, outOfDate,currentTask.showImages)
+        // console.log(values, errorFields, outOfDate,currentTask.showImages)
     }
    
     const onFinish = async (values: ITaskFormItemDetail) => {
        
         //set the buttons disabled
         setFormAndButtonsDisabled(true);
-        //check current user type
-        currentUserTypeCheck();
 
         let showImages: IImageObjWithUrlAndRefPath[] = currentTask.showImages;
         let frontCoverImage: IImageObjWithUrlAndRefPath | null = currentTask.frontCoverImage;
@@ -379,8 +360,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
 
     };
 
-
-    if(!currentTask || !detail) return <Spin />
+    if(!currentTask || !detail) return <Spin />;
     return(
         <TaskFormItemContainer>
             <Form
@@ -393,6 +373,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 colon = {false}
                 disabled = {formDisabled}
             >   
+            <DividerCon orientation="left">Details about the event</DividerCon>
                 <EventTitleRow>
                     <Col span={24}>
                         <Form.Item 
@@ -403,40 +384,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                 </EventTitleRow>
 
-                <Row gutter={16 + 8}>
-                    <Col span={10}>
-                        <Form.Item
-                            {...startDateFormProps}
-                        >
-                            <DatePickerCon  disabledDate = {disabledDate}/>
-                        </Form.Item>
-                        
-                    </Col>
-                    <Col span={10}>
-                        <Form.Item 
-                            {...startTimeFormProps}
-                        >
-                            <TimePickerCon />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16 + 8}>
-                    <Col span={10}>
-                        <Form.Item
-                           {...endDateFormProps}
-                        >
-                            <DatePickerCon  disabledDate = {disabledDate}/>
-                        </Form.Item>
-                        
-                    </Col>
-                    <Col span={10}>
-                        <Form.Item 
-                           {...endTimeFormProps}
-                        >
-                            <TimePickerCon />
-                        </Form.Item>
-                    </Col>
-                </Row>
+                
                 <Row>
                     <Col span={24}>
                         <Form.Item 
@@ -447,26 +395,52 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                 </Row>
             
-                <Row>
-                    <Col span={24}>
-                        <Form.Item 
-                            label="Numbers"
-                            name = "participantsNumber"
-                            labelCol={{ span: 5 }}
-                            wrapperCol={{ span: 3 }}
-                            rules={[{ required: true, message: '' }]}
+                <DividerCon orientation="left">Date and Time</DividerCon>
+                <Row gutter={16 + 8}>
+                    <Col span={12}>
+                        <Form.Item
+                            {...startDateFormProps}
                         >
-                            <InputNumberCon />
+                            <DatePickerCon  disabledDate = {disabledDate}/>
+                        </Form.Item>
+                        
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item 
+                            {...startTimeFormProps}
+                        >
+                            <TimePickerCon />
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={24}>
+                <Row gutter={16 + 8}>
+                    <Col span={12}>
+                        <Form.Item
+                           {...endDateFormProps}
+                        >
+                            <DatePickerCon  disabledDate = {disabledDate}/>
+                        </Form.Item>
+                        
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item 
+                           {...endTimeFormProps}
+                        >
+                            <TimePickerCon />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+
+                <DividerCon orientation="left">Category and Attendees</DividerCon>
+                <Row gutter={16 + 8}>
+                    
+                    <Col span={12}>
                         <Form.Item 
                             label="category"
                             name = "category"
-                            labelCol={{ span: 5 }}
-                            wrapperCol={{ span: 3 }}
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
                             rules={[{ required: true, message: '' }]}
                         >
                             <CategorySelect>
@@ -476,7 +450,21 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                             </CategorySelect>
                         </Form.Item>
                     </Col>
+                    <Col span={12}>
+                        <Form.Item 
+                            label="Number of Attendes"
+                            name = "participantsNumber"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
+                            rules={[{ required: true, message: '' }]}
+                        >
+                            <InputNumberCon />
+                        </Form.Item>
+                    </Col>
+                    
                 </Row>
+                
+                <DividerCon orientation="left">Tags</DividerCon>
                 <Row>
                     <Col span={24}>
                         <Form.Item 
@@ -487,8 +475,10 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                 </Row>
 
-                <Row>
-                    <Col span={24} >                
+
+                <DividerCon orientation="left">Upload Images</DividerCon>
+                <Row gutter={16 + 8}>
+                    <Col span={7} >                
                         <FormImagesUpload
                             {...frontCoverFormProp}
                             showImages = {
@@ -496,15 +486,14 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                             }
                         />
                     </Col>
-                </Row>
-                <Row>
-                    <Col span={24} >                
+                    <Col span={17} >                
                         <FormImagesUpload
                             {...showImagesFormProps}
                             showImages = {currentTask.showImages || []}
                         />
                     </Col>
                 </Row>
+                <DividerCon orientation="left">Location</DividerCon>
                 <Row>
                     <Col span={24}>
                         <Form.Item 
@@ -520,7 +509,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     </Col>
                 </Row>
                 
-
+                <DividerCon orientation="left">Event settings</DividerCon>
                 <Row>
                     <Col span = {12}>
                         <FormSwitch
@@ -539,7 +528,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                 
                 
                 <Row>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item>
                             <Button 
                                 type="primary" 
@@ -556,24 +545,24 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
                     isNewTaskForm?
                     null:
                     <Row>
-                        <Col span={12}>
-                                <PopconfirmCon 
-                                    placement="right" 
-                                    title={`Are you sure to delete this Event?`} 
-                                    onConfirm={ deleteTaskHandle } 
-                                    okText="Yes" 
-                                    cancelText="No"
+                        <Col span={24}>
+                            <PopconfirmCon 
+                                placement="right" 
+                                title={`Are you sure to delete this Event?`} 
+                                onConfirm={ deleteTaskHandle } 
+                                okText="Yes" 
+                                cancelText="No"
+                                disabled = {deleteButtonDisabled}
+                            >
+
+                                <Button 
+                                    type="primary" 
+                                    htmlType="button"
                                     disabled = {deleteButtonDisabled}
                                 >
-
-                                    <Button 
-                                        type="primary" 
-                                        htmlType="button"
-                                        disabled = {deleteButtonDisabled}
-                                    >
-                                        Delete
-                                    </Button>
-                                </PopconfirmCon>
+                                    Delete
+                                </Button>
+                            </PopconfirmCon>
                         </Col>
                     </Row>
                 }

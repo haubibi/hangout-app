@@ -7,6 +7,7 @@ import { markerCreator } from '../../utils/googleMap/googleMap.utils'
 import { Spin } from "antd";
 import { googleMapLibWithPlaces } from '../../utils/googleMap/googleMap.utils'
 import { ILatLngAndAddress } from "../../interfaces/google.interface";
+import { GoogleMapsSearchCon } from './googleMaps-search.styles';
 
 const comboboxSettings = {
     comboboxContainerStyle:{
@@ -71,7 +72,7 @@ const GoogleSearchInForm:FC<IGoogleSearchInFormProps> = ({onChange, value}) =>{
     if(!isLoaded) return <Spin />
 
     return (
-        <div>
+        <GoogleMapsSearchCon>
             <Places 
                 {...comboboxSettings}
                 defaultV = { placeInput!}
@@ -82,7 +83,7 @@ const GoogleSearchInForm:FC<IGoogleSearchInFormProps> = ({onChange, value}) =>{
                 markers = {[...markerLocation, ...googleMapSettings.markers]}
                 center = { placeInput! }
             />
-        </div>
+        </GoogleMapsSearchCon>
     )
 }
 

@@ -8,7 +8,7 @@ import {
     Popconfirm,
     Select,
     Row,
-    Col
+    Divider
 } from 'antd';
 // $ruler: 16px;
 // $color-red: #AE1100;
@@ -36,11 +36,12 @@ export const FlexStart = css`
 
 
 export const TaskFormItemContainer = styled.div`
-
+    background-color: rgba(255,255,255,0.4);
+    background-attachment: fixed;
     width:100%;
-    width: 800px;
-    /* max-width: 800px; */
-    /* min-width: 400px; */
+    width: 750px;
+    padding: 100px;
+    border-radius: 30px;
     .ant-form-item-control{
         width: 100% !important;
     }
@@ -55,7 +56,6 @@ export const EventTitleRow = styled(Row) `
 export const InputCon = styled(Input)`
     
 `
-
 
 
 export const FormContainer = styled(Form)`
@@ -78,3 +78,12 @@ export const CategorySelect = styled(Select)`
 `;
 export const CategoryOption = styled(Option)`
 `;
+
+export const DividerCon = styled(Divider)`
+    span{
+        font-size: 18px;
+        font-weight: 500;
+        font-style:italic;
+    }
+`
+

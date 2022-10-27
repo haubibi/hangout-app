@@ -14,7 +14,6 @@ import {
 import { 
     Row,
     Col,
-    Divider
 } from 'antd';
 import {
     carouselImgWidth,
@@ -24,11 +23,14 @@ import {
 
 
 export const TaskitemContainer = styled.div`
-    background-color: aquamarine;
+    background-color: rgba(255,255,255,0.4);
+    background-attachment: fixed;
+    border-radius: 50px;
     width: 100%;
     max-width: ${eventContainerMaxWidth}px;
     min-width: ${eventContainerMinWidth}px;
-    padding: 5%;
+    padding: 100px;
+    
 `
 
 export const TitleCon = styled.h2`
@@ -54,6 +56,12 @@ export const TaskDescriptionCol = styled(Col)`
     width: 100%;
 `
 export const TaskMapCol = styled(Col)`
+    width: 100%;
+`
+export const TaskAttendeeAvatarCol = styled(Col)`
+    width: 100%;
+`
+export const TaskTagsCol = styled(Col)`
     width: 100%;
 `
 export const TaskTimeLocationAttendeeCol = styled(Col)`
