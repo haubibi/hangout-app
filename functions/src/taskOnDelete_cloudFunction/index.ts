@@ -14,8 +14,8 @@ const onTaskDelete = functions.database
     .ref("/tasks/{taskId}")
     .onDelete(async (snapshot,context)=>{
         const task=  snapshot.val();
-        console.log(`ondelete: start`);
-        console.log(`task:`, task);
+        // console.log(`ondelete: start`);
+        // console.log(`task:`, task);
         
 
         //send notifications to all participants
@@ -35,18 +35,18 @@ const onTaskDelete = functions.database
             await updateTaskUpdateNotifications(participantsUid, [taskUpdateNotification]);
         }
 
-        console.log(`notifications added`);
+        // console.log(`notifications added`);
 
         //delete all the images from firestore
         const bucket = admin.storage().bucket(bucketName)
         await bucket.deleteFiles({directory: `images/tasks/${task.id}`})
                 .then((file)=>{
-                    console.log("file", file);
+                    // console.log("file", file);
                 })
                 .catch(error => {
                     console.error(`Error occurred while deleting the task: ${task.id}`, error)
                 });
-                console.log(`images deleted`);
+                // console.log(`images deleted`);
 
     });
 

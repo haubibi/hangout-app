@@ -2,6 +2,7 @@ import { useState, Dispatch, useEffect,createContext, FC } from "react";
 import { getCurrentCoords } from "../utils/googleMap/googleMap.utils";
 import { LatLngLiteral } from "../interfaces/google.interface";
 import React from 'react';
+import { message } from 'antd';
 
 // google.maps.Map
 interface IMapFormInput {
@@ -55,7 +56,8 @@ export const GoogleMapProvider:FC<IProviderChildrenProps> = ({children}) =>{
               // setCurrentCoords(coor!);
           })
           .catch((error)=>{
-              console.log(error);
+            message.destroy();
+            message.error(error);
           });
       }
       getCurrentCoordsAsync();

@@ -21,14 +21,14 @@ const deleteApplicationNotification = ({
             return snap.val();
         })
         .then((value) => {
-            console.log("application notification",value)
+            // console.log("application notification",value)
             const notifications = (value as ApplicationNotificationType[]).filter(
                 notification => (
                     notification.participantUid !== participantUid && 
                     notification.taskId !== taskId && 
                     notification.organizerUid !== organizerUid
             ));
-            console.log("updated application notification",notifications);
+            // console.log("updated application notification",notifications);
             if(Array.isArray(notifications) && notifications.length === 0 ){
                 userApplicationNotificationsRef.set(null)
                 .then(()=> resolve(notifications))

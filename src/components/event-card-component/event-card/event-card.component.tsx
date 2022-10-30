@@ -10,7 +10,6 @@ import {
     ClockCircleFilled,
 } from '@ant-design/icons';
 import { 
-    Avatar,
     Popover,
     Tooltip
  } from 'antd';
@@ -24,7 +23,6 @@ import {
     AttendeesSpan,
     AttendeeDateRow,
     AttendeeCol,
-    DateStatusCol
 } from "./event-card.styles";
 
 import { ITask } from '../../../interfaces/task.interface';
@@ -119,7 +117,7 @@ export const EventCard:FC<IEventCardProps> = ({
     },[id, navigate]);
 
 
-    console.log("description:", description)
+    // console.log("description:", description)
     return (
         <EventCardCon
             cover={

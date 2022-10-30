@@ -35,7 +35,7 @@ export interface IProviderChildrenProps {
 export const MyAccountMenuProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [ currentMyAccountMenuKey, setCurrentMyAccountMenuKey ] = useState<MyAccountMenuKey>(defaulKey);
 
-    console.log(currentMyAccountMenuKey + 'context')
+    // console.log(currentMyAccountMenuKey + 'context')
     const value = {
         currentMyAccountMenuKey,
         setCurrentMyAccountMenuKey

@@ -43,11 +43,11 @@ const addParticipant = async (
   // eslint-disable-next-line no-async-promise-executor
 
   return new Promise( async (resolve, reject)=>{
-    console.log("addTaskRequestType:" + addTaskRequestType);
+    // console.log("addTaskRequestType:" + addTaskRequestType);
     // check if task exist
     const task = await getTaskById(taskId);
-    console.log("task:", task)
-    console.log("taskId:", taskId)
+    // console.log("task:", task)
+    // console.log("taskId:", taskId)
     if (!task) return reject(new Error("The task doesn't exist"));
     // check if already applied
     const taskParticipants = task.participants;
@@ -66,8 +66,8 @@ const addParticipant = async (
     const participantDisplayName = participantUser.displayName;
     const organizerDisplayName = organizerUser.displayName;
 
-    console.log("participants:", participants)
-    console.log("currentParticipant:", currentParticipant)
+    // console.log("participants:", participants)
+    // console.log("currentParticipant:", currentParticipant)
     // if the participant apply exist, check all the types
     if (currentParticipant) {
       // let message: string;

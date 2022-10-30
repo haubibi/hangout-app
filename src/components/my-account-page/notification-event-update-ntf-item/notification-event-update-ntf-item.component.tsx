@@ -1,7 +1,5 @@
-import { IUser } from '../../../interfaces/user.interface';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_USER, GET_TASK_BY_ID } from '../../../utils/graphql/query.utils';
-import { UserAvatarBase } from '../../user-avatar/user-avatar-base/user-avatar-base.component';
+import { GET_TASK_BY_ID } from '../../../utils/graphql/query.utils';
 import {
     FC,
     useEffect,
@@ -79,7 +77,7 @@ export const NotifiCationEventUpdateNtfItem:FC<INotificationApplicationItemProps
     return (
         <NotificationEventUpdateListItem
             actions={[
-                <ConfirmButton type='primary' htmlType='button' onClick={confirmButtonOnClick}>confirm </ConfirmButton>
+                <ConfirmButton disabled = {buttonDisabled} type='primary' htmlType='button' onClick={confirmButtonOnClick}>confirm</ConfirmButton>
             ]}
         >
 

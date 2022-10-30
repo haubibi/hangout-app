@@ -2,7 +2,6 @@ import {
     useContext,
     useEffect,
     useState,
-    useCallback
 } from "react";
 import { 
     Spin, 
@@ -83,7 +82,7 @@ const TaskFormPage = () =>{
      useEffect(()=>{
         if(!isLoading && typeof isExpired === 'boolean') {
             if(isExpired){
-                console.log(222)
+                // console.log(222)
                 navigate(`/`);
                 message.info(`The event is expired`);
             }

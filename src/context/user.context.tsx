@@ -46,9 +46,9 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
         },
         notifyOnNetworkStatusChange: true
     });
-    console.log('userUid:',userUid);
-    console.log('currentUser:',currentUser);
-    console.log('data:',data);
+    // console.log('userUid:',userUid);
+    // console.log('currentUser:',currentUser);
+    // console.log('data:',data);
     // const [addUser] = useMutation(ADD_USER);
 
     useEffect(()=>{
@@ -62,19 +62,6 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
         }
     },[data, setCurrentUser, networkStatus])
     
-    // console.log(currentUser)
-    // useEffect(()=>{
-    //     if(currentUser !== null && currentUser.uid !== null){
-    //         const add = async()=>{
-    //             await addUser({
-    //                 variables:{userInput: currentUser} 
-    //             });
-    //         }
-    //         add();
-    //     }
-    //     // console.log(user, currentUser)
-
-    // },[currentUser, addUser])
 
     const value = {
         currentUser,
@@ -85,8 +72,3 @@ export const UserProvider:FC<IProviderChildrenProps> = ({children}) =>{
     };
     return <UserContext.Provider value = {value}>{children}</UserContext.Provider>
 }
-
-// interface ProviderProps<T> {
-//     value: T;
-//     children?: ReactNode | undefined;
-// }

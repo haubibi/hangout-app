@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import Places from '../../components/places-auto-complete/places-auto-complete.component';
-import SearchPageGoogleMaps from '../../components/search-page-googlemaps/search-page-googlemaps.conponent';
 import {
     Col,
     Row,

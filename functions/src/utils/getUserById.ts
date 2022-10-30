@@ -8,11 +8,11 @@ const getUserById = async (uid:string):Promise<null | IUser> => {
   return db.ref(`${Collection.users}/${uid}`)
       .once("value")
       .then((snap) =>{
-        console.log(snap, "snap");
+        // console.log(snap, "snap");
         return snap.val();
       })
       .then((value) => {
-        console.log("user value:", value);
+        // console.log("user value:", value);
         return value;
       });
 };

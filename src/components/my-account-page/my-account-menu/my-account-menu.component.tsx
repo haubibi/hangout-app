@@ -63,7 +63,7 @@ export const MyAccountMenu = () => {
     const { currentMenuKey } = useContext(NavigationContext);
     const onClick: MenuProps['onClick'] = e => {
         const parentPath = `/myAccount`;
-        console.log(e.key)
+        // console.log(e.key)
         switch(e.key){
             case MyAccountMenuKey.PERSONNALINFO:
                 navigate(`${parentPath}/`);

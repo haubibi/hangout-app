@@ -3,8 +3,8 @@ import usePlacesAutocomplete, {
     getLatLng,
   } from "use-places-autocomplete";
 import {
-    Combobox,
-    ComboboxInput,
+    // Combobox,
+    // ComboboxInput,
     ComboboxPopover,
     ComboboxList,
     ComboboxOption,
@@ -12,7 +12,7 @@ import {
 import "@reach/combobox/styles.css";
 
 import { ComboboxInputStyled, ComboboxStyled, ComboboxContainer } from './places-auto-complete.styles'
-import React, { FC, useEffect,useState } from "react";
+import React, { FC, useEffect } from "react";
 import { ILatLngAndAddress } from "../../interfaces/google.interface";
 
   export interface IComboboxContainer {
@@ -31,12 +31,6 @@ import { ILatLngAndAddress } from "../../interfaces/google.interface";
   export interface IComboboxInputStyled extends IComboboxContainer{
 
   }
-
-  // export interface IPlaceInputValue {
-  //     location: LatLngLiteral;
-  //     address: string;
-  // }
-  
   interface IPlacesProps {
     comboboxContainerStyle: IComboboxContainer;
     ComboboxStyle: IComboboxStyled;
@@ -60,9 +54,6 @@ import { ILatLngAndAddress } from "../../interfaces/google.interface";
       suggestions: { status, data },
       clearSuggestions,
     } = usePlacesAutocomplete();
-    // const [ ifAddressExist ] = useState<boolean>(defaultV.address?true:false)
-    // const [latLng, setLatLng] = useState<LatLngLiteral>(defaultV.location);
-    // const {setAddressFormInput, mapInstance, addressFormInput, addressString } = useContext(GoogleMapContext);
 
     useEffect(()=>{
         setValue(defaultV.address, false);

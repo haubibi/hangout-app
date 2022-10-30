@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { 
-    List,
     Row,
     Col
  } from "antd";
@@ -24,6 +23,4 @@ export const ColEventList = styled(Col)`
 `;
 export const ColNotificationList = styled(Col)`
     width: ${notification_request_notifications_width}px;
-
-
 `;

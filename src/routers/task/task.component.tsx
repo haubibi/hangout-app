@@ -3,7 +3,7 @@ import {
     useState,
     useContext
 } from "react";
-import { TaskContainer } from './task.styles';
+import { TaskContainer, BackHomeLink } from './task.styles';
 import { TaskItem } from "../../components/task-component/task-item/task-item.component";
 import { useLocation } from 'react-router-dom';
 import { AddTaskRequestEnum, QuitTaskRequestEnum } from '../../interfaces/notifications.interface';
@@ -135,9 +135,9 @@ const Task = () =>{
     },[currentUser, task, userType])
 
 
-    console.log("data:",data)
-    console.log("error:",error)
-    console.log("loading:",loading)
+    // console.log("data:",data)
+    // console.log("error:",error)
+    // console.log("loading:",loading)
     if(error || loading || !task) return <Spin />;
     // console.log(location)
     return (

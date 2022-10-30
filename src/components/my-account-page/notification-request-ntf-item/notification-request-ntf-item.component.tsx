@@ -25,8 +25,6 @@ import { UserContext } from '../../../context/user.context';
 import { getNotificationDate } from '../../../utils/date/date.utils';
 import { message } from 'antd';
 
-const moment = require('moment');
-
 interface INotifiCationRequestNtfItemProps {
     notification: RequestNotificationType;
     argeeDisabled:boolean;
@@ -85,7 +83,7 @@ export const NotifiCationRequestNtfItem:FC<INotifiCationRequestNtfItemProps> = (
                 addTaskRequestType: AddTaskRequestEnum.ORGANIZER_REFUSE_REQUEST,
             }
         }).then(()=>{
-            console.log(1111111)
+            // console.log(1111111)
             refetchUser({
                 uid: organizerUid
             });

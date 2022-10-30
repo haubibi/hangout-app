@@ -1,31 +1,19 @@
 /* eslint-disable max-len */
 import {
     ITask,
-    IFilterTasks,
     ITasksFilterInput,
     DistanceRange,
     ParticipantsRange,
     EventCategory,
-    TaskStatusType,
     IMyTaskFilterInput
 } from "../../interfaces/task.interface";
-import {LatLngLiteral} from "../../interfaces/google.interface";import {getDistanceBetweenPoints} from "../googleMap/getDistanceBetweenLatLng.utils";
-import { Moment } from 'moment';
+import {LatLngLiteral} from "../../interfaces/google.interface";
+import {getDistanceBetweenPoints} from "../googleMap/getDistanceBetweenLatLng.utils";
 import { 
   getMomentByDateAndTimeString,
   getCurrentMoment,
-  getDateString,
-  getDateTimeString
 } from "../date/date.utils";
 import { DateRangeValueType } from "../../interfaces/time.interface";
-// export const checkIfTaskExpired = (
-//   task: ITask
-// ):boolean => {
-//   const {startDate, startTime} = task;
-//   const startMoment = getMomentByDateAndTimeString(startDate, startTime);
-
-//   return startMoment.is
-// }
 
 
 /**
@@ -121,7 +109,7 @@ export const getFilteredTasksByDistance = (
       tasks: ITask[]
   ):ITask[] => {
     return tasks.filter((task:ITask) => {
-      console.log("latLngAndAddress:", task.latLngAndAddress, "currentLatLng:", currentLatLng);
+      // console.log("latLngAndAddress:", task.latLngAndAddress, "currentLatLng:", currentLatLng);
       const distance = getDistanceBetweenPoints(currentLatLng, task.latLngAndAddress.latLng);
   
       // console.log("distance:"+ distance);
@@ -157,7 +145,7 @@ export const getTasksWithinDateRange = (
     dateRange: DateRangeValueType,
 ):ITask[] =>{
   const currentMoment = getCurrentMoment();
-  console.log("date range:", dateRange)
+  // console.log("date range:", dateRange)
   //if date range is null, user didn't pick the date range
   if (!dateRange || (!dateRange[0] && !dateRange[1])) return tasks.filter(task => {
     const { startDate, startTime} = task;
@@ -275,7 +263,7 @@ export const filterHiddenTasks = (
       filteredTasks = filterHiddenTasks(filteredTasks);
     }
 
-    console.log(filteredTasks)
+    // console.log(filteredTasks)
   
     return [...filteredTasks];
   };

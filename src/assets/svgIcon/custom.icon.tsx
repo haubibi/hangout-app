@@ -1,6 +1,5 @@
-import Icon, { HomeOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
-import ExpiredDDate from './date-expired-icon.svg';
 import React from 'react';
 export const PandaSvg = () => (
     <svg viewBox="0 0 1024 1024" width="3em" height="3em" fill="currentColor">

@@ -1,10 +1,6 @@
 
 
 import styled from "styled-components";
-import { 
-    attendeeH3LineHeight,
-    attendeeContentLineHeight
-} from '../../../utils/default-settings/event.settings';
 import { Divider } from "antd";
 
 export const TaskAttendeeAvatarCon = styled.div`

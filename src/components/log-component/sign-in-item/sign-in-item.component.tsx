@@ -5,9 +5,7 @@ import {
 } from 'react';
 import { 
     SignInItemContainer,
-    ForgetPasswordLink,
-    EmailVerifyModal,
-    EmailVerifySpan
+    ForgetPasswordLink
 } from './sign-in-item.styles';
 import { 
     Button, 
@@ -53,7 +51,7 @@ export interface IStateWithPathname {
 
 
 const SignInItem = () => {
-    const { setUserUid, refetchUser, currentUser } = useContext(UserContext)
+    const { setUserUid, currentUser } = useContext(UserContext)
     const { setCurrentMenuKey } = useContext(NavigationContext)
     const [ detail, setDetail] = useState<Record<string, any>>();
     const [ signinUser, setSigninUser] = useState<UserCredential["user"]>(null);
@@ -82,7 +80,6 @@ const SignInItem = () => {
                 Object.prototype.hasOwnProperty.call(state, 'pathname')
             ) {
                 const pathName = (state as IStateWithPathname).pathname;
-                console.log("pathName:", pathName)
                 if(pathName === `/signUp`){
                     navigate(`/`);
                 } else {
@@ -122,12 +119,10 @@ const SignInItem = () => {
 
     const onFinish = useCallback(async(values: any) => {
         setButtonDisabled(true);
-        console.log('Success:', values);
         const { email, password} = values;
         await signInWithWithEmailAndPasswordMethod(email, password)
         .then(async(credential: UserCredential)=>{
             const { user } = credential;
-            console.log("sing in:", user.emailVerified);
             if(user.emailVerified){
                 setUserUid(user.uid);
             } else {
@@ -136,18 +131,21 @@ const SignInItem = () => {
             }
         })
         .catch((error:AuthError) => {
+            message.destroy();
             message.error(error.code);
         });
         setButtonDisabled(false);
       },[setUserUid]);
     
     const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-      };
+    };
     return (
         <SignInItemContainer>
             <Form
                 name="logIn"
+                layout="vertical"    
+                colon = {false}
+                disabled = {buttonDisabled}
                 initialValues={detail}
                 onFinish={onFinish}
                 onFinishFailed = { onFinishFailed }

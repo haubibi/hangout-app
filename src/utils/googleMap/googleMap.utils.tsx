@@ -4,7 +4,6 @@ import {
     LatLngLiteral
 } from '../../interfaces/google.interface';
 import Geocode from 'react-geocode';
-import Icon from '@ant-design/icons';
 
 
 export const defaultLatLng = {
@@ -34,14 +33,14 @@ export const getCurrentCoords= async ():Promise<LatLngLiteral | null> => {
 
 // Geocode.setApiKey("AIzaSyB0TA9D7pUqSlKckqwbh4BXNNi2MS---Hc");
 export const getLocationByLatlng = async(latlng: LatLngLiteral):Promise<string | undefined> => {
-    console.log(latlng)
+    // console.log(latlng)
     return new Promise((resolve,reject)=>{
         Geocode.fromLatLng(latlng.lat.toString(), latlng.lng.toString()).then(
             (response) => {
                 resolve(response.results[0].formatted_address);
             },
             (error) => {
-                console.log(latlng)
+                // console.log(latlng)
                 reject(error);
             }
         );

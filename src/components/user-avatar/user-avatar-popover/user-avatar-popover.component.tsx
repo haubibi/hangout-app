@@ -17,7 +17,7 @@ interface UserAvatarProps {
 export const UserAvatarPopover:FC<UserAvatarProps> = ({
     user,
 }) => {
-    console.log('cursor')
+    // console.log('cursor')
     if (!user) return <SpinCon />
     return (
         <PopoverCon

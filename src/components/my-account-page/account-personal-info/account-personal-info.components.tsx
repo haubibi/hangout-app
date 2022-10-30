@@ -1,7 +1,5 @@
 import { 
     AccountPersonalInfoCon,
-    ColInfoCon,
-    RowInfoCon,
     FormCon,
     FormSexItem,
     FormSexRadioGroup,
@@ -26,7 +24,6 @@ import { UserContext } from '../../../context/user.context';
 import { getImageObjWithUrl } from '../../../utils/images/images.utils';
 import { IPersonalInfoInput } from '../../../interfaces/user.interface';
 import { 
-    Spin,
     message,
 } from 'antd';
 import { useForm } from 'antd/es/form/Form';
@@ -60,7 +57,7 @@ const sexRadioGroupOptions = [
 export const AccountPersonalInfo = () => {
     const navigate = useNavigate();
     const [ form ] = useForm();
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
     const { currentUser, refetchUser } = useContext(UserContext);
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const [ detail, setDetail] = useState<Record<string, any>>();
@@ -108,8 +105,6 @@ export const AccountPersonalInfo = () => {
     }
    
     const onFinish = async (values: IPersonalInfoInput) => {
-        // const {avatarImg, displayName, sex} = values;
-        console.log("values:", values);
         setUpdateButtonDisabled(true);
 
 
@@ -133,6 +128,7 @@ export const AccountPersonalInfo = () => {
                     newAvatarImg= avatarImageArr[0] as IImageObjWithUrlAndRefPath;
                 });
             }).catch((error)=>{
+                message.destroy();
                 message.error(error.toString(), 3);
                 setUpdateButtonDisabled(false);
             });
@@ -151,8 +147,12 @@ export const AccountPersonalInfo = () => {
             refetchUser({
                 uid: currentUser?.uid
             });
+            message.destroy();
             message.success(`You have update the personal information successfully!`);
-        }).catch(error => message.error(error, 3))
+        }).catch(error => {
+            message.destroy();
+            message.error(error, 3
+        )})
         
 
         setUpdateButtonDisabled(false);
@@ -160,8 +160,6 @@ export const AccountPersonalInfo = () => {
 
     return(
         <AccountPersonalInfoCon>
-            <RowInfoCon >
-                <ColInfoCon>
                 <FormCon
                     form = {form}
                     disabled = {updateButtonDisabled}
@@ -207,9 +205,6 @@ export const AccountPersonalInfo = () => {
                         <FormSubmitButton htmlType='submit' type='primary'>Update</FormSubmitButton>
                     </FormSubmitButtonItem>
                 </FormCon>
-                </ColInfoCon>
-            </RowInfoCon>
-                
         </AccountPersonalInfoCon>
     )
 }

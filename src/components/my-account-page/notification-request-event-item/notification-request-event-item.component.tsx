@@ -1,19 +1,13 @@
 import {
-    useState,
     FC,
     useCallback,
-    useEffect
 } from 'react';
 import {
      ListItem,
      ListItemMeta
 } from './notification-request-event-item.styles'
 import { ITask } from '../../../interfaces/task.interface';
-import {
-    Avatar,
-    Skeleton, 
-    Divider
-} from 'antd';
+import { Avatar} from 'antd';
 
 interface INotificationRequestEventItemProps {
     task: ITask;
@@ -33,7 +27,7 @@ export const NotificationRequestEventItem:FC<INotificationRequestEventItemProps>
     const onClickHandle = useCallback(()=>{
         taskListItemOnClick(task.id);
     },[taskListItemOnClick, task])
-    console.log("active:", active)
+    // console.log("active:", active)
     return ( 
         <ListItem
             key = {task.id}

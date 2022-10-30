@@ -1,8 +1,5 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import React, { useState } from 'react';
+import { message} from 'antd';
+import type { RcFile } from 'antd/es/upload/interface';
 
 
 

@@ -3,7 +3,6 @@ import { EventCard } from '../event-card/event-card.component';
 import {
     ListContainer,
     ListItem,
-    EventCardListCon, 
 } from './event-card-list.styles';
 import { 
     ITask,

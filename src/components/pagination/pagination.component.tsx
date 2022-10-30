@@ -16,7 +16,7 @@ export const PaginationBar:FC<IPaginationProps> = ({
 }) => {
     
     const onPageChange: PaginationProps['onShowSizeChange'] = (current) => {
-        console.log(current);
+        // console.log(current);
         onChange(current)
     };
     return(

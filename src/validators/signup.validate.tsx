@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import { 
     validateInputString,
     validateStringLength,
@@ -28,7 +27,7 @@ export const initialValues = {
 };
 
 export const checkDisplayNameCallBack = (_: any, value: string) => {
-    console.log(value)
+    // console.log(value)
     if(value.length === 0) return Promise.reject(new Error("display name can't be empty"));
     //check name valid
     if(!validateInputString(value)) return Promise.reject(new Error('name format is invalid'));
@@ -49,7 +48,6 @@ const checkPasswordCallBack = (_: any, value: string) => {
 export const signupRules = {
     [SignUpNamesEnum.displayname] :[{ 
         required: true,
-        message: 'Please input your display name!'
     },{
         validator: checkDisplayNameCallBack
     }],

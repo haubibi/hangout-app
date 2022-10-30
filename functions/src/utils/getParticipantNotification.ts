@@ -10,8 +10,8 @@ const getParticipantNotification = async (
     organizerUid: string
 ):Promise<ParticipantNotification | Error> => {
   const participant = await getUserById(participantUid);
-  console.log("participantUid:", participantUid);
-  console.log("participant:", participant);
+  // console.log("participantUid:", participantUid);
+  // console.log("participant:", participant);
   if (!participant) return new Error("Participant doesn't exist!");
   const organizer = await getUserById(organizerUid);
   if (!organizer) return new Error("Organize doesn't exist!");

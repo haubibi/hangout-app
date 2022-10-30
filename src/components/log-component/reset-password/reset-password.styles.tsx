@@ -5,7 +5,9 @@ import {
  } from "antd";
 
 export const ResetPassWordCon = styled.div`
-    
+    padding: 100px;
+    height: auto;
+    width: 700px;
 `;
 
 export const PasswordInput = styled(Input)`

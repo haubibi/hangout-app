@@ -12,7 +12,7 @@ const mutationDeleteApplicationNotification = async (
       organizerUid: string;
     }
 ):Promise<Error | ApplicationNotificationType[]> => {
-  console.log("taskId:", taskId)
+  // console.log("taskId:", taskId)
   return deleteApplicationNotification({
     participantUid,
     taskId,

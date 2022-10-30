@@ -25,7 +25,7 @@ export const VerifyEmailModal:FC<IVerifyEmailModalProps> = ({
     sendStatus,
     open
 }) => {
-    console.log(sendStatus)
+    // console.log(sendStatus)
     return (
         <VerifyEmailModalCon
             title = ''

@@ -3,7 +3,7 @@ import {
     useContext,
     useEffect,
     useState
- } from 'react';
+} from 'react';
 import { 
     NotificationRequestPageContainer,
     Rowpage,
@@ -16,8 +16,7 @@ import {
 } from '../../../context/navigation.context';
 import { UserContext } from '../../../context/user.context';
 import { TasksContext } from '../../../context/tasks.context';
-import { message,Spin } from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Spin } from 'antd';
 import { RequestNotificationType } from '../../../interfaces/notifications.interface';
 import { ITask } from '../../../interfaces/task.interface';
 import { getMyTasks } from '../../../utils/task/task.filter';
@@ -28,12 +27,10 @@ import { checkIfTaskAttendeesReachMax } from '../../../utils/task/task.utils';
 import { NotifiCationRequestNtfList } from '../notification-request-ntf-list/notification-request-ntf-list.component';
 
 const NotificationRequestPage = () => {
-    const navigate = useNavigate();
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const [ activeTaskId, setActiveTaskId] = useState<string>();
-    const { pathname } = useLocation();
-    const { currentUser, refetchUser } = useContext(UserContext);
-    const { allTasks, refetchAllTasks, fetchAllTasksLoading, fetchAllTasksError } = useContext(TasksContext);
+    const { currentUser } = useContext(UserContext);
+    const { allTasks, refetchAllTasks } = useContext(TasksContext);
     const [ myTasks, setMyTasks] = useState<ITask[]>([]);
     const [ isAttendeesMax, setIsAttendeesMax] = useState<boolean>(false);
     const [ notifications, setNotifications] = useState<RequestNotificationType[]>([]);
@@ -43,30 +40,10 @@ const NotificationRequestPage = () => {
         setCurrentMenuKey(MyAccountMenuKey.NOTIFICATIONS_REQUEST);
     },[setCurrentMenuKey]);
 
-    // //check the current user
-    // useEffect(()=> {
-    //     if (!currentUser) {
-    //         message.info(`Please log in first!`);
-    //         navigate(`/logIn`,{state:{pathname}});
-    //     } else {
-    //         message.destroy();
-    //     }
-    // },[currentUser, navigate, pathname]);
-
     //refetch tasks
     useEffect(()=> {
         refetchAllTasks();
     },[refetchAllTasks]);
-
-
-    //refetch users
-    // useEffect(()=> {
-    //     if (currentUser) {
-    //         refetchUser({
-    //             uid: currentUser.uid
-    //         });
-    //     }
-    // },[currentUser, refetchUser]);
 
 
      //get All my tasks
@@ -87,8 +64,8 @@ const NotificationRequestPage = () => {
     useEffect(()=> {
         if (currentUser && activeTaskId) {
             const notifications = currentUser?.notifications?.requestNotification || [];
-            console.log(`currentUser:`, currentUser)
-            console.log(`notifications:`, notifications)
+            // console.log(`currentUser:`, currentUser)
+            // console.log(`notifications:`, notifications)
             const requestNotificationOfTheTask = getRequestNotificationsByTask(activeTaskId, notifications);
             setNotifications(sortNotificationsByTime(requestNotificationOfTheTask));
         }
@@ -108,13 +85,12 @@ const NotificationRequestPage = () => {
         setActiveTaskId(taskId);
     },[setActiveTaskId]);
 
-    console.log("currentUser:", currentUser);
-    console.log("myTasks:", myTasks);
+    // console.log("currentUser:", currentUser);
+    // console.log("myTasks:", myTasks);
     if(!myTasks) return <Spin />;
 
     return (
         <NotificationRequestPageContainer>
-            NotificationRequestPage
             <Rowpage>
                 <ColEventList>
                     <NotificationRequestEventList 

@@ -19,7 +19,7 @@ if(process.env.NODE_ENV === 'development') {
 } else {
   uri = 'https://us-central1-hang-out-213d4.cloudfunctions.net/graphql-default';
 }
-console.log(process.env.NODE_ENV)
+// console.log(process.env.NODE_ENV)
 const client = new ApolloClient({
   uri,
   // uri: 'http://localhost:5002/hang-out-213d4/us-central1/graphql-default',

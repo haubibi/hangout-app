@@ -16,7 +16,6 @@ import {
     confirmPasswordReset,
     checkActionCode,
     UserCredential,
-    AuthError
 } from 'firebase/auth';
 import { 
   getStorage,
@@ -25,14 +24,10 @@ import {
   getDownloadURL,
   deleteObject,
   UploadResult,
-  connectStorageEmulator 
  } from "firebase/storage";
 import { ISignUpAdditionsInfo, IUser } from '../../interfaces/user.interface';
 import { localDomin, appDomin } from '../domin';
 
-import { useContext, useState } from 'react';
-import { UserContext} from '../../context/user.context';
-import { ApolloQueryResult } from '@apollo/client';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCeT3ANdqXNbquxmYay1gm9O-8NgqlpakA",
@@ -55,7 +50,7 @@ const storage = getStorage(app,'gs://hang-out-213d4.appspot.com/');
 
 
 //images ref
-const imagesRef = ref(storage, 'images');
+// const imagesRef = ref(storage, 'images');
 
 export type BuckType = 'users' | 'tasks';
 export type userImageType = 'avatar';
@@ -116,12 +111,12 @@ export const createAuthUserWithEmailAndPassword = async (
         sendEmailVerification(user).then(()=>{
               const { email, uid, emailVerified } = user;
               const newUser  = {email, uid, emailVerified, ...additionalInfo};
-              console.log('additionalInfo:',additionalInfo);
-              console.log('newUser:', newUser)
+              // console.log('additionalInfo:',additionalInfo);
+              // console.log('newUser:', newUser)
               resolve(newUser);
         })
         .catch((error) => {
-          console.log("error:", error)
+          // console.log("error:", error)
             reject(error.code);
             // ..
         });;
@@ -148,7 +143,7 @@ const actionCodeSettings = {
 
 export const forgetPassword = (email: string) => {
   if (!email) return;
-  console.log(email)
+  // console.log(email)
   return sendPasswordResetEmail(auth, email, actionCodeSettings);
 }
 

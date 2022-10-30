@@ -20,7 +20,6 @@ import {
  import { 
     useNavigate
 } from 'react-router-dom';
-//  {  name: LoginNamesEnum.email, rules: loginRules[LoginNamesEnum.email], item: <Input prefix={<UserOutlined />} placeholder="E-mail" />},
 
 interface IFormItems {
     email: string;
@@ -54,7 +53,6 @@ export const ForgetPassWordItem = () => {
 
     return (
         <ForgetPassWordCon>
-            forget password
             <Form
                 initialValues={detail}
                 onFinish={onFinish}
@@ -64,11 +62,11 @@ export const ForgetPassWordItem = () => {
                 <Form.Item
                     name = {LoginNamesEnum.email}
                     label = "Email address"
-                    
+                    wrapperCol={{span: 24}}   
                     rules = {loginRules[LoginNamesEnum.email]}
                 >
                     <EmailInput
-                        placeholder='E-mail'
+                        placeholder='input your e-mail address'
                     />
                 </Form.Item>
 
@@ -76,7 +74,7 @@ export const ForgetPassWordItem = () => {
                     <SubmitButton
                         type='primary'
                         htmlType='submit'
-                    >Submit</SubmitButton>
+                    >Send</SubmitButton>
                 </Form.Item>
             </Form>
         </ForgetPassWordCon>

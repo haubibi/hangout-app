@@ -38,7 +38,7 @@ import { UserContext } from "../../../context/user.context";
 import { AddTaskRequestEnum, QuitTaskRequestEnum } from '../../../interfaces/notifications.interface';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { getMomentByDateAndTimeString, getCurrentMoment } from '../../../utils/date/date.utils';
+import { getMomentByDateAndTimeString } from '../../../utils/date/date.utils';
 import { TaskTimeLocationAttendee } from '../task-time-location-attendee/task-time-location-attendee.component';
 import { TaskDescription } from '../task-description/task-description.component';
 import { TaskMap } from '../task-map/task-map.component';
@@ -82,7 +82,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
 }) => {
     const navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
-    const { data, loading , error } = useQuery(GET_ALL_USERS)
+    const { data} = useQuery(GET_ALL_USERS)
     const [ userApplyIsLoading, setUserApplyIsLoading ] = useState<boolean>(false);
     const [ userQuitIsLoading, setUserQuitIsLoading ] = useState<boolean>(false);
     const [ isReachMax, setIsReachMax ] = useState<boolean>();

@@ -6,7 +6,6 @@ import { defaultLatLng } from "../googleMap/googleMap.utils";
 import { ITaskFormItemDetailWithImageRefAndUrl } from '../../interfaces/taskForm.interface';
 import { getNumberofParticipants } from "../../interfaces/participate.interface";
 import { IUser } from "../../interfaces/user.interface";
-import * as _ from "lodash";
 
 export const getUid = (uid: string) => {
     return uid+ '_' + Math.random().toString().replace(/\./,'');

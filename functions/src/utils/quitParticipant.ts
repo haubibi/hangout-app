@@ -27,11 +27,11 @@ const quitParticipant = async (
     quitTaskRequestType: QuitTaskRequestEnum
 ):Promise<Error | IPaticipant> => {
     return new Promise( async (resolve, reject)=>{
-        console.log("quitTaskRequestType:" + quitTaskRequestType);
+        // console.log("quitTaskRequestType:" + quitTaskRequestType);
         // check if task exist
         const task = await getTaskById(taskId);
-        console.log("task:", task)
-        console.log("taskId:", taskId)
+        // console.log("task:", task)
+        // console.log("taskId:", taskId)
         if (!task) return reject(new Error("The task doesn't exist"));
         // check if already applied
         const taskParticipants = task.participants;

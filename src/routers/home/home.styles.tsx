@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { 
-    List,
     Col,
     Row
  } from 'antd';

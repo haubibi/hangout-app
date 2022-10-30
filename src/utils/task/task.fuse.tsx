@@ -41,7 +41,7 @@ const getSearchTasks = (
     taskStartIndex: number,
     amout: number,
 ): ISearchTaskReturnType => {
-    console.log("tasks:", tasks)
+    // console.log("tasks:", tasks)
     const fuse = new Fuse(tasks, options);
     let newTasks:ITask[] = [];
     let totalLength:number;
@@ -52,13 +52,13 @@ const getSearchTasks = (
         totalLength = tasks.length;
     } else {
         const result = fuse.search(input);
-        console.log("result:", result)
+        // console.log("result:", result)
         const startIndex = taskStartIndex < result.length? taskStartIndex: result.length-1;
         const endIndex = (startIndex + amout) < result.length? (startIndex + amout): result.length;
         newTasks = _.slice(result.map(taskResult => taskResult.item), startIndex, endIndex);
-        console.log("startIndex:", startIndex)
-        console.log("endIndex:", endIndex)
-        console.log("newTasks:", newTasks)
+        // console.log("startIndex:", startIndex)
+        // console.log("endIndex:", endIndex)
+        // console.log("newTasks:", newTasks)
         totalLength = result.length;
     }
 

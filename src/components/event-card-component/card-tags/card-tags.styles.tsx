@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import { 
-    textOverFlowElilipsis,
- } from "../../../App.styles";
  import { 
     tagSpanPadding,
     tagConPadding,

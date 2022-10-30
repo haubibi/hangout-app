@@ -33,7 +33,7 @@ export const NotificationRequestEventList:FC<INotificationRequestEventListProps>
     const taskListItemOnClick = useCallback((taskId: string)=>{
         setActiveTaskId(taskId);
     },[]);
-    console.log("activeTaskId:", activeTaskId)
+    // console.log("activeTaskId:", activeTaskId)
 
     //set the active task
     useEffect(()=>{

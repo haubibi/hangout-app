@@ -15,7 +15,7 @@ const getFilteredTasksByDistance = (
     tasks: ITask[]
 ):ITask[] => {
   return tasks.filter((task:ITask) => {
-    console.log("latLngAndAddress:", task.latLngAndAddress, "currentLatLng:", currentLatLng);
+    // console.log("latLngAndAddress:", task.latLngAndAddress, "currentLatLng:", currentLatLng);
     const distance = getDistanceBetweenPoints(currentLatLng, task.latLngAndAddress.latLng);
 
     // console.log("distance:"+ distance);

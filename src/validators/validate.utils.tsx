@@ -26,7 +26,7 @@ export const ifTextWidthValid = (
     maxWidth: number,
     font: string
 ):boolean => {
-    console.log("font",  font)
-    console.log("text width:",  getTextWidth(text, font))
+    // console.log("font",  font)
+    // console.log("text width:",  getTextWidth(text, font))
     return getTextWidth(text, font) < maxWidth;
 }

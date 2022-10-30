@@ -25,15 +25,14 @@ import {
     signupRules,
     SignUpNamesEnum
  } from '../../../validators/signup.validate';
-import { IStateWithPathname } from '../sign-in-item/sign-in-item.component';
 
 
 
 const formitems = [
-    { label: 'Displayname', name: SignUpNamesEnum.displayname, rules: signupRules[SignUpNamesEnum.displayname],item: <Input placeholder='display name'/>},
+    { label: 'Display name', name: SignUpNamesEnum.displayname, rules: signupRules[SignUpNamesEnum.displayname],item: <Input placeholder='display name'/>},
     { label: 'E-mail', name: SignUpNamesEnum.email, rules: signupRules[SignUpNamesEnum.email], item: <Input placeholder='e-mail address'/>},
     { label: 'Password', name: SignUpNamesEnum.password, rules: signupRules[SignUpNamesEnum.password], item: <Input.Password placeholder='password'/>},
-    { label: 'Confirm Password', name: SignUpNamesEnum.confirm, rules: signupRules[SignUpNamesEnum.confirm],item: <Input.Password  placeholder='confirm password'/>},
+    { label: 'Confirm password', name: SignUpNamesEnum.confirm, rules: signupRules[SignUpNamesEnum.confirm],item: <Input.Password  placeholder='confirm password'/>},
 ]
 
 
@@ -58,7 +57,7 @@ const SignUpItem = () => {
 
     const onFinish = useCallback(async(values: any)=>{
         setFormDisabled(true);
-        console.log('Success:', values);
+        // console.log('Success:', values);
         const { email,password, displayName} = values;
         const additionalInfo: ISignUpAdditionsInfo = {
             displayName
@@ -66,9 +65,9 @@ const SignUpItem = () => {
         //sign up with email and password
         createAuthUserWithEmailAndPassword(email, password, additionalInfo).then(async (userInfo: (IUserInput & {emailVerified: boolean}))=>{
             const {emailVerified, ...otherProps} =userInfo;
-            console.log('emailVerified:', userInfo.emailVerified)
-            console.log('userInfo:', userInfo)
-            console.log('otherProps:', otherProps)
+            // console.log('emailVerified:', userInfo.emailVerified)
+            // console.log('userInfo:', userInfo)
+            // console.log('otherProps:', otherProps)
             //add user to database
             await addUser({
                 variables:{userInput: otherProps} 
@@ -85,19 +84,21 @@ const SignUpItem = () => {
             });
             setFormDisabled(false);
         }).catch((error)=>{
-            message.error(`111111111`);
+            message.error(error);
         });
         setFormDisabled(false);
     },[addUser, navigate, setUserUid]);
     
     const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+        // console.log('Failed:', errorInfo);
       };
     return(
         <SignupItemContainer>
             <Form
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
+                layout="vertical"    
+                colon = {false}
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
                 initialValues = {detail}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -109,7 +110,7 @@ const SignUpItem = () => {
                     formitems.map(({item,rules,...otherProps}, index) => <Form.Item key = {index} {...otherProps} rules = {rules}>{item as JSX.Element}</Form.Item>)
                             
                 }
-                <Form.Item label = "" wrapperCol={{sm: {span: 4, offset: 14}}}>
+                <Form.Item label = "" wrapperCol={{span: 24}}>
                     <Button type="primary" htmlType="submit">
                         Sign up
                     </Button>

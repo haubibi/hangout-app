@@ -12,7 +12,7 @@ const mutationDeleteEventUpdateNotification = async (
       organizerUid: string;
     }
 ):Promise<Error | TaskUpdateNotificationType[]> => {
-  console.log("taskId:", taskId)
+  // console.log("taskId:", taskId)
   return deleteEventUpdateNotification({
     participantUid,
     taskId,

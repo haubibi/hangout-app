@@ -51,7 +51,7 @@ export interface IProviderChildrenProps {
 export const NavigationProvider:FC<IProviderChildrenProps> = ({children}) =>{
     const [ currentMenuKey, setCurrentMenuKey ] = useState<MenuKey>(defaulKey);
 
-    console.log(currentMenuKey + 'context')
+    // console.log(currentMenuKey + 'context')
     const value = {
         currentMenuKey,
         setCurrentMenuKey

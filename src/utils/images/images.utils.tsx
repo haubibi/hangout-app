@@ -61,7 +61,7 @@ const CheckIfUidExist = (uid: string, fileList: UploadFile[]) => {
     return fileList.findIndex(v => v.uid === uid) !== -1;
 }
 const getModifedUploadFileObjByUid = (preFileList:UploadFile[], currentFileList:UploadFile[]):IModifiedUploadFile =>{
-    console.log(preFileList, currentFileList)
+    // console.log(preFileList, currentFileList)
     const addFilesList:UploadFile[] = [], deleteFilesList:UploadFile[] = [];
 
     for(const preFile of preFileList) {
@@ -126,7 +126,7 @@ export const getImagesWithUrlAndRefPath = (imageObjs: IImageObjWithRefPath[]) =>
     const promises = imageObjs.map((imageObj)=>{
         return new Promise((resolve)=>{
             getImageUrl(imageObj.refPath).then((url)=>{
-                console.log(url);
+                // console.log(url);
                 resolve({
                     ...imageObj,
                     url

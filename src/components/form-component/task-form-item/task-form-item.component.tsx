@@ -18,8 +18,7 @@ import {
     Col, 
     Row,
     Spin,
-    message,
-    Modal
+    message
 } from 'antd';
 import { 
     TaskFormItemContainer,
@@ -68,7 +67,6 @@ import {
  } from '../../../validators/taskForm.validate';
 
 import { getUpdatedTask } from '../../../utils/task/task.utils';
-import { TaskFormUserTypeEnum } from '../../../routers/taskFormPage/task-form-page.component';
 
 
 const { TextArea } = Input;
@@ -140,22 +138,22 @@ const showImagesFormProps = {
     wrapperCol: {span: 24},
     maxImageLength: 3,
 }
-const participantsNumberFormProps = {
-    label: "Numbers",
-    name: TaskFormItemName.participantsNumber,
-    labelCol: {span: 4},
-    wrapperCol: {span: 4},
-    rules: [{ required: true, message: '' }]
-}
+// const participantsNumberFormProps = {
+//     label: "Numbers",
+//     name: TaskFormItemName.participantsNumber,
+//     labelCol: {span: 4},
+//     wrapperCol: {span: 4},
+//     rules: [{ required: true, message: '' }]
+// }
 
 
-const googleSearchFormProps = {
-    name: TaskFormItemName.latLngAndAddress,
-    style:{width: '100%'},                 
-    wrapperCol:{span: 24},
-    rules: [{ required: true, message: '' }]                   
+// const googleSearchFormProps = {
+//     name: TaskFormItemName.latLngAndAddress,
+//     style:{width: '100%'},                 
+//     wrapperCol:{span: 24},
+//     rules: [{ required: true, message: '' }]                   
                             
-}
+// }
 
 const openFormitemProps = {
     name:TaskFormItemName.open,
@@ -194,7 +192,7 @@ export const TaskFormItem:FC<TaskFormItemProps> = ({
     const [ deleteButtonDisabled, setDeleteButtonDisabled] = useState<boolean>(false);
     const [ formDisabled, setFormDisabled] = useState<boolean>(false);
     const [ detail, setDetail] = useState<Record<string, any>>();
-    const [ currentTask, setCurrentTask ] = useState<ITask>(task);
+    const [ currentTask ] = useState<ITask>(task);
     const [ addTask ] = useMutation(ADD_TASK);
     const [ deleteTask ] = useMutation(DELETE_TASK);
     const navigate = useNavigate();

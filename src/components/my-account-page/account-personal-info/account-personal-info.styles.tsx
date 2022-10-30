@@ -12,11 +12,12 @@ import {
 const {TextArea} = Input;
 
 export const AccountPersonalInfoCon = styled.div`
-    width: 100%;
+    width: 650px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    
 `;
 
 
@@ -29,7 +30,12 @@ export const RowInfoCon = styled(Row)`
     justify-content: center;
 `;
 export const FormCon = styled(Form)`
-    
+     background-color: rgba(255,255,255,0.4);
+    background-attachment: fixed;
+    width:100%;
+    width: 650px;
+    padding: 50px;
+    border-radius: 30px;
 `;
 
 export const FormDisplayNameItem = styled(Form.Item)`

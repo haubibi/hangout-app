@@ -14,7 +14,7 @@ const addTask = async (
   taskObj:ITask,
   isNewTaskForm: boolean
 ):Promise<ITask> => {
-  console.log("isNewTaskForm:",isNewTaskForm,"111111111111111111")
+  // console.log("isNewTaskForm:",isNewTaskForm,"111111111111111111")
   const task = {
     ...baseTask,
     ...taskObj,
@@ -27,7 +27,7 @@ const addTask = async (
       const participantsUids = getParticipantsUids(participants);
 
 
-      console.log("participantsUids:", participantsUids)
+      // console.log("participantsUids:", participantsUids)
       for(const participantsUid of participantsUids) {
         const taskUpdateNotification:TaskUpdateNotificationType = {
           time: moment().format(),

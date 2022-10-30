@@ -21,14 +21,14 @@ const deleteRequestNotification = ({
             return snap.val();
         })
         .then((value) => {
-            console.log("request notification",value)
+            // console.log("request notification",value)
             const notifications = (value as RequestNotificationType[]).filter(
                 notification => (
                     notification.participantUid !== participantUid && 
                     notification.taskId !== taskId && 
                     notification.organizerUid !== organizerUid
             ));
-            console.log("updated request notification",notifications);
+            // console.log("updated request notification",notifications);
             if(Array.isArray(notifications) && notifications.length === 0 ){
                 userRequestNotificationsRef.set(null);
             } else {

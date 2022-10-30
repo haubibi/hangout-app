@@ -29,8 +29,6 @@ import { FilterBar } from '../../components/filter-component/filter-bar/filter-b
 import { 
     IFilterTasks
  } from '../../interfaces/task.interface';
-import { useQuery } from '@apollo/client'; 
-import { GET_All_TASKS } from '../../utils/graphql/query.utils';
 import { TasksContext } from '../../context/tasks.context';
 import { ITask } from '../../interfaces/task.interface';
 import { EventCard } from '../../components/event-card-component/event-card/event-card.component';
@@ -95,7 +93,7 @@ const MapSearch = () => {
     const [ filteredTasks, setFilteredTasks ] = useState<ITask[]>([]);
     const [ clickedTask, setClickedTask ] = useState<ITask>(null);
     const [ submitClick, setSubmitClick ] = useState<boolean>(false);
-    const { allTasks, refetchAllTasks, fetchAllTasksLoading, fetchAllTasksError } = useContext(TasksContext);
+    const { allTasks, refetchAllTasks} = useContext(TasksContext);
     // const { data, loading, error} = useQuery(GET_All_TASKS);
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const { isLoaded } = useLoadScript({

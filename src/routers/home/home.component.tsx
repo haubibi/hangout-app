@@ -14,12 +14,10 @@ import {
 } from './home.styles';
 import { HomeSearch } from '../../components/home-search/home-search.component';
 import { EventCardList } from '../../components/event-card-component/event-card-list/event-card-list.component';
-import { GET_All_TASKS } from '../../utils/graphql/query.utils';
 import { PaginationBar } from '../../components/pagination/pagination.component'
 import { 
     EventCategory,
     ITask,
-    ITasksFilterInput
  } from '../../interfaces/task.interface';
 import { 
     Col,
@@ -28,7 +26,6 @@ import {
 } from 'antd';
 import { NavigationContext } from '../../context/navigation.context';
 
-import { useQuery } from '@apollo/client';
 import { 
     tasksColMiddleLayout,
 } from '../../utils/layout-antdesign/layout';

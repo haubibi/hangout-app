@@ -16,7 +16,7 @@ export const NotifiCationApplicationNtfList:FC<INotifiCationApplicationNtfListPr
     notifications,
 }) =>{
 
-    console.log(`notifications:`, notifications)
+    // console.log(`notifications:`, notifications)
     return (
         notifications && notifications.length === 0 ?
         <EmptyCon  description={<span> No Notification</span>} />:

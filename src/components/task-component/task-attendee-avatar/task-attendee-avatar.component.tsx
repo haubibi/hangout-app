@@ -5,9 +5,6 @@ import { Avatar } from 'antd';
 import { IUser } from '../../../interfaces/user.interface';
 import { UserAvatarPopover } from '../../user-avatar/user-avatar-popover/user-avatar-popover.component';
 import {
-    UserOutlined
-} from '@ant-design/icons';
-import {
     DividerCon,
     TaskAttendeeAvatarCon
 } from './task-attendee-avatar.styles';

@@ -1,22 +1,14 @@
 import { useCallback, useMemo} from "react";
-import { ReactComponent } from '../../assets/svgIcon/panda-face.svg'
 import {
     GoogleMap,
     MarkerF,
-    DirectionsRenderer,
     Circle,
-    MarkerClusterer,
     GoogleMapProps
 } from "@react-google-maps/api";
 import React, { FC } from "react";
 
-import { 
-    SearchPageGoogleMapCon,
-    PlacesCon
- } from './search-page-googlemaps.styles';
+import { SearchPageGoogleMapCon } from './search-page-googlemaps.styles';
 import { MapOptions } from "../../interfaces/google.interface";
-import { GoogleMapContext } from "../../context/google-map.context";
-import { useContext } from "react";
 import { IGoogleMarkerProps } from "../../interfaces/google.interface";
 import { ILatLngAndAddress } from "../../interfaces/google.interface";
 import { ITask } from '../../../functions/src/interfaces/task.interface';
@@ -52,26 +44,17 @@ const circleOption = {
     searchCircle
 }) => {
     // const mapRef = useRef<GoogleMap>();
-    // if(mapRef.current) {
-    //     mapRef.current.panTo(center.location);
-    // }
-   
-    // const mapRef = useRef<any>();
-    // const { setMapInstance } = useContext(GoogleMapContext);
     const options = useMemo<MapOptions>(
         () => (googleMapProps.options!),
-        []
+        [googleMapProps.options]
     );
     const onLoad = useCallback((map: any) => {
         // map.panTo(center.location);
     }, []);
 
     const markerOnload = (marker:google.maps.Marker) => {
-        console.log(marker.get('0'))
-        console.log(1111111111111111111111111)
     }
     const markOnClick = (task:ITask) =>{
-        // console.log(task)
         onMarkerChange(task);
     }
     return (

@@ -5,8 +5,7 @@ import {
 import { 
     FC, 
     useState, 
-    useEffect,
-    useCallback
+    useEffect
  } from 'react';
 import { 
     ParticipantsFilterContainer,
@@ -31,7 +30,7 @@ export const ParticipantsFilter:FC<ParticipantsFilterProps> = ({
 
 
     useEffect(()=>{
-        console.log(smallValue, largeValue)
+        // console.log(smallValue, largeValue)
         onChange([smallValue, largeValue]);
     },[smallValue, largeValue,onChange]);
 

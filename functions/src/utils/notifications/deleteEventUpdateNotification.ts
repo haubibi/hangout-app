@@ -18,18 +18,18 @@ const deleteEventUpdateNotification = ({
         userEventUpdateNotificationsRef
         .once("value")
         .then((snap) =>{
-            console.log("snap event update:", snap)
+            // console.log("snap event update:", snap)
             return snap.val();
         })
         .then((value) => {
-            console.log("event update notification",value)
+            // console.log("event update notification",value)
             const notifications = (value as TaskUpdateNotificationType[]).filter(
                 notification => (
                     notification.participantUid !== participantUid && 
                     notification.taskId !== taskId && 
                     notification.organizerUid !== organizerUid
             ));
-            console.log("event updated notification",notifications);
+            // console.log("event updated notification",notifications);
             if(Array.isArray(notifications) && notifications.length === 0 ){
                 userEventUpdateNotificationsRef.set(null)
                 .then(()=> resolve(notifications))

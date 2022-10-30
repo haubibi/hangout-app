@@ -2,7 +2,6 @@ import {
     useEffect,
     useCallback,
     useState,
-    useContext
 } from 'react';
 import { ITask } from '../../../interfaces/task.interface';
 import { 
@@ -12,15 +11,7 @@ import {
 import { renderEventCard } from '../../event-card-component/event-card-list/event-card-list.component';
 import { PaginationBar } from '../../pagination/pagination.component';
 import getSearchTasks from '../../../utils/task/task.fuse';
-const gridStyle = {
-    gutter: 0,
-    xs: 1,
-    sm: 1,
-    md: 2,
-    lg: 2,
-    xl: 3,
-    xxl: 4,
-};
+
 export interface IMyEventListProps {
     tasks: ITask[]
 }
@@ -51,8 +42,8 @@ export const MyEventList = ({
         setCurrentPage(page);
     },[setCurrentPage]);
 
-    console.log(events)
-    console.log(tasksTotalLength)
+    // console.log(events)
+    // console.log(tasksTotalLength)
 
     return(
         <ContainerDiv>
