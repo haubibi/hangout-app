@@ -14,7 +14,7 @@ export const gradient = css`
 
 export const AppLayoutContainer = styled.div`
    ${gradient}
-   min-width: 1500px;
+   /* min-width: 1500px; */
    width: 100%;
    height: 100%;
    margin: 0;
