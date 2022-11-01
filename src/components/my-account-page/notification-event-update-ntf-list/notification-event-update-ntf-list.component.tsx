@@ -15,8 +15,6 @@ interface INotifiCationEventUpdateNtfListProps {
 export const NotifiCationEventUpdateNtfList:FC<INotifiCationEventUpdateNtfListProps> = ({
     notifications,
 }) =>{
-
-    console.log(`notifications:`, notifications)
     return (
         notifications && notifications.length === 0 ?
         <EmptyCon  description={<span> No Notification</span>} />:

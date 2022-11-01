@@ -94,16 +94,17 @@ export const TaskItem:FC<ITaskItemProps> = ({
         title, 
         description,
         keyWords,
-        organizer, 
+        // organizer, 
         startDate,
         startTime, 
         endTime, endDate, 
         latLngAndAddress, 
         participantsNumber,
         participants,
+        open
     } = task;
     const showImages = task.showImages || []
-    const startTimeMoment = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!), [startDate,startTime]);
+    // const startTimeMoment = useMemo(()=> getMomentByDateAndTimeString(startDate!, startTime!), [startDate,startTime]);
     const currentAttendees = useMemo(()=> getNumberofParticipants(participants),[participants]);
 
     
@@ -121,8 +122,6 @@ export const TaskItem:FC<ITaskItemProps> = ({
         const reachMax = currentAttendees < participantsNumber? false:true;
         setIsReachMax(reachMax);
     },[participantsNumber,currentAttendees]);
-
-
 
     const applyOnClick = useCallback(async () => {
         const {uid} = currentUser;
@@ -248,9 +247,9 @@ export const TaskItem:FC<ITaskItemProps> = ({
             (()=>{
                 switch(userType){
                     case CurrentTaskUserTypeEnum.GUEST_LOGIN:
-                    case CurrentTaskUserTypeEnum.PARTICIPANT_REJECT:
+                    case CurrentTaskUserTypeEnum.PARTICIPANT_REJECT:          
                         return(
-                            <RowCon>
+                            (open && !isReachMax)? <RowCon>
                                 <CenterAlignCol span={24}>
                                     <Button 
                                         type="primary" 
@@ -262,6 +261,7 @@ export const TaskItem:FC<ITaskItemProps> = ({
                                     </Button>
                                 </CenterAlignCol>
                             </RowCon>
+                            : null
                         );
                     case CurrentTaskUserTypeEnum.PARTICIPANT_NOT_CONFIRMED:
                         return(

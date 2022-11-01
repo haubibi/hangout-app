@@ -81,7 +81,7 @@ export const CardTags:FC<ITagsProps> = ({
     const randomColors = getRandomColors(maxKeyWords);
     const numberOfTags = useNumberOfTagsInDiv(tagDivRef,tagConPadding,spanColumnGap,tagSpanPadding, maxTagsDivWidth - 50);
 
-    console.log("numberOfTags:", numberOfTags)
+    // console.log("numberOfTags:", numberOfTags)
   
     useEffect(()=>{
         setCurrentTags(tags.slice(0, numberOfTags + 1));

@@ -6,11 +6,10 @@ export const MyAccountPageCon = styled(Layout)`
     height:100%;
 `
 export const MyAccountPageSideCon = styled(Sider)`
-
 `
 export const MyAccountPageContentCon = styled(Content)`
-    /* ${gradient} */
-    background-color:  rgb(76, 182, 182);
+    ${gradient}
+    /* background-color:  rgb(76, 182, 182); */
     display: flex;
     flex-direction: row;
     justify-content: center;

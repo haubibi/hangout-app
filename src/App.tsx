@@ -1,6 +1,6 @@
 
-import React, { FC, useEffect, useContext } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { FC, useEffect, useContext, useCallback } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AppLayout from './routers/appLayout/appLayout.component';
 import MyAccountPage from './routers/my-account-page/my-account-page.component';
 import Home from './routers/home/home.component';
@@ -35,12 +35,11 @@ import "antd/dist/antd.css";
 //   RESETPASSWORD = "RESETPASSWORD",
 // }
 
-
 const  App: FC = () => {
   const { setUserUid } = useContext(UserContext);
+  const  {pathname}= useLocation();
   useEffect(()=>{
     onUserAuthStateChanged(async(user) =>{
-      // console.log(user)
       if(!user){
         setUserUid('');
       } else {
@@ -52,7 +51,14 @@ const  App: FC = () => {
       }
     });
   },[setUserUid]);
-
+  useEffect(()=>{
+    document.body.style.width = "100%";
+    if(pathname.search(/myAccount/g) !== -1){
+      document.body.style.minWidth = "1500px";
+    }else {
+      document.body.style.minWidth = "0px";
+    }
+  },[pathname]);
 //'personal-info'
   return (
     <Routes>

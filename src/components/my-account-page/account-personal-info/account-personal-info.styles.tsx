@@ -30,7 +30,7 @@ export const RowInfoCon = styled(Row)`
     justify-content: center;
 `;
 export const FormCon = styled(Form)`
-     background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255,255,255,0.4);
     background-attachment: fixed;
     width:100%;
     width: 650px;
@@ -48,7 +48,11 @@ export const FormSexItem = styled(Form.Item)`
     
 `
 export const FormSexRadioGroup = styled(Radio.Group)`
-    
+    & {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
 `
 export const FormSubmitButtonItem = styled(Form.Item)`
     

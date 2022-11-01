@@ -44,6 +44,10 @@ const MyAccountPage = () => {
         }
     },[currentUser, refetchUser]);
 
+    useEffect(()=>{
+        document.body.style.width = "100%";
+        document.body.style.minWidth = "1400px";
+      },[]);
     return (
 
         <MyAccountPageCon>

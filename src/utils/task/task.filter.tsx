@@ -257,7 +257,7 @@ export const filterHiddenTasks = (
     if(IfFilterOutOfDateTasks) {
       filteredTasks = filterOutOfDateTasks(filteredTasks);
     }
-
+    
     //if show the events has been hidden
     if(ifFilterHiddenTasks) {
       filteredTasks = filterHiddenTasks(filteredTasks);

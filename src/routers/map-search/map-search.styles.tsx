@@ -16,7 +16,6 @@ export const MapSearchContent = styled(Content)`
     width: 100%;
     height: auto;
     min-height: 700px;
-    min-width: 1100px;
 `
 
 

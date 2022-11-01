@@ -29,7 +29,6 @@ export const LayoutCon = styled(Layout)`
    /* height: 100%; */
 `;
 export const HeaderCon = styled(Header)`
-
    /* margin: 20px 50px 20px 50px; */
    padding: 0;
    height: auto;

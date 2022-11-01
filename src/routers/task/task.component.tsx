@@ -76,7 +76,7 @@ const Task = () =>{
     const { pathname } = useLocation();
     const [ taskId, setTaskId ] = useState<string>('');
     const [ task, setTask ] = useState<ITask>();
-    const [ userType, setUserType ] = useState<CurrentTaskUserTypeEnum>(CurrentTaskUserTypeEnum.GUEST_WITHOUT_LOGIN);
+    const [ userType, setUserType ] = useState<CurrentTaskUserTypeEnum>();
     const { setCurrentMenuKey } = useContext(NavigationContext);
     const [ ifTaskExpired, setIfTaskExpired ] =  useState<boolean>(false);
     const { data, loading, error, refetch } = useQuery(GET_TASK_BY_ID,{
@@ -138,7 +138,7 @@ const Task = () =>{
     // console.log("data:",data)
     // console.log("error:",error)
     // console.log("loading:",loading)
-    if(error || loading || !task) return <Spin />;
+    if(error || loading || !task || !userType) return <Spin />;
     // console.log(location)
     return (
         <TaskContainer>

@@ -89,7 +89,7 @@ export const MyAccountMenu = () => {
         
     };
 
-    console.log('currentMenuKey:', currentMenuKey)
+    // console.log('currentMenuKey:', currentMenuKey)
     return (
         <MyMenuCon>
             <Menu

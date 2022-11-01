@@ -163,7 +163,7 @@ const openFormitemProps = {
 }
 const showFormitemProps = {
     name:TaskFormItemName.hide,
-    label:'Display to public',
+    label:'Hide the event',
     labelCol: {span: 24},
     wrapperCol: {span: 24}                      
 }

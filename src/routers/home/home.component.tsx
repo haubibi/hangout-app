@@ -10,7 +10,10 @@ import {
     ListCol,
     SearchRow,
     SearchCol,
-    ErrorH2
+    ErrorH2,
+    BackgroundImageDiv,
+    BackgroundImage,
+    BackgroundPicture
 } from './home.styles';
 import { HomeSearch } from '../../components/home-search/home-search.component';
 import { EventCardList } from '../../components/event-card-component/event-card-list/event-card-list.component';
@@ -36,7 +39,10 @@ import { message } from 'antd';
 import { TasksContext } from '../../context/tasks.context';
 const pageTasksAmout = 12;
 const initialCategory:EventCategory = 'any';
-
+// const imgSrc = require('../../assets/home/cover.png');
+const imgSrc660 = require('../../assets/home/cover_660.png');
+const imgSrc1680 = require('../../assets/home/cover_1680.png');
+const imgSrc1920 = require('../../assets/home/cover_1920.png');
 const Home: FC = () =>{
     const { allTasks, refetchAllTasks, fetchAllTasksLoading, fetchAllTasksError } = useContext(TasksContext);
     const [ tasks, setTasks ] = useState<ITask[]>();
@@ -46,10 +52,6 @@ const Home: FC = () =>{
     const [ currentPage, setCurrentPage ] = useState<number>(1);
     // const { data, loading, error, refetch} = useQuery(GET_All_TASKS);
     const { setCurrentMenuKey } = useContext(NavigationContext);
-
-    // console.log("data:", data)
-    // console.log("loading:" , loading)
-    // console.log("error:" , error)
 
     //set the menu key
     useEffect(()=> {
@@ -69,7 +71,7 @@ const Home: FC = () =>{
                 searchInputValue,
                 (currentPage - 1) * pageTasksAmout,
                 pageTasksAmout,
-            );
+                );
             const {tasks, totalLength} = tasksAndTotalLength;
             const filteredTasks = getFilteredTasks({
                 tasks,
@@ -78,7 +80,7 @@ const Home: FC = () =>{
                 },
                 IfFilterOutOfDateTasks: true,
                 ifFilterHiddenTasks: true
-            })
+            });
             // setTasks(filteredTasks.concat(filteredTasks));
             // setTasks([...filteredTasks, ...filteredTasks, ...filteredTasks, ...filteredTasks]);
             setTasks([...filteredTasks]);
@@ -98,6 +100,16 @@ const Home: FC = () =>{
     return (
 
         <HomeContainer>
+            <BackgroundImageDiv>
+                <BackgroundPicture>
+                    <source media='(max-width: 660px)' srcSet={imgSrc660}></source>
+                    <source media='(max-width: 1608px)' srcSet={imgSrc1680}></source>
+                    <BackgroundImage  sizes="(max-width: 1920px) 1920px, 1924px"src = {imgSrc660} srcSet={imgSrc1680} loading = "eager">
+
+                    </BackgroundImage>
+                </BackgroundPicture>
+
+            </BackgroundImageDiv>
             <SearchRow>
                 <SearchCol {...tasksColMiddleLayout}>
                     <HomeSearch

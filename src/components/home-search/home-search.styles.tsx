@@ -5,4 +5,5 @@ export const HomeSearchContainer = styled.div`
 `
 export const CategoryFilterContainer = styled(CategoryFilter)`
    height:100px !important;
+   
 `
