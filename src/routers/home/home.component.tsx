@@ -104,7 +104,7 @@ const Home: FC = () =>{
                 <BackgroundPicture>
                     <source media='(max-width: 660px)' srcSet={imgSrc660}></source>
                     <source media='(max-width: 1608px)' srcSet={imgSrc1680}></source>
-                    <BackgroundImage  sizes="(max-width: 1920px) 1920px, 1924px"src = {imgSrc660} srcSet={imgSrc1680} loading = "eager">
+                    <BackgroundImage  sizes="(max-width: 1920px) 1920px, 1924px"src = {imgSrc660} srcSet={imgSrc1920} loading = "eager">
 
                     </BackgroundImage>
                 </BackgroundPicture>

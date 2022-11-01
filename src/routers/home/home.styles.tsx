@@ -15,6 +15,9 @@ export const HomeContainer = styled.div`
 `
 
 export const BackgroundPicture= styled.picture`
+    min-width: 1200px;
+    width:100%;
+    height:500px;
 `;
 export const BackgroundImage = styled.img`
     src: ${imgSrc};
@@ -23,7 +26,7 @@ export const BackgroundImage = styled.img`
 `;
 export const BackgroundImageDiv = styled.div`
     width:100%;
-    min-width: 1200px;
+    /* min-width: 1200px; */
     height:500px;
     background-repeat: no-repeat;
     background-size: cover;
